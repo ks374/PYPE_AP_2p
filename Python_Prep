@@ -1,0 +1,18 @@
+#! /bin/bash
+
+set -e
+
+if [ "$(whoami)" != "root" ]; then 
+  exec sudo -- "$0" "$@"
+  echo $"Run the scirpt as root"
+fi
+
+pushd ~/Downloads
+curl -O https://repo.anaconda.com/archive/Anaconda3-2024.06-1-Linux-x86_64.sh
+echo $"Will install Anaconda3 now"
+echo $"Recommand to install it in the default directory"
+echo $"Recommand to update the shell profile automatically"
+sh Anaconda3-2024.06-1-Linux-x86_64.sh
+rm Anaconda3-2024.06-1-Linux-x86_64.sh
+popd
+echo Done
