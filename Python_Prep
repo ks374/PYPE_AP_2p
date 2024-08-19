@@ -1,5 +1,7 @@
 #! /bin/bash
 
+#Reference scirpt to install anaconda. Check the website for updated Conda version. 
+
 set -e
 
 if [ "$(whoami)" != "root" ]; then 
