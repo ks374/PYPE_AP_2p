@@ -1,15 +1,17 @@
 #! /bin/bash
 ### script should be executed by the bash interpreter
-### Script modified Aug/2024 for Pype 2-photon project. 
 
 ### Exit on error: script will exit if any command returns a non-zero exit status
 set -e
+
+#Add these to properly use conda environment: Note that your environment has to be name "pype_env"
+source ~/anaconda3/bin/activate pype_env
 
 ### check if the current user is not root user, 
 ### if that's true then the command "exec sudo -- "$0" "$@"" is executed, 
 ### this command runs the current script using "sudo" command, 
 ### which allows the current user to execute the script as root user.
-[ "$(whoami)" != "root" ] && exec sudo -- "$0" "$@"
+[ "$(whoami)" != "root" ] && exec sudo -E -- "$0" "$@"
 
 ### If the SUDO_USER variable is empty, 
 ### it means the script is being run as the root user, and not through the sudo command. 
@@ -19,13 +21,6 @@ if [ -z "$SUDO_USER" ]; then
   echo "Run this script with sudo, not as root"
   exit 1
 fi
-
-conda info
-echo "Will install to: /usr/local/pype_python3"
-echo "Are you using the correct environment to install Pype? (y/n)"
-read answer
-if ["$answer"!="${answer#[Yy]}"];then
-  exit 1
 
 ### The command starts by calling lsb_release -i, 
 ### which retrieves information about the Linux distribution and 
@@ -70,42 +65,69 @@ USER_HOME=$(eval echo ~${SUDO_USER})
 sudo apt update -qq
 
 ### to install the python 3.10
+#11/14 install manually
 #sudo apt install python3.10
 
 ### to install PIP
 sudo apt install python3-pip
 
+#11/14 install manually
 #pip3 install h5py numpy PyOpengl pandas Pillow pygame scipy pmw
 #sudo apt-get install python3-pil.imagetk
-conda install h5py numpy PyOpeng1 pandas Pillow pygame scipy pmw
-sudo apt-get install python3-pil.imagetk
 
+#PACKAGES="python3-all-dev python3-comedilib python3-h5py \
+#python3-numpy python3-opengl python3-pandas \
+#python3-pil python3-pygame python3-scipy python3-tk \
+#libcomedi-dev libcomedi0 swig grace csh \
+#libsdl2-dev libsdl1.2-dev cpufrequtils openssh-server samba"
+
+#11/14 manual installed
 # pip3 install tk doesn't work with pype.py
-PACKAGES="libcomedi-dev libcomedi0 swig grace csh python3-tk \
-cpufrequtils openssh-server samba"
+#PACKAGES="libcomedi-dev libcomedi0 swig grace csh python3-tk \
+#cpufrequtils openssh-server samba"
 
 ### the option -yy is used to automatically assume yes 
 ### when prompted to confirm installation or any other package configuration options.
-sudo apt install ${PACKAGES} -yy
+#sudo apt install ${PACKAGES} -yy
 
+### python-dev-tools pmw
+#pip3 install python-dev-tools pmw
+
+### biggles: seems to be used in mplot.py (do we need this? and not sure if python3 supports this)
+#sudo apt-get libplot-dev plotutils
+#pip3 install biggles
+
+#Skipped in 11/14 manual install
 # Turn off automatic updates and update notifications on Ubuntu
 ### I don't know whether the following settings are working well in recent ubuntu versions
 #if [ "$DISTRO" = "Ubuntu" ]; then
 #  # Turn off automatic updates
-#  sed -i 's/"[0-9][0-9]*"/"0"/g' /etc/apt/apt.conf.d/10periodic
-#  # Don't look for new OS releases
-#  sed -i 's/^\(Prompt=\).*/\1never/' /etc/update-manager/release-upgrades
-#  # Turn off update notifications
-#  gconftool -s --type bool /apps/update-notifier/auto_launch false
-#  gconftool -s --type bool /apps/update-notifier/no_show_notifications true
-#  gconftool -s --type int /apps/update-notifier/regular_auto_launch_interval 2147483647
+ # sed -i 's/"[0-9][0-9]*"/"0"/g' /etc/apt/apt.conf.d/10periodic
+ # # Don't look for new OS releases
+ # sed -i 's/^\(Prompt=\).*/\1never/' /etc/update-manager/release-upgrades
+  ## Turn off update notifications
+  #gconftool -s --type bool /apps/update-notifier/auto_launch false
+  #gconftool -s --type bool /apps/update-notifier/no_show_notifications true
+  #gconftool -s --type int /apps/update-notifier/regular_auto_launch_interval 2147483647
+#fi
+
+# Make all cores use the performance governor (max frequency all the time)
+##NCORES=$(getconf _NPROCESSORS_ONLN)
+##for ((i=0;i<$NCORES;i++)); do cpufreq-set -c $i -r -g performance; done #do this in manual. TN: Segmentation fault happened and ignored.
+# set as the default for persistence between reboots
+#echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
+
+### Ubuntu will override the "performance" setting with "ondemand"
+### this will disable that service
+#if [ "$DISTRO" = "Ubuntu" ]; then
+#  update-rc.d ondemand disable
 #fi
 
 # Install a samba share so the backup scripts running on the
 # Plexon machines can backup the pype computer
 # only do it for the shapelab user
-if [ "$SUDO_USER" = "lab" ]; then
-  (echo 'nhp2p3p'; echo 'nhp2p3p') | smbpasswd -a -s $SUDO_USER
+if [ "$SUDO_USER" = "shapelab" ]; then
+  (echo 'mel&co'; echo 'mel&co') | smbpasswd -a -s $SUDO_USER
   SMB_CONF=/etc/samba/smb.conf
 
   # Append the following to the smb.conf (if we haven't already)
@@ -121,6 +143,7 @@ if [ "$SUDO_USER" = "lab" ]; then
    guest ok = yes
    read only = no
 EOF
+  
     /usr/sbin/service smbd restart
     # This share now lives at \\IP_ADDRESS\shapelab
   fi
@@ -144,7 +167,8 @@ trap cleanup EXIT
 ### and the "-xzf" options are used to extract the contents in gzip format, 
 ### and the "--strip-components=1" option is used to remove 
 ### the leading directory components of the file names in the archive.
-tar -C "$tempdir" -xzf "$TARFILE" --strip-components=1
+#Modified 11/14
+tar -C "$tempdir" -xJf "$TARFILE" --strip-components=1
 
 ### uses the "pushd" command, which changes the current directory to "$tempdir" 
 ### and also pushes the current directory onto a stack 
@@ -167,7 +191,7 @@ pushd "$tempdir"
 #--------------------------------------------------------------------------
 
 # build and install pype
-PYPEDIR=/usr/local/pype_python3 ./build install-nodacq wrapper clean
+PYPEDIR=/usr/local/pype_python3 ./build install wrapper clean
 popd
 
 # Be helpful and make the .pyperc folder if needed

@@ -1,0 +1,64 @@
+#!/bin/sh
+set -e
+### if [ $(whoami) != "root" ]; then
+###   echo "Are you sure you want to do this as $(whoami)?"
+###   echo -n "hit ctrl-c to abort, return to continue"
+###   read xxx
+### fi
+
+if [ "$1" = "-dir" ]; then
+  export PYPEDIR=$2
+  shift; shift
+fi
+
+if [ "$PYPEDIR" = "" ]; then
+  echo "set PYPEDIR first"
+  exit 0
+fi
+echo
+export WHO=`/usr/bin/whoami`
+
+### This is an old version ###
+#---------------------------------------------------------------------
+## No need to be fancy here. Python 2.7 is the last in the 2.0 series.
+#export PYTHONVER="2"
+#export PYTHONFULLVER="2.7"
+#export PYTHONEXE=$(which python$PYTHONFULLVER)
+#export PYTHONPREFIX=$(echo $PYTHONEXE | sed 's/\(.*\)\/bin.*/\1/')
+#export PYPEDIR
+#---------------------------------------------------------------------
+
+### This is a new version to use Anaconda Python3 ###
+#Modify 11/14, to actually use Anaconda environment. 
+export PYTHONVER="3"
+echo PYTHONVER=$PYTHONVER
+export PYTHONEXE=$(which python)
+echo PYTHONEXE=$PYTHONEXE
+export PYTHONFULLVER=$(${PYTHONEXE} -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+echo PYTHONFULLVER=$PYTHONFULLVER
+export PYTHONPREFIX=$(echo $PYTHONEXE | sed 's/\(.*\)\/bin.*/\1/')
+echo PYTHONPREFIX=$PYTHONPREFIX
+
+#Changed the following code. They should't be hard-coded. 11/14
+#Also, what is "dist-packages? "
+#incdir=/usr/include/python$PYTHONFULLVER
+#libdir=/usr/lib/python$PYTHONFULLVER
+#libdir2=/usr/lib/python3/dist-packages
+
+incdir=$PYTHONPREFIX/include/python$PYTHONFULLVER
+libdir=$PYTHONPREFIX/lib/python$PYTHONFULLVER
+libdir2=$PYTHONPREFIX/lib/python$PYTHONFULLVER/site-packages
+
+#libdir=$(${PYTHONEXE} -c "from distutils.sysconfig import get_python_lib; \
+#		print(get_python_lib())" | xargs dirname)
+#incdir=$(${PYTHONEXE} -c "from distutils.sysconfig import get_python_lib; \
+#		print(get_python_lib())" | sed s/lib/include/g | xargs dirname)
+
+export PYTHONINC=-I$incdir
+export PYCOMPILE=$libdir/compileall.py
+#export LIBPYTHON=-l$libdir2
+
+export PYPEDIR
+
+/usr/bin/make -f Buildfile $*
+

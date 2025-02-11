@@ -11,4 +11,9 @@ Pype_AP: Pype2_AP was also updated for python 3 support, but the development pat
 Starting with Pype_AP, the software is modified for experiment using a homemade 2p microscope.  
 It also supports a customized eye-tracking system based on Openris ([here](https://github.com/ocular-motor-lab/OpenIris) for the base software and [here](https://github.com/ryan-ressmeyer/OpenIrisDPI) for DPI plugin)
 
-### WIP
+### NOV2024 Version: 
+PYPE was successfully installed on a modern machine. Check the change log for installation guide. 
+
+### Feb2025 Version: 
+WIP.
+
