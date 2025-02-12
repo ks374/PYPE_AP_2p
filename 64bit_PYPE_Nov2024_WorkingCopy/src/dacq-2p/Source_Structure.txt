@@ -1,3 +1,29 @@
+System design: 
+When PYPE starts, it needs to initiate the Openiris server. The server will keep reading the pupil and p4 reflection position. 
+Something should handle the pupil reflection and p4 reflection, and make gaze position out of them. You should be able to select which eye to use and whether you want to use p4 reflection. 
+
+In the PYPE dacq read the gaze position. First we do calibration and set parameters for both eyes. 
+During the experiment, one eye will be dominant and the other is just for checking. When the gaze position of the two eyes mismatch there will be a warning sign. 
+You can select whether to use single eye or both eyes, and which eye will be the dominant. 
+
+By default, the software use single eye with only pupil position for tracking. 
+
+Get a task file to figure out everything. 
+
+Eye_data.h/c: Basic eyesdata structure definition. Also defined some utility function related to eyes data. 
+	Inlcuded json-c. 
+Openiris_client.h/c: Init Openiris client or close it. It also gives the function to fetch one eye data and put it in an eyesdata pointer. 
+	Inlcuded Eye_data.h. json-c. 
+Eth32_interface.h/c: Functions related to Winford Eth32. It's basically standalone. 
+Openiris_server.c/h: 
+    A server that communicates with the eye tracking hardware to keep updating DACQINFO. This should be called when pype initialized. 
+dacq.c/h: ???
+
+
+DACQINFO.h: define some macro, struct FixWin and DACQINFO. Core shared variable between the task and Pype. 
+
+
+
 File structure: 
 
 --Eye_data.h Eye_data.c, included json-c

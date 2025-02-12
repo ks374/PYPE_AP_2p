@@ -25,8 +25,6 @@ void Point_set_x(Point* point,double value);
 void Point_set_y(Point* point,double value);
 Point* Point_sub(Point* point1,Point* point2);
 Point* Point_add(Point* point1,Point* point2);
-
-//Eyes data receiver. You will need to use it frequently. 
 void Eyesdata_update(json_object* json,EyesData* eyesdata);
 
 

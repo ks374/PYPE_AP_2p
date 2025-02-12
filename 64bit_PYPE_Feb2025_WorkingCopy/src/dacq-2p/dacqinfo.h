@@ -59,10 +59,14 @@ typedef struct {
   /*Needed for Openiris*/
   char	dout[NDIGOUT];		/* status of digital output lines */
   /*Calibrated positions*/
-  int	eye_x;			/* current eye position: X position */
-  int	eye_y;			/* current eye position: Y position */
-  int	eye_pa;			/* current pupil area, if available */
+  int	eye_x_l;			/* current eye position: X position */
+  int	eye_y_l;			/* current eye position: Y position */
+  int	eye_pa_l;			/* current pupil area, if available */
+  int	eye_x_r;			/* current eye position: X position */
+  int	eye_y_r;			/* current eye position: Y position */
+  int	eye_pa_r;			/* current pupil area, if available */
   /*Raw positions*/
+  /*Do we need these? */
   double openiris_left_p0_x;
   double openiris_left_p0_y;
   double openiris_right_p0_x;
@@ -72,8 +76,10 @@ typedef struct {
   double openiris_right_p4_x;
   double openiris_right_p4_y;
   /*Calibration values*/
-  float eye_xgain, eye_ygain;	/* mult. gain for x/y eye position */
-  int	eye_xoff, eye_yoff;	/* additive offset in pixels */
+  double eye_xgain_l, eye_ygain_l;	/* mult. gain for x/y eye position */
+  double	eye_xoff_l, eye_yoff_l;	/* additive offset in pixels */
+  double eye_xgain_r, eye_ygain_r;	/* mult. gain for x/y eye position */
+  double	eye_xoff_r, eye_yoff_r;	/* additive offset in pixels */
 
   /* Kept for back-compatibility */
   char	din[NDIGIN];		/* status of digital input lines */
@@ -100,6 +106,7 @@ typedef struct {
   int	openiris_ready;		/* sync flag -- when true, iscan proc ready */
 
   /* used only once.. */
+  /* What are these? Why they are in the precious memory if used only once? */
   int	dacq_pri;
   int	iscan_pri;
 
@@ -109,9 +116,15 @@ typedef struct {
   unsigned int	adbuf_overflow;	/* overflow flag (INDICATES ERROR!!) */
 
   unsigned long adbuf_t[ADBUFLEN];	/* timestamps (ms) */
-  int		adbuf_x[ADBUFLEN];	/* eye x position trace */
-  int		adbuf_y[ADBUFLEN];	/* eye y position trace */
-  int		adbuf_pa[ADBUFLEN];	/* pupil area, if available */
+  double		adbuf_x_l[ADBUFLEN];	/* eye x position trace */
+  double		adbuf_y_l[ADBUFLEN];	/* eye y position trace */
+  double		adbuf_pa_l[ADBUFLEN];	/* pupil area, if available */
+  double       adbuf_c4_l[ADBUFLEN]    /* c4 reflection */
+  double		adbuf_x_r[ADBUFLEN];	/* eye x position trace */
+  double		adbuf_y_r[ADBUFLEN];	/* eye y position trace */
+  double		adbuf_pa_r[ADBUFLEN];	/* pupil area, if available */
+  double       adbuf_c4_r[ADBUFLEN]    /* c4 reflection */
+  
   int		adbuf_c0[ADBUFLEN];	/* channel 0/x */
   int		adbuf_c1[ADBUFLEN];	/* channel 1/y */
   int		adbuf_c2[ADBUFLEN];	/* channel 2/photo diode*/
