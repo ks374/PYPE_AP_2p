@@ -13,12 +13,9 @@ typedef struct {
 } OpenIrisClient;
 
 OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double timeout);
-void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug); 
-//Read eye position and put it in eyesdata. 
-void OpenIrisClient_close(OpenIrisClient* client);
-
 EyeData* OpenIrisClient_Data_buffer_init();
-//This init a pointer to EyeData*. 
+void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug);
+void OpenIrisClient_close(OpenIrisClient* client);
 
 
 #endif

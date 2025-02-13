@@ -5,7 +5,10 @@
 ** info:    pype interface with openiris eye tracker; modified from comedi_server by Mazer
 ** history:
 ** 
-** I'm supposed to write an openiris server that contains a mainloop() to keep updating DACQINFO data. 
+** An openiris server that contains a mainloop() to keep updating DACQINFO data buffer. 
+** Note: it will only read from the socket and insert data to the ring buffer. 
+** It will try to collect and update all these data for both eyes. If the task file determines to use eye data from just one eye, then others will be redundent. 
+**
 ** When PYPE boots, it will call dacq_start() to create a subprocess of this server. The server will keep fetching data from the eyetracker (or analog input), 
 ** while other dacq functions fetch data from DACQINFO for the task file. 
 ** 

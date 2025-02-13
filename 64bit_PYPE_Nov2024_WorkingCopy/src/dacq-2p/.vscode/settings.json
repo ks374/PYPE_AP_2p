@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "openiris_server.h": "c",
+        "dacqinfo.h": "c",
+        "__node_handle": "c"
+    }
+}

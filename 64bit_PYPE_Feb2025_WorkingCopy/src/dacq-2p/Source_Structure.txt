@@ -3,8 +3,10 @@ When PYPE starts, it needs to initiate the Openiris server. The server will keep
 Something should handle the pupil reflection and p4 reflection, and make gaze position out of them. You should be able to select which eye to use and whether you want to use p4 reflection. 
 
 In the PYPE dacq read the gaze position. First we do calibration and set parameters for both eyes. 
-During the experiment, one eye will be dominant and the other is just for checking. When the gaze position of the two eyes mismatch there will be a warning sign. 
-You can select whether to use single eye or both eyes, and which eye will be the dominant. 
+
+During the experiment, gaze position from the two eyes will be averaged to determine the final position. 
+But when the gaze position of the two eyes mismatch there will be a warning sign. So there will be a monitoring function to do this. 
+You can select which eye to use as the dominant eye. This eye will be used when there is a mismatch. 
 
 By default, the software use single eye with only pupil position for tracking. 
 
@@ -15,13 +17,25 @@ Eye_data.h/c: Basic eyesdata structure definition. Also defined some utility fun
 Openiris_client.h/c: Init Openiris client or close it. It also gives the function to fetch one eye data and put it in an eyesdata pointer. 
 	Inlcuded Eye_data.h. json-c. 
 Eth32_interface.h/c: Functions related to Winford Eth32. It's basically standalone. 
-Openiris_server.c/h: ???
+Openiris_server.c/h: 
+    A server that communicates with the eye tracking hardware to keep updating DACQINFO. This should be called when pype initialized. 
 dacq.c/h: ???
 
 
 DACQINFO.h: define some macro, struct FixWin and DACQINFO. Core shared variable between the task and Pype. 
 
-
+Core change log: 
+    A bunch of code was added in dacq-2p to utilize OpenIris eye tracking system. Other changes to pype main or dacq source are recorded here: 
+    - DACQINFO: 
+        - Uodate for Openiris data structure: calibrated positions; Raw positions; Calibration values; ring buffer. 
+        - IMPORTANT: all Point struct have "double" x and y. The pupil size is also "double". 
+        - But old Pype has "int" raw and calibrated positions (posibly to match pixels)
+        - Now all positions are "double", as well as the calibration parameters. Calibrated positions will still be "int". 
+    - PYPE: 
+		- self.config.server from "das16_server" to "openiris_server". 
+		- PypeApp has a private variable "self._eye_x". This will be used as the main eye position. 
+		- In ~/.pyperc/_none, there is a pypestate.(hostname) pickle file to store calibration parameters. You need python to change it. I added calibration for both eyes. 
+		- Added _aux eye gain and off for x and y in the pypestate.elcat file.  m
 
 File structure: 
 
@@ -33,11 +47,4 @@ File structure:
 --------dacq.c dacq.h, include DACQINFO.h
 
 
-DACQINFO is initially assigned in dacq_start(), and used in openiris_server.c. We call dacq_start() first and then start the server. 
-
-Major change to PYPE: 
-- We have 2 eyes to track in pype, when the old pype version only supports one eye. In the new software we needs to make some chagnes: 
-	For now we simply average the position of the two eyes. 
-	In the future, we may need to make sure we get a warining if one/both eyes tracking has errors. 
-	
-	To make the change, we add 4 more calibration parameters to the calibration table and modify DACQINFO, dacq_param accordingly. 
+DACQINFO is initially assigned in dacq_start(), and used in openiris_server.c. We call dacq_start() first and then start the server.  

@@ -26,26 +26,23 @@
 **
 ** Tues Aug 1 2006 Anitha
 **   Added doutc for writing to port C
-** 
-** Tues Feb 11 2025 Chenghang
-**   Modified for 2p project
 */
 
 #define SHMKEY	0xDA01
 #define SEMKEY	0xF0F0
 
-#define NDIGIN	8 
-#define NDIGOUT	8 
-#define NDIGOUTC 8        /*digital output on port C - Anitha*/  
-#define NADC	4 
-#define NDAC	2 
-#define NFIXWIN	5 
-#define ADBUFLEN (200 * 60) //probably too large for modern machine. Modified from 1000*60 to 200*60. 
-#define MAXSMOOTH 25 
+#define NDIGIN	8
+#define NDIGOUT	8
+#define NDIGOUTC 8        /*digital output on port C - Anitha*/
+#define NADC	4
+#define NDAC	2
+#define NFIXWIN	5
+#define ADBUFLEN (1000 * 60)
+#define MAXSMOOTH 25
 
 /* pseudo-interupt codes */
-#define INT_DIN		1 //What's this? 
-#define INT_FIXWIN	2 //What's this? 
+#define INT_DIN		1
+#define INT_FIXWIN	2
 
 typedef struct {
   int active;			/* active or idle flag */
