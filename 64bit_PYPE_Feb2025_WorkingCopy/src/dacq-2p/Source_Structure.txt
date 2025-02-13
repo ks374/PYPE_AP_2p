@@ -31,11 +31,15 @@ Core change log:
         - IMPORTANT: all Point struct have "double" x and y. The pupil size is also "double". 
         - But old Pype has "int" raw and calibrated positions (posibly to match pixels)
         - Now all positions are "double", as well as the calibration parameters. Calibrated positions will still be "int". 
+<<<<<<< HEAD
     - PYPE: 
 		- self.config.server from "das16_server" to "openiris_server". 
 		- PypeApp has a private variable "self._eye_x". This will be used as the main eye position. 
 		- In ~/.pyperc/_none, there is a pypestate.(hostname) pickle file to store calibration parameters. You need python to change it. I added calibration for both eyes. 
 		- Added _aux eye gain and off for x and y in the pypestate.elcat file.  m
+=======
+        * How to use a ring buffer and how does Pype handle it? 
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
 
 File structure: 
 

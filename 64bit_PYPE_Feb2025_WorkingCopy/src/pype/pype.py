@@ -216,7 +216,11 @@ class PypeApp:
     for all additions.
     """
 
+<<<<<<< HEAD
     def __init__(self, framebuffer=1, gui=1): #Note: server and eye related. 
+=======
+    def __init__(self, framebuffer=1, gui=1):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         Initialize a PypeApp instance, with side effects ::
         
@@ -256,7 +260,11 @@ class PypeApp:
         self.config.set('DEBUG',		'0',			override=None)
         debug(self.config.iget('DEBUG'))
         
+<<<<<<< HEAD
         self.config.set('DACQ_SERVER',	'openiris_server',	override=None)
+=======
+        self.config.set('DACQ_SERVER',	'das16_server',	override=None)
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         self.config.set('ISCAN_SERVER', '',				override=None)
         self.config.set('EYETRACKER_DEV','',			override=None)
         self.config.set('PPORT',		'-1',			override=None)
@@ -391,7 +399,11 @@ class PypeApp:
         self._rewardlock = _thread.allocate_lock()
         self._eye_x = 0
         self._eye_y = 0
+<<<<<<< HEAD
         self._eyetarg_x = 0 #targ possibly marks the shift. 
+=======
+        self._eyetarg_x = 0
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         self._eyetarg_y = 0
         self._eyetrace = 0
         self.taskidle = None
@@ -1322,7 +1334,11 @@ class PypeApp:
     def udpy_note_at_location(self, t='', locX=5, locY=25):
         self.udpy.note_at_location(t,locX, locY)
 
+<<<<<<< HEAD
     def eyeset(self):  #Note: eye related. 
+=======
+    def eyeset(self):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """Update eye coil params from entry boxes"""
 
         k = self.rig_common.queryv('eye_smooth')
@@ -1564,7 +1580,11 @@ class PypeApp:
         else:
             raise GuiOnlyFunction("status")
 
+<<<<<<< HEAD
     def eyepos(self):  #Note: eye related. 
+=======
+    def eyepos(self):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         ts = dacq_ts()
         if (self._last_eyepos) is None or (ts > self._last_eyepos):
             self._eye_x = dacq_eye_read(0)
@@ -1572,7 +1592,11 @@ class PypeApp:
             self._last_eyepos = ts
         return (self._eye_x, self._eye_y)
 
+<<<<<<< HEAD
     def looking_at(self, x=0, y=0): #Note: eye related. 
+=======
+    def looking_at(self, x=0, y=0):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         Tell pype where the monkey's supposed to be looking.
         
@@ -1584,7 +1608,11 @@ class PypeApp:
         self._eyetarg_x = x
         self._eyetarg_y = y
 
+<<<<<<< HEAD
     def eyeshift(self, x=0, y=0, reset=None, zero=None): #Note: eye related. 
+=======
+    def eyeshift(self, x=0, y=0, reset=None, zero=None):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         Adjust X & Y offsets to set DC-offsets for eye position
         --------------------------------------------------------
@@ -1612,7 +1640,11 @@ class PypeApp:
         self._eye_yoff.setentry('%d' % y)
         self.eyeset()
 
+<<<<<<< HEAD
     def eyeadjust(self, dx=0, dy=0): #Note: eye related. 
+=======
+    def eyeadjust(self, dx=0, dy=0):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         x = int(self._eye_xoff.component('entry').get()) + dx
         y = int(self._eye_yoff.component('entry').get()) + dy
         self._eye_xoff.setentry('%d' % x)
@@ -1624,7 +1656,11 @@ class PypeApp:
             warn('Task is running.',
                  "I'm sorry Ben, but I can't do that (drain juice).", wait=0)
 
+<<<<<<< HEAD
     def idlefn(self, ms=None, update=1, toplevel=None, fast=None):#Note: eye related. 
+=======
+    def idlefn(self, ms=None, update=1, toplevel=None, fast=None):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         The idle function -- this function should be call periodically
         by everything.  Whenever the program's looping or busy waiting
@@ -2315,7 +2351,11 @@ class PypeApp:
         if not self.config.iget('DACQ_TESTMODE'):
             dacq_dig_out(1, state)
 
+<<<<<<< HEAD
     def eyetrace(self, on): #Note: eye related. 
+=======
+    def eyetrace(self, on):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         Begin recording eye trace data now. Or, stop recording eye
         data now.  Be sure to call this before you save data with
@@ -2407,7 +2447,11 @@ class PypeApp:
         spike_times = find_ttl(t, s0, spike_thresh, spike_polarity)
         return spike_times
 
+<<<<<<< HEAD
     def get_eyepos_now(self): #Note: eye related. 
+=======
+    def get_eyepos_now(self):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         This function extracts the current state of the x/y eye
         position buffers from the dacq_server NOW.  Like get_spikes()
@@ -2449,7 +2493,11 @@ class PypeApp:
         """
         return self.record_buffer[:]
         
+<<<<<<< HEAD
     def record_write(self, result=None, rt=None, pdict=None, taskinfo=None): #Note: eye related. 
+=======
+    def record_write(self, result=None, rt=None, pdict=None, taskinfo=None):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         """
         Write the current record to the specified datafile.
         """
@@ -2787,7 +2835,11 @@ class PypeApp:
         self.show_eyetrace_start = start
         self.show_eyetrace_stop = stop
 
+<<<<<<< HEAD
     def plotEyetraces(self, t=None, x=None, y=None, others=None, raster=None): #Note: eye related. 
+=======
+    def plotEyetraces(self, t=None, x=None, y=None, others=None, raster=None):
+>>>>>>> 3f43b5d7c904305f472187209be111ad82757fdd
         if len(t) > 0:
             # works even if _eyetrace_window is None
             oldgraph = attach(self._eyetrace_window)
