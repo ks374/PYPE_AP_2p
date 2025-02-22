@@ -27,7 +27,11 @@ DACQINFO.h: define some macro, struct FixWin and DACQINFO. Core shared variable 
 Core change log: 
     A bunch of code was added in dacq-2p to utilize OpenIris eye tracking system. Other changes to pype main or dacq source are recorded here: 
     - DACQINFO: 
-        - Uodate for Openiris data structure: calibrated positions; Raw positions; Calibration values; ring buffer. 
+        - Uodate for Openiris data structure: The important data we need: 
+            - Calibrated positions: eye_x, eye_y, eye_pa (Note they are int)
+            - Raw positions for Openiris P0 xy and P4 xy. 
+            - Calibration value. Note that they are int. 
+            - Buffer for adbuf_x, adbuf_y, adbuf_pa, and they are all int. 
         - IMPORTANT: all Point struct have "double" x and y. The pupil size is also "double". 
         - But old Pype has "int" raw and calibrated positions (posibly to match pixels)
         - Now all positions are "double", as well as the calibration parameters. Calibrated positions will still be "int". 
