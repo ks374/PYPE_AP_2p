@@ -42,7 +42,7 @@
 **   Added output of strobed words directly in mainloop
 **
 ** Mon 17 Mar 2025 Chenghang 
-**   Modified for Openiris. 
+**   Modified for Openiris. Based on Taekjun's version 2019-2023. 
 */
 
 #include <unistd.h>
@@ -76,29 +76,14 @@ static char *_tmodes[] = { "ANALOG", "ISCAN", "EYELINK", "EYELINK_TEST", "Openir
 #define INSIDE		1
 #define OUTSIDE		0
 
-/*STOPPEDHERE*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static int tracker_mode = ANALOG;
+static int tracker_mode = ANALOG; //Default tracker mode. 
 static int semid = -1;
 static unsigned long long ticks_per_ms = 0;
 static int eyelink_camera = -1;
 static int swap_xy = 0;
 
-static double find_clockfreq()	/* get clock frequency in Hz */
+static double find_clockfreq()	/* get clock frequency in Hz. Should be public method */
 {
   FILE *fp;
   char buf[100];
@@ -130,7 +115,7 @@ static double find_clockfreq()	/* get clock frequency in Hz */
   return(khz * 1.0e3); 
 }
 
-static void iscan_init(char *server, char *dev)
+static void iscan_init(char *server, char *dev) /*Kept same for Openiris version*/
 {
   int pid, k;
 
@@ -152,7 +137,7 @@ static void iscan_init(char *server, char *dev)
   tracker_mode = ISCAN;
 }
 
-static void iscan_halt()
+static void iscan_halt() /*Kept same for Openiris version*/
 {
   int k;
 
@@ -174,7 +159,7 @@ static void iscan_halt()
   fprintf(stderr, "%s: leaving iscan_halt\n", progname);
 }
 
-static void eyelink_init(char *ip_address)
+static void eyelink_init(char *ip_address) /*Kept same for Openiris version*/
 {
   char *p, *q, *opts, buf[100];
   extern char *__progname;
@@ -268,9 +253,7 @@ static void eyelink_init(char *ip_address)
   set_proc_title(saved);
 #endif
 }
-
-
-static void eyelink_halt()
+static void eyelink_halt() /*Kept same for Openiris version*/
 {
   char *p;
 
@@ -292,6 +275,38 @@ static void eyelink_halt()
     }
   }
 }
+
+/*Openiris init and halt are based on eyelink functions. */
+static OpenIrisClient* openiris_init(char *ip_address) 
+{
+  //char *p, *q, *opts, buf[100];
+  extern char *__progname;
+  char *saved;
+  
+  //FILE *fp;
+  
+
+  fprintf(stderr, "%s/openiris_init: trying %s\n", progname, ip_address);
+
+  saved = malloc(strlen(__progname) + 1);
+  strcpy(saved, __progname);
+#ifdef CHANGE_NAME
+  set_proc_title("openiris_thread");
+#endif
+
+  //begin_realtime_mode();
+  //set_eyelink_address(ip_address);
+  
+  /*Attemp to connect to Openiris client. */
+  /*Establish the client and return the pointer to the client. */
+  
+  
+#ifdef CHANGE_NAME
+  set_proc_title(saved);
+#endif
+}
+static void eyelink_halt() /*Kept same for Openiris version*/
+{
 
 static int eyelink_read(float *x, float *y,  float *p,
 			unsigned int *t, int *new)
