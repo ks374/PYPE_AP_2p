@@ -2,6 +2,7 @@
 #define OPENIRIS_CLIENT_H
 
 #include <arpa/inet.h>
+#include<sys/socket.h>
 #include <json-c/json.h>
 
 #include "Eye_data.h"
