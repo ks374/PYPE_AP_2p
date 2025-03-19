@@ -56,6 +56,9 @@ typedef struct {
 } FIXWIN;
 
 typedef struct {
+  /*Openiris client info*/
+  OpenIrisClient *openiris_client
+  
   /*Needed for Openiris*/
   char	dout[NDIGOUT];		/* status of digital output lines */
   /*Calibrated positions*/
@@ -97,7 +100,6 @@ typedef struct {
   int	openiris_ready;		/* sync flag -- when true, iscan proc ready */
 
   /* used only once.. */
-  /* What are these? Why they are in the precious memory if used only once? */
   int	dacq_pri;
   int	iscan_pri;
 

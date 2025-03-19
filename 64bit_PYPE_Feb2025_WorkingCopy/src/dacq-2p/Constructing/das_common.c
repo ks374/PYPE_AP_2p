@@ -54,6 +54,8 @@
 #include <sched.h>
 #include <string.h>
 
+#include "Openiris_client.h"
+
 #include "psems.h"
 #ifdef CHANGE_NAME
 # include "procname.h"
@@ -166,6 +168,7 @@ static void eyelink_init(char *ip_address) /*Kept same for Openiris version*/
   char *saved;
   FILE *fp;
   
+  tracker_mode = OPENIRIS;
 
   fprintf(stderr, "%s/eyelink_init: trying %s\n", progname, ip_address);
 
@@ -277,7 +280,7 @@ static void eyelink_halt() /*Kept same for Openiris version*/
 }
 
 /*Openiris init and halt are based on eyelink functions. */
-static OpenIrisClient* openiris_init(char *ip_address) 
+static OpenIrisClient* openiris_init(char *ip_address,int port, double timeout) 
 {
   //char *p, *q, *opts, buf[100];
   extern char *__progname;
@@ -299,15 +302,23 @@ static OpenIrisClient* openiris_init(char *ip_address)
   
   /*Attemp to connect to Openiris client. */
   /*Establish the client and return the pointer to the client. */
-  
+
+	OpenIrisClient* client = OpenIrisClient_init(ip_address, port, timeout);
+	if (!client) {
+		fprintf(stderr, "%s/openiris_init: failed %s\n", progname, ip_address);
+		return NULL;
+	}
+	return client;
   
 #ifdef CHANGE_NAME
   set_proc_title(saved);
 #endif
 }
-static void eyelink_halt() /*Kept same for Openiris version*/
+static void openiris_halt(OpenIrisClient* client) /*Kept same for Openiris version*/
 {
-
+	OpenIrisClient_close(OpenIrisClient* client);
+	fprintf(stdout,"Openiris client shut down");
+}
 static int eyelink_read(float *x, float *y,  float *p,
 			unsigned int *t, int *new)
 {
@@ -714,11 +725,341 @@ static void mainloop(void)
   //halt();
 }
 
+static void mainloop_openiris(OpenIrisClient *client)
+{
+  register int i, lastpri, setpri;
+  register float x, y, z, pa, tmp, calx, caly;
+  float tx, ty, tp;
+  unsigned long last_ts = 0, ts;
+  unsigned int eyelink_t;
+  int eyelink_new;
+  int k;
+  long accum[NADC], naccum;
+
+  register float sx=0, sy=0;
+  int si, sn;
+  float sbx[MAXSMOOTH], sby[MAXSMOOTH];
+
+  /*
+   * calx/caly are the gain+offset adjusted eye position values
+   * x/y are the raw values
+   */
+  calx = caly = x = y = pa = -1;
+
+  for (si = 0; si < MAXSMOOTH; si++) {
+    sbx[si] = sby[si] = 0.0;
+  }
+  si = 0;
+
+  errno = 0;
+  LOCK(semid);
+  dacq_data->openiris_client = client;
+  k = dacq_data->dacq_pri;
+  UNLOCK(semid);
+
+  if (setpriority(PRIO_PROCESS, 0, k) == 0 && errno == 0) {
+    fprintf(stderr, "%s: bumped priority %d\n", progname, k);
+    lastpri = k;
+    if (lastpri < 0) {
+      resched(1);
+    }
+    setpri = 1;
+  } else {
+    fprintf(stderr, "%s: failed to change priority\n", progname);
+    setpri = 0;
+    lastpri = 0;
+  }
+
+  timestamp(1);			/* initialize the timestamp to 0 */
+
+  fprintf(stderr, "%s: tracker_mode=%s (%d)\n", progname,
+	  _tmodes[tracker_mode], tracker_mode);
+
+  /* signal client we're ready */
+  LOCK(semid);
+  dacq_data->das_ready = 1;
+  fprintf(stderr, "%s: ready\n", progname);
+  UNLOCK(semid);
+
+  do {
+    /* sample converters as fast as possible and accumulate
+     * into temp buffer for averaging at the end of the sample
+     * period (1ms).  This replaces spin-locking code.
+     */
+    naccum = 0;
+    /*
+	//These code is for daq/das16_server. Openiris doesn't need them. 
+	do {
+      //sample the converters & acculumate values
+      for (i = 0; i < NADC; i++) {
+	if (naccum == 0) {
+	  accum[i] = ad_in(i);
+	} else {
+	  accum[i] += ad_in(i);
+	}
+      }
+      naccum += 1;
+    } while (((ts = timestamp(0)) - last_ts) < 1);
+
+    last_ts = ts;
+
+    // adjust for # of acculumated values
+    for (i = 0; i < NADC; i++) {
+      LOCK(semid);
+      dacq_data->adc[i] = (int)(accum[i] / naccum);
+      UNLOCK(semid);
+    }
+    */
+ {
+      LOCK(semid);
+      x = dacq_data->iscan_x;
+      y = dacq_data->iscan_y;
+      UNLOCK(semid);
+      pa = -1;
+    } 
+	LOCK(semid);
+      x_0 = dacq_data->openiris_p0_x;
+      y_0 = dacq_data->openiris_p0_y;
+	  x_4 = dacq_data->openiris_p4_x;
+	  y_4 = dacq_data->openiris_p4_y;
+      UNLOCK(semid);
+    if (swap_xy) {
+      tmp = x_0; x_0 = y_0; y_0 = tmp;
+	  temp = x_4;x_4 = y_4;y_4 = temp;
+    }
+
+    /* smooth (if necessary) raw eye position trace */
+    LOCK(semid);
+    sn = dacq_data->eye_smooth;
+    if (sn > MAXSMOOTH) {
+      sn = MAXSMOOTH;
+    }
+    UNLOCK(semid);
+
+    if (sn > 1) {
+      /* remove old point, add new point to smoothing sum */
+      sx = sx - sbx[si] + x;
+      sy = sy - sby[si] + y;
+
+      /* add new (unsmoothed data points) to smoothing buffer */
+      sbx[si] = x;
+      sby[si] = y;
+      si = (si + 1) % sn;
+
+      /* calc smoothed point */
+      x = sx / sn;
+      y = sy / sn;
+    }
+
+    /* convert from raw to pixel domain and save in eye_x/eye_y */
+    LOCK(semid);
+    calx = (dacq_data->eye_xgain * x) - dacq_data->eye_xoff;
+    caly = (dacq_data->eye_ygain * y) - dacq_data->eye_yoff;
+    dacq_data->eye_x = (int)((calx > 0) ? (calx+0.5) : (calx-0.5));
+    dacq_data->eye_y = (int)((caly > 0) ? (caly+0.5) : (caly-0.5));
+    dacq_data->eye_pa = pa;
+    UNLOCK(semid);
+    
+    /* read digital input lines */
+    dig_in();
+    
+    /* set digital output lines, only if the strobe's been set */
+    LOCK(semid);
+    k = dacq_data->dout_strobe;
+    UNLOCK(semid);
+    if (k) {
+      dig_out();
+      /* reset the strobe (as if it were a latch */
+      LOCK(semid);
+      dacq_data->dout_strobe = 0;
+      UNLOCK(semid);
+    }
+    /* or if the strword is high -- Anitha*/
+    LOCK(semid);
+    k = dacq_data->dout_strword;
+    UNLOCK(semid);
+    if (k) {
+      dig_str_out(); /* write the strobed word */
+      LOCK(semid);
+      dacq_data->dout_strword = 0;
+      UNLOCK(semid);
+    }
+
+    LOCK(semid);
+    dacq_data->timestamp = ts;
+    k = dacq_data->adbuf_on;
+    UNLOCK(semid);
+
+    /* Stash the data, if recording is on:
+     *  adbuf_t,x,y <- calibrated eye signal
+     *  adbuf_pa <- pupil area, if available (eyelink only)
+     *  adbuf_c[01234] <- raw data streams; in eyelink test mode
+     *    these are:
+     *     c0 <- eyelink x
+     *     c1 <- eyelink y
+     *     c2 <- coil raw x
+     *     c3 <- coil raw y
+     *     c4 <- eyelink pupil area
+     */
+    if (k) {
+      LOCK(semid);
+      k = dacq_data->adbuf_ptr;
+      dacq_data->adbuf_t[k] = ts;
+      dacq_data->adbuf_x[k] = dacq_data->eye_x;
+      dacq_data->adbuf_y[k] = dacq_data->eye_y;
+      dacq_data->adbuf_pa[k] = dacq_data->eye_pa;
+
+      if (tracker_mode == EYELINK_TEST) {
+	/* in test mode, analog channels 0,1,4 are filled with
+	 * the eyelink data (x,y,pupil area)
+	 */
+	dacq_data->adbuf_c0[k] = (int)(tx > 0 ? tx+0.5 : tx-0.5);
+	dacq_data->adbuf_c1[k] = (int)(ty > 0 ? ty+0.5 : ty-0.5);
+	dacq_data->adbuf_c2[k] = (int)((x > 0) ? (x+0.5) : (x-0.5));
+	dacq_data->adbuf_c3[k] = (int)((y > 0) ? (y+0.5) : (y-0.5));
+	dacq_data->adbuf_c4[k] = (int)(tp > 0 ? tp+0.5 : tp-0.5);
+      } else {
+	/* otherwise, the raw analog values are stuffed in, which
+	 * are usually raw x,y values off the coil, unless you're
+	 * using them for something else (and have iscan/eyelink)
+	 */
+	dacq_data->adbuf_c0[k] = dacq_data->adc[0];
+	dacq_data->adbuf_c1[k] = dacq_data->adc[1];
+	dacq_data->adbuf_c2[k] = dacq_data->adc[2];
+	dacq_data->adbuf_c3[k] = dacq_data->adc[3];
+
+	/* Mon Jan 16 09:25:34 2006 mazer 
+	 *  set up saving EDF-time to c4 channel for debugging
+
+	 dacq_data->adbuf_c4[k] = eyelink_t;
+
+	 */
+      }
+      if (++dacq_data->adbuf_ptr > ADBUFLEN) {
+	dacq_data->adbuf_overflow++;
+	dacq_data->adbuf_ptr = 0;
+      }
+      UNLOCK(semid);
+    }
+
+    /* check fixwins for in/out events */
+    for (i = 0; i < NFIXWIN; i++) {
+      LOCK(semid);
+      k = dacq_data->fixwin[i].active;
+      UNLOCK(semid);
+      if (k) {
+	LOCK(semid);
+	x = dacq_data->eye_x - dacq_data->fixwin[i].cx;
+	y = (dacq_data->eye_y - dacq_data->fixwin[i].cy) /
+	  dacq_data->fixwin[i].vbias;
+	UNLOCK(semid);
+	
+	z = (x * x) + (y * y);
+	
+	LOCK(semid);
+	if (z < dacq_data->fixwin[i].rad2) {
+	  /*
+	   * eye is now INSIDE the fixation window -- stop counting
+	   * transient breaks
+	   */
+	  dacq_data->fixwin[i].state = INSIDE;
+	  dacq_data->fixwin[i].fcount = 0;
+	} else {
+	  /*
+	   * eye is outside the fixation window, but could be shot noise..
+	   */
+	  if (dacq_data->fixwin[i].state == INSIDE) {
+	    /*
+	     * eye was inside last sample, so the break just happened
+	     * reset the break counter and start counting # samples
+	     * outside fixation window
+	     */
+	    dacq_data->fixwin[i].fcount = 1;
+	    dacq_data->fixwin[i].nout = 0;
+	  }
+	  dacq_data->fixwin[i].state = OUTSIDE;
+	  if (dacq_data->fixwin[i].fcount) {
+	    dacq_data->fixwin[i].nout += 1;
+	    if (dacq_data->fixwin[i].nout > dacq_data->fixbreak_tau) {
+	      /* number of samples the eye's been out of the window
+	       * has exceeded the limit defined by fixbreak_tau, count
+	       * this as a real fixation break.
+	       */
+	      if (dacq_data->fixwin[i].broke == 0) {
+		/* stash time if it's the first break */
+		dacq_data->fixwin[i].break_time =  dacq_data->timestamp;
+	      }
+	      dacq_data->fixwin[i].broke = 1;
+	      if (dacq_data->fixwin[i].genint) {
+		/* send interupt to parent */
+		dacq_data->int_class = INT_FIXWIN;
+		dacq_data->int_arg = 0;
+		dacq_data->fixwin[i].genint = 0;
+		kill(getppid(), SIGUSR1);
+		/* fprintf(stderr,"das: sent int, disabled\n"); */
+	      }
+	    }
+	  }
+	}
+	UNLOCK(semid);
+      }
+    }
+
+    /* possibly bump up or down priority on the fly */
+    LOCK(semid);
+    k = dacq_data->dacq_pri;
+    UNLOCK(semid);
+    if (setpri && lastpri != k) {
+      lastpri = k;
+      errno = 0;
+      if (setpriority(PRIO_PROCESS, 0, k) == -1 && errno) {
+	/* disable future priority changes */
+	setpri = 0;
+      }
+      if (lastpri < 0) {
+	resched(1);
+      }
+    }
+    LOCK(semid);
+    k = dacq_data->terminate;
+    UNLOCK(semid);
+  } while (! k);
+
+  fprintf(stderr, "%s: terminate signaled\n", progname);
+  iscan_halt();
+  eyelink_halt();
+
+  /* no longer ready */
+  LOCK(semid);
+  dacq_data->das_ready = 0;
+  UNLOCK(semid);
+
+  // this isn't needed, halt() gets called automatically via atexit()
+  //halt();
+}
+
 int main(int ac, char **av, char **envp)
 {
   char *p;
   //char buf[100];
   float mhz;
+  OpenIrisClient *client;
+  int port;
+  double timeout;
+  
+  if (ac == 1){
+	port = 5000;
+	timeout = 10;
+  }
+  if (ac == 2){
+	  port = av[1];
+	  timeout = 10;
+  }
+  if (ac == 3){
+	  port = av[1];
+	  timeout = av[2];
+  }
+  
 
 #ifdef CHANGE_NAME
   init_set_proc_title(ac, av, envp);
@@ -748,7 +1089,7 @@ int main(int ac, char **av, char **envp)
     exit(1);
   }
 
-  init();
+  client = openiris_init(char *ip_address,int port, double timeout);
   fprintf(stderr, "%s: initted\n", progname);
   
 
@@ -769,16 +1110,21 @@ int main(int ac, char **av, char **envp)
       fprintf(stderr, "*** eyelink test mode FAILED  ***\n");
       fprintf(stderr, "*********************************\n");
     }
-  } else if (ac > 2) {
+  } else if (ac == 2) {
     iscan_init(av[1], av[2]);
+  } else if (ac == 3) {
+	client = openiris_init(char *ip_address,int port, double timeout);
   }
 
   if (getenv("XXSWAP_XY")) {
     swap_xy = 1;
     fprintf(stderr, "%s: swapping X and Y\n", progname);
   }
-
-  mainloop();
+  if (tracker_mode == OPENIRIS){
+	  mainloop_openiris(client);
+  } else {
+	mainloop();
+  }
   fprintf(stderr, "%s: bye bye\n", progname);
   exit(0);
 }

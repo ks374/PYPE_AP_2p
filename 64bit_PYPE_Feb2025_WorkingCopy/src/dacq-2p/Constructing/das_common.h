@@ -7,6 +7,8 @@
 **
 */
 
+#include "Openiris_client.h"
+
 static unsigned long timestamp(int init);
 static void perror2(char *s, char *file, int line);
 static void mainloop(void);

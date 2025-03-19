@@ -53,10 +53,8 @@ OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double
         return NULL;
     }
 	
-	/*
-	STOPPED HERE: FOllowing handler for connection test. -
 	// Test connection by sending a handshake
-    const char* handshake = "INIT";
+	const char* handshake = "INIT";
     socklen_t addr_len = sizeof(client->server_address);
     if (sendto(client->sock, handshake, strlen(handshake), 0,
               (struct sockaddr*)&client->server_address, addr_len) < 0) {
@@ -64,8 +62,8 @@ OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double
         OpenIrisClient_close(client);
         return NULL;
     }
-
-    // Verify server response
+	/*
+	// Verify server response
     char ack_buffer[16];
     int bytes_received = recvfrom(client->sock, ack_buffer, sizeof(ack_buffer), 0, NULL, NULL);
     if (bytes_received <= 0) {
@@ -73,22 +71,7 @@ OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double
         OpenIrisClient_close(client);
         return NULL;
     }
-	
-	
-	Then in the main loop
-	OpenIrisClient* client = OpenIrisClient_init("192.168.1.100", 5000, 2.0);
-if (!client) {
-    // Handle connection failure
-}
-
-while (running) {
-    // Keep grabbing data
-    EyeData* data = OpenIrisClient_Data_buffer_init();
-    OpenIrisClient_fetch_data(data, client, 0);
-    // Process eye data...
-}
 	*/
-    
     return client;
 }
 
