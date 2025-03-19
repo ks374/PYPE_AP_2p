@@ -54,7 +54,7 @@ OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double
     }
 	
 	/*
-	STOPPED HERE: FOllowing handler for connection test. 
+	STOPPED HERE: FOllowing handler for connection test. -
 	// Test connection by sending a handshake
     const char* handshake = "INIT";
     socklen_t addr_len = sizeof(client->server_address);
