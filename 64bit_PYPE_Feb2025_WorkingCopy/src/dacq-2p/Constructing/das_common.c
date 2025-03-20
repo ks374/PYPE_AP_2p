@@ -54,7 +54,7 @@
 #include <sched.h>
 #include <string.h>
 
-#include "Openiris_client.h"
+#include "das_common.h"
 
 #include "psems.h"
 #ifdef CHANGE_NAME
@@ -280,15 +280,15 @@ static void eyelink_halt() /*Kept same for Openiris version*/
 }
 
 /*Openiris init and halt are based on eyelink functions. */
-static OpenIrisClient* openiris_init(char *ip_address,int port, double timeout) 
+static void openiris_init(char *ip_address,int port, double timeout) 
 {
   //char *p, *q, *opts, buf[100];
   extern char *__progname;
   char *saved;
-  
+  int pid;
+  char *server
   //FILE *fp;
   
-
   fprintf(stderr, "%s/openiris_init: trying %s\n", progname, ip_address);
 
   saved = malloc(strlen(__progname) + 1);
@@ -308,7 +308,23 @@ static OpenIrisClient* openiris_init(char *ip_address,int port, double timeout)
 		fprintf(stderr, "%s/openiris_init: failed %s\n", progname, ip_address);
 		return NULL;
 	}
-	return client;
+    LOCK(semid);
+      dacq_data->openiris_client = client;
+    UNLOCK(semid);
+    server = "openiris_server"
+    if ((pid = fork()) == 0) {
+        execlp(server, server, NULL);
+  } else {
+    fprintf(stderr, "%s: waiting for iscan_ready\n", progname);
+    do {
+      LOCK(semid);
+      k = dacq_data->openiris_ready;
+      UNLOCK(semid);
+      usleep(100);
+    } while (! k);
+  }
+  tracker_mode = OPENIRIS;
+  
   
 #ifdef CHANGE_NAME
   set_proc_title(saved);
@@ -317,6 +333,9 @@ static OpenIrisClient* openiris_init(char *ip_address,int port, double timeout)
 static void openiris_halt(OpenIrisClient* client) /*Kept same for Openiris version*/
 {
 	OpenIrisClient_close(OpenIrisClient* client);
+    LOCK(semid);
+    dacq_data->openiris_ready = 0;
+    UNLOCK(semid);
 	fprintf(stdout,"Openiris client shut down");
 }
 static int eyelink_read(float *x, float *y,  float *p,
@@ -725,7 +744,7 @@ static void mainloop(void)
   //halt();
 }
 
-static void mainloop_openiris(OpenIrisClient *client)
+static void mainloop_openiris()
 {
   register int i, lastpri, setpri;
   //register float x, y, z, pa, tmp, calx, caly;
@@ -738,6 +757,7 @@ static void mainloop_openiris(OpenIrisClient *client)
   int eyelink_new;
   int k;
   long accum[NADC], naccum;
+  OpenIrisClient *client;
 
   register float sx=0, sy=0;
   register double sx_0=0, sy_0=0, sx_4=0, sy_4=0;
@@ -757,7 +777,7 @@ static void mainloop_openiris(OpenIrisClient *client)
 
   errno = 0;
   LOCK(semid);
-  dacq_data->openiris_client = client;
+  client = dacq_data->openiris_client;
   k = dacq_data->dacq_pri;
   UNLOCK(semid);
 
@@ -919,10 +939,6 @@ static void mainloop_openiris(OpenIrisClient *client)
      *     c4 <- eyelink pupil area
      */
      
-     
-     
-     
-     /*STOPPED HERE*/
     if (k) {
       LOCK(semid);
       k = dacq_data->adbuf_ptr;
@@ -930,33 +946,15 @@ static void mainloop_openiris(OpenIrisClient *client)
       dacq_data->adbuf_x[k] = dacq_data->eye_x;
       dacq_data->adbuf_y[k] = dacq_data->eye_y;
       dacq_data->adbuf_pa[k] = dacq_data->eye_pa;
-
-      if (tracker_mode == EYELINK_TEST) {
-	/* in test mode, analog channels 0,1,4 are filled with
-	 * the eyelink data (x,y,pupil area)
-	 */
-	dacq_data->adbuf_c0[k] = (int)(tx > 0 ? tx+0.5 : tx-0.5);
-	dacq_data->adbuf_c1[k] = (int)(ty > 0 ? ty+0.5 : ty-0.5);
-	dacq_data->adbuf_c2[k] = (int)((x > 0) ? (x+0.5) : (x-0.5));
-	dacq_data->adbuf_c3[k] = (int)((y > 0) ? (y+0.5) : (y-0.5));
-	dacq_data->adbuf_c4[k] = (int)(tp > 0 ? tp+0.5 : tp-0.5);
-      } else {
-	/* otherwise, the raw analog values are stuffed in, which
-	 * are usually raw x,y values off the coil, unless you're
-	 * using them for something else (and have iscan/eyelink)
-	 */
-	dacq_data->adbuf_c0[k] = dacq_data->adc[0];
-	dacq_data->adbuf_c1[k] = dacq_data->adc[1];
-	dacq_data->adbuf_c2[k] = dacq_data->adc[2];
-	dacq_data->adbuf_c3[k] = dacq_data->adc[3];
-
-	/* Mon Jan 16 09:25:34 2006 mazer 
-	 *  set up saving EDF-time to c4 channel for debugging
-
-	 dacq_data->adbuf_c4[k] = eyelink_t;
-
-	 */
-      }
+        
+    /* Fill the c channels buffer, we don't have adc so fill channel 0,1,4
+    with x,y,pupil area, but pa will be convereted as int*/
+    if (tracker_mode == OPENIRIS) {
+        dacq_data->adbuf_c0[k] = (int)((calx > 0) ? (calx+0.5) : (calx-0.5));
+        dacq_data->adbuf_c1[k] = (int)((caly > 0) ? (caly+0.5) : (caly-0.5));
+        dacq_data->adbuf_c4[k] = (int) pa;
+    }
+    
       if (++dacq_data->adbuf_ptr > ADBUFLEN) {
 	dacq_data->adbuf_overflow++;
 	dacq_data->adbuf_ptr = 0;
@@ -1048,8 +1046,9 @@ static void mainloop_openiris(OpenIrisClient *client)
   } while (! k);
 
   fprintf(stderr, "%s: terminate signaled\n", progname);
-  iscan_halt();
-  eyelink_halt();
+  //iscan_halt();
+  //eyelink_halt();
+  openiris_halt(client);
 
   /* no longer ready */
   LOCK(semid);
@@ -1111,7 +1110,7 @@ int main(int ac, char **av, char **envp)
     exit(1);
   }
 
-  client = openiris_init(char *ip_address,int port, double timeout);
+  //client = openiris_init(char *ip_address,int port, double timeout);
   fprintf(stderr, "%s: initted\n", progname);
   
 
@@ -1135,7 +1134,7 @@ int main(int ac, char **av, char **envp)
   } else if (ac == 2) {
     iscan_init(av[1], av[2]);
   } else if (ac == 3) {
-	client = openiris_init(char *ip_address,int port, double timeout);
+	openiris_init(char *ip_address,int port, double timeout);
   }
 
   if (getenv("XXSWAP_XY")) {
@@ -1143,7 +1142,7 @@ int main(int ac, char **av, char **envp)
     fprintf(stderr, "%s: swapping X and Y\n", progname);
   }
   if (tracker_mode == OPENIRIS){
-	  mainloop_openiris(client);
+	  mainloop_openiris();
   } else {
 	mainloop();
   }

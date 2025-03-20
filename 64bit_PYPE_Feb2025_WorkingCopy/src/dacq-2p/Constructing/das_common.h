@@ -6,14 +6,18 @@
 ** history:
 **
 */
+#ifndef DAS_COMMON_H
+#define DAS_COMMON_H
+
 
 #include "Openiris_client.h"
 
-static unsigned long timestamp(int init);
-static void perror2(char *s, char *file, int line);
-static void mainloop(void);
-static void iscan_halt(void);
-static int semid;
+//static unsigned long timestamp(int init);
+//static void perror2(char *s, char *file, int line);
+//static void mainloop(void);
+//static void iscan_halt(void);
+//static int semid;
+//int main();
 
 
-
+#endif

@@ -35,6 +35,12 @@ halt(): shutdown ETH32 connection and Openiris client. Clean the EyesData pointe
 
 */
 
+/*Temp note: 
+Grab clien from the dacq_data. 
+Set openiris_ready=1 once setup. 
+set k=terminate=1 when done? 
+No argument passed to main*/
+
 #include "openiris_server.h"
 
 #include <sys/types.h>
