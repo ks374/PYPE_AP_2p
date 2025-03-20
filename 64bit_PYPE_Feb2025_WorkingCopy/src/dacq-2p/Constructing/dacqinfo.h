@@ -59,6 +59,7 @@ typedef struct {
   /*Openiris client info*/
   OpenIrisClient *openiris_client
   
+  
   /*Needed for Openiris*/
   char	dout[NDIGOUT];		/* status of digital output lines */
   /*Calibrated positions*/

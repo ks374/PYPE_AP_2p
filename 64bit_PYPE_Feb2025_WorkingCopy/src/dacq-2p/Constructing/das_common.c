@@ -728,7 +728,10 @@ static void mainloop(void)
 static void mainloop_openiris(OpenIrisClient *client)
 {
   register int i, lastpri, setpri;
-  register float x, y, z, pa, tmp, calx, caly;
+  //register float x, y, z, pa, tmp, calx, caly;
+  register float x,y,z,pa,temp;
+  register double calx_0,calx_4,caly_0,caly_4;
+  register double x_0,y_0,x_4,y_4;
   float tx, ty, tp;
   unsigned long last_ts = 0, ts;
   unsigned int eyelink_t;
@@ -737,8 +740,9 @@ static void mainloop_openiris(OpenIrisClient *client)
   long accum[NADC], naccum;
 
   register float sx=0, sy=0;
+  register double sx_0=0, sy_0=0, sx_4=0, sy_4=0;
   int si, sn;
-  float sbx[MAXSMOOTH], sby[MAXSMOOTH];
+  double sbx_0[MAXSMOOTH], sby_0[MAXSMOOTH], sbx_4[MAXSMOOTH], sby_4[MAXSMOOTH];
 
   /*
    * calx/caly are the gain+offset adjusted eye position values
@@ -747,7 +751,7 @@ static void mainloop_openiris(OpenIrisClient *client)
   calx = caly = x = y = pa = -1;
 
   for (si = 0; si < MAXSMOOTH; si++) {
-    sbx[si] = sby[si] = 0.0;
+    sbx_0[si] = sby_0[si] = sbx_4[si] = sby_4[si] = 0.0;
   }
   si = 0;
 
@@ -810,6 +814,8 @@ static void mainloop_openiris(OpenIrisClient *client)
       UNLOCK(semid);
     }
     */
+    ts = timestamp(0);
+    last_ts = ts;
  {
       LOCK(semid);
       x = dacq_data->iscan_x;
@@ -838,21 +844,29 @@ static void mainloop_openiris(OpenIrisClient *client)
 
     if (sn > 1) {
       /* remove old point, add new point to smoothing sum */
-      sx = sx - sbx[si] + x;
-      sy = sy - sby[si] + y;
+      sx_0 = sx_0 - sbx_0[si] + x_0;
+      sy_0 = sy_0 - sby_0[si] + y_0;
+	  sx_4 = sx_4 - sbx_4[si] + x_4;
+      sy_4 = sy_4 - sby_4[si] + y_4;
 
       /* add new (unsmoothed data points) to smoothing buffer */
-      sbx[si] = x;
-      sby[si] = y;
+      sbx_0[si] = x_0;
+      sby_0[si] = y_0;
+	  sbx_4[si] = x_4;
+      sby_4[si] = y_4;
       si = (si + 1) % sn;
 
       /* calc smoothed point */
-      x = sx / sn;
-      y = sy / sn;
+      x_0 = sx_0 / sn;
+      y_0 = sy_0 / sn;
+	  x_4 = sx_4 / sn;
+      y_4 = sy_4 / sn;
     }
 
     /* convert from raw to pixel domain and save in eye_x/eye_y */
     LOCK(semid);
+	x = (float)(x4-x0);
+    y = (float)(y4-y0);
     calx = (dacq_data->eye_xgain * x) - dacq_data->eye_xoff;
     caly = (dacq_data->eye_ygain * y) - dacq_data->eye_yoff;
     dacq_data->eye_x = (int)((calx > 0) ? (calx+0.5) : (calx-0.5));
@@ -860,36 +874,39 @@ static void mainloop_openiris(OpenIrisClient *client)
     dacq_data->eye_pa = pa;
     UNLOCK(semid);
     
-    /* read digital input lines */
+    /*Following lines are for digital signal or strobe. No need for Openiris.
+    // read digital input lines 
     dig_in();
     
-    /* set digital output lines, only if the strobe's been set */
+    //  set digital output lines, only if the strobe's been set 
     LOCK(semid);
     k = dacq_data->dout_strobe;
     UNLOCK(semid);
     if (k) {
       dig_out();
-      /* reset the strobe (as if it were a latch */
+       //  reset the strobe (as if it were a latch 
       LOCK(semid);
       dacq_data->dout_strobe = 0;
       UNLOCK(semid);
     }
-    /* or if the strword is high -- Anitha*/
+    // or if the strword is high -- Anitha
     LOCK(semid);
     k = dacq_data->dout_strword;
     UNLOCK(semid);
     if (k) {
-      dig_str_out(); /* write the strobed word */
+      dig_str_out();  // write the strobed word 
       LOCK(semid);
       dacq_data->dout_strword = 0;
       UNLOCK(semid);
     }
-
+    */
+    
+    //Check eye position buffer. 
     LOCK(semid);
     dacq_data->timestamp = ts;
     k = dacq_data->adbuf_on;
     UNLOCK(semid);
-
+    
     /* Stash the data, if recording is on:
      *  adbuf_t,x,y <- calibrated eye signal
      *  adbuf_pa <- pupil area, if available (eyelink only)
@@ -901,6 +918,11 @@ static void mainloop_openiris(OpenIrisClient *client)
      *     c3 <- coil raw y
      *     c4 <- eyelink pupil area
      */
+     
+     
+     
+     
+     /*STOPPED HERE*/
     if (k) {
       LOCK(semid);
       k = dacq_data->adbuf_ptr;
