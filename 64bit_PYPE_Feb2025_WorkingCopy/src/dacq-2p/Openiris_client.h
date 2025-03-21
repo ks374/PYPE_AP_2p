@@ -12,7 +12,7 @@ typedef struct {
     int timeout;
 } OpenIrisClient;
 
-OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double timeout);
+OpenIrisClient* OpenIrisClient_init(char* server_address, int port, double timeout);
 EyeData* OpenIrisClient_Data_buffer_init();
 void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug);
 void OpenIrisClient_close(OpenIrisClient* client);

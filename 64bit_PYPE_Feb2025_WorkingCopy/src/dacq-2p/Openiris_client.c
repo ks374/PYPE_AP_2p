@@ -19,13 +19,25 @@ You also need the header file Openiris_client.h.
 */
 
 // Function to initialize the OpenIrisClient
-OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double timeout) {
+OpenIrisClient* OpenIrisClient_init(char* server_address, int port, double timeout) {
     //timeout in microsecond. 
     OpenIrisClient* client = (OpenIrisClient*)malloc(sizeof(OpenIrisClient));
+	if (!client) {
+        fprintf(stderr, "Memory allocation failed for Openirsclient\n");
+        return NULL;
+    }
     client->server_address.sin_family = AF_INET; //Use IPV4 address type. 
     client->server_address.sin_port = htons(port); //assign the port number. 
-    client->server_address.sin_addr.s_addr = inet_addr(server_address); //assign the server address. 
-    client->sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (inet_pton(AF_INET, server_address, &client->server_address.sin_addr) <= 0) {
+        fprintf(stderr, "Invalid server address: %s\n", server_address);
+        free(client);
+        return NULL;
+    }
+    if ((client->sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("Socket creation failed");
+        free(client);
+        return NULL;
+    }
     client->timeout = timeout;
     
     // Set socket timeout
@@ -34,8 +46,32 @@ OpenIrisClient* OpenIrisClient_init(const char* server_address, int port, double
     struct timeval tv;
     tv.tv_sec = timeout_sec;
     tv.tv_usec = timeout_usec;
-    setsockopt(client->sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
-    
+    if (setsockopt(client->sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0) {
+        perror("Failed to set socket timeout");
+        close(client->sock);
+        free(client);
+        return NULL;
+    }
+	
+	// Test connection by sending a handshake
+	const char* handshake = "INIT";
+    socklen_t addr_len = sizeof(client->server_address);
+    if (sendto(client->sock, handshake, strlen(handshake), 0,
+              (struct sockaddr*)&client->server_address, addr_len) < 0) {
+        perror("Connection test failed");
+        OpenIrisClient_close(client);
+        return NULL;
+    }
+	/*
+	// Verify server response
+    char ack_buffer[16];
+    int bytes_received = recvfrom(client->sock, ack_buffer, sizeof(ack_buffer), 0, NULL, NULL);
+    if (bytes_received <= 0) {
+        fprintf(stderr, "No response from server\n");
+        OpenIrisClient_close(client);
+        return NULL;
+    }
+	*/
     return client;
 }
 
@@ -63,9 +99,14 @@ static char* OpenIrisClient_fetch_data_raw(OpenIrisClient* client, int debug) {
 // Function to fetch data as a JSON object
 static json_object* OpenIrisClient_fetch_data_json(OpenIrisClient* client, int debug) {
     char* raw_data = OpenIrisClient_fetch_data_raw(client, debug);
-    json_object* json_data = json_tokener_parse(raw_data);
-    free(raw_data);  // Free the raw data string after parsing
-    return json_data;
+    if strcmp(raw_data, "{}") == 0{
+        perror("Error receiving data");
+        return NULL
+    } else {
+        json_object* json_data = json_tokener_parse(raw_data);
+        free(raw_data);  // Free the raw data string after parsing
+        return json_data;
+    }    
 }
 
 /*
