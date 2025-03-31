@@ -1,0 +1,17 @@
+######################################################################
+# Customize for your environment.  You # must have write access to
+# this directory! Note: ?= searches 'env' first..
+PYPEDIR ?= /usr/local/pype_python3
+
+######################################################################
+# do as you wish here:
+GLOBAL_CFLAGS = -O -Wall -D_REENTRANT
+
+#######################################################################
+# PYCOMPILE is defined in build file
+#PYTHONINC ?= -I$(PYTHONPREFIX)/include/python$(PYTHONFULLVER)
+#PYCOMPILE ?= $(PYTHONEXE) $(PYTHONPREFIX)/lib/python$(PYTHONFULLVER)/compileall.py
+
+libdir=/usr/lib/python$(PYTHONFULLVER)
+PYCOMPILE ?= $(PYTHONEXE) $(libdir)/compileall.py
+
