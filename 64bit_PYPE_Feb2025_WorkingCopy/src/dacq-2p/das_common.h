@@ -19,3 +19,8 @@
 /* this has set_eyelink_address() etc.. */
 #include <core_expt.h> // edited May 2019, Taekjun
 
+static unsigned long timestamp(int init);
+static void perror2(char *s, char *file, int line);
+static void mainloop(void);
+static void iscan_halt(void);
+static int semid;

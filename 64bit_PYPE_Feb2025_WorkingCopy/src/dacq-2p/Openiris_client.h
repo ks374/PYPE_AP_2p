@@ -2,6 +2,8 @@
 #define OPENIRIS_CLIENT_H
 
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <json-c/json.h>
 
 #include "Eye_data.h"
@@ -13,7 +15,7 @@ typedef struct {
 } OpenIrisClient;
 
 OpenIrisClient* OpenIrisClient_init(char* server_address, int port, double timeout);
-EyeData* OpenIrisClient_Data_buffer_init();
+EyesData* OpenIrisClient_Data_buffer_init();
 void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug);
 void OpenIrisClient_close(OpenIrisClient* client);
 

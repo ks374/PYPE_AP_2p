@@ -1,6 +1,6 @@
 include ../make.defs
 
-DACQDIR = dacq3
+DACQDIR = dacq-2p
 DUMMYDIR= dummy-dacq
 SUBDIRS = pype sh icons sounds sample-tasks Plexon p2m tools
 

@@ -341,7 +341,7 @@ int dacq_start(int boot, int testmode, char *tracker_type,
 	            //fprintf(stderr, "dacqmodule: starting analog\n");
 	            execlp(dacq_server, dacq_server, NULL);
 	          } else if (strcmp(tracker_type, "OPENIRIS") == 0) {
-                  char *ip_address = getenv("IP_ADDRESS")
+                  char *ip_address = getenv("IP_ADDRESS");
                   int port = atoi(getenv("OPENIRIS_PORT"));
                   double timeout = atoi(getenv("OPENIRIS_TIMEOUT"));
                   execlp(dacq_server, dacq_server, ip_address, port, timeout, NULL);

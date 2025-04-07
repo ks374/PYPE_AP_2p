@@ -430,6 +430,12 @@ static int init()
     exit(1);
   }
 
+  if ((semid = psem_init(SEMKEY)) < 0) {
+    perror("psem_init");
+    fprintf(stderr, "%s: can't init semaphore\n", progname);
+    exit(1);
+  }
+
   if (mlockall(MCL_CURRENT) == 0) {
     mem_locked = 1;
   } else {

@@ -1,11 +1,10 @@
 #! /bin/bash
 ### script should be executed by the bash interpreter
-
 ### Exit on error: script will exit if any command returns a non-zero exit status
 set -e
 
 #Add these to properly use conda environment: Note that your environment has to be name "pype_env"
-source ~/anaconda3/bin/activate pype_env
+source ~/anaconda3/bin/activate pype
 
 ### check if the current user is not root user, 
 ### if that's true then the command "exec sudo -- "$0" "$@"" is executed, 
@@ -176,6 +175,7 @@ tar -C "$tempdir" -xJf "$TARFILE" --strip-components=1
 ### This allows the script to operate within the context of the extracted files 
 ### without having to constantly reference the full path of the temporary directory.
 pushd "$tempdir"
+
 
 ### Numeric is an old package not used anymore, replaced with numpy
 ### So, the following lines could be omitted. 

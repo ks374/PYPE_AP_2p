@@ -47,7 +47,7 @@ halt(): shutdown ETH32 connection and Openiris client. Clean the EyesData pointe
 #include <sys/shm.h>
 #include <sys/mman.h>
 
-#include "openiris_server.h"
+#include "Openiris_server.h"
 
 static char *progname = NULL;
 static DACQINFO *dacq_data = NULL;
@@ -59,19 +59,18 @@ static int semid = -1;
 OpenIrisClient *client = NULL;
  
 
-static void openiris_read(double *x, double *y, int *pa){
-    Eyesdata *eyesdata;
+static int openiris_read(double *x, double *y, int *pa){
+    EyesData *eyesdata = malloc(sizeof(EyesData));
     OpenIrisClient_fetch_data(eyesdata, client, 0);
-    Eyedata *temp;
-    temp = eyesdata -> left; //you might want to change it to right if needed. 
+    EyeData *temp;
+    temp = &(eyesdata -> left); //you might want to change it to right if needed. 
     
     /*Variable to store current eyedata content*/
     
-    x = (temp -> cr.x) - (temp -> p4.x);
-    y = (temp -> cr.y) - (temp -> p4.y);
-    pa = (int)(temp -> pupil_area);
-    
-    return(1);
+    if (x) *x = (temp -> cr.x) - (temp -> p4.x);
+    if (y) *y = (temp -> cr.y) - (temp -> p4.y);
+    if (pa) *pa = (int)(temp -> pupil_area);
+	return(1);
 }
 static void halt(void){
     if (shmdt(dacq_data) == -1) {
@@ -107,39 +106,9 @@ static void init(char *dev,char *server_address, int port, double timeout){
   client = OpenIrisClient_init(server_address, port, timeout);
   
   fprintf(stderr, "openiris: attached to %s\n", dev);
-  atexit(halt());
+  atexit(halt);
   catch_signals(progname); //Don't know what it does. May not need it. 
 
-}
-int main(int ac, char **av){
-    char *p = rindex(av[0], '/');
-    char *dev;
-    
-    if (p) {
-        progname = p+1;
-    } else {
-        progname = av[0];
-    }
-    fprintf(stderr, "%s: started up\n", progname);
-    
-    if (ac < 2) {
-        fprintf(stderr, "usage: %s serialdev\n", progname);
-        exit(1);
-    }
-    dev=av[1];
-    if (ac < 4) {
-        fprintf(stderr,"not enought arguments passed to openiris_server\n");
-    } else if (ac < 5) {
-        double timeout = 10;
-    } else {
-        char *server_address = av[2];
-        int port = av[3];
-        double timeout = av[4];
-    }
-    init(dev,server_address,port,timeout);
-    fprintf(stderr,"%s: entering aminloop\n",progname);
-    mainloop(server_address,port,timeout);
-    exit(0);
 }
 
 static void mainloop(char *server_address,int port,double timeout)
@@ -199,4 +168,41 @@ static void mainloop(char *server_address,int port,double timeout)
     fprintf(stderr, "%s: exiting\n", progname);
   }
   dacq_data->openiris_ready = 0;
+}
+
+
+int main(int ac, char **av){
+    char *p = rindex(av[0], '/');
+    char *dev;
+	char *server_address = NULL;
+	int port = 5000;
+	double timeout = 10;
+    
+    if (p) {
+        progname = p+1;
+    } else {
+        progname = av[0];
+    }
+    fprintf(stderr, "%s: started up\n", progname);
+    
+    if (ac < 2) {
+        fprintf(stderr, "usage: %s serialdev\n", progname);
+        exit(1);
+    }
+    dev=av[1];
+    if (ac < 4) {
+        fprintf(stderr,"not enought arguments passed to openiris_server\n");
+    } else if (ac < 5) {
+        server_address = av[2];
+        port = atoi(av[3]);
+		timeout = 10;
+    } else {
+        server_address = av[2];
+        port = atoi(av[3]);
+        timeout = atof(av[4]);
+    }
+    init(dev,server_address,port,timeout);
+    fprintf(stderr,"%s: entering aminloop\n",progname);
+    mainloop(server_address,port,timeout);
+    exit(0);
 }

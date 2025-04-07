@@ -9,8 +9,11 @@ GLOBAL_CFLAGS = -O -Wall -D_REENTRANT
 
 #######################################################################
 # PYCOMPILE is defined in build file
-#PYTHONINC ?= -I$(PYTHONPREFIX)/include/python$(PYTHONFULLVER)
-#PYCOMPILE ?= $(PYTHONEXE) $(PYTHONPREFIX)/lib/python$(PYTHONFULLVER)/compileall.py
+PYTHONEXE ?= python
+PYTHONFULLVER ?= $(shell python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+PYTHONPREFIX ?= $(shell python -c "import sys; print(sys.prefix)")
+PYTHONINC ?= -I$(PYTHONPREFIX)/include/python$(PYTHONFULLVER)
+PYCOMPILE ?= $(PYTHONEXE) $(PYTHONPREFIX)/lib/python$(PYTHONFULLVER)/compileall.py
 
 libdir?=/usr/lib/python$(PYTHONFULLVER)
 PYCOMPILE ?= ${PYTHONEXE}$libdir/compileall.py

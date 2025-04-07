@@ -784,7 +784,9 @@ int main(int ac, char **av, char **envp)
   } else if ((ac > 2)&&(ac<4)) {
     iscan_init(av[1], av[2]);
   } else if (ac >= 4) {
-      openiris_init(av[1],av[2],av[3],av[4],av[5]);
+	  int port = atoi(av[4]);
+	  double timeout = atof(av[5]);
+      openiris_init(av[1],av[2],av[3],port,timeout);
   }
 
   if (getenv("XXSWAP_XY")) {

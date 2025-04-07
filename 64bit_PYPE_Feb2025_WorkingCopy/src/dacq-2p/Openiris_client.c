@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include<math.h>
 
 #include "Openiris_client.h"
 
@@ -99,14 +100,15 @@ static char* OpenIrisClient_fetch_data_raw(OpenIrisClient* client, int debug) {
 // Function to fetch data as a JSON object
 static json_object* OpenIrisClient_fetch_data_json(OpenIrisClient* client, int debug) {
     char* raw_data = OpenIrisClient_fetch_data_raw(client, debug);
-    if strcmp(raw_data, "{}") == 0{
+    if (strcmp(raw_data, "{}") == 0){
         perror("Error receiving data");
-        return NULL
+        return NULL;
     } else {
         json_object* json_data = json_tokener_parse(raw_data);
         free(raw_data);  // Free the raw data string after parsing
         return json_data;
-    }    
+    } 
+	return NULL;
 }
 
 /*
@@ -118,16 +120,17 @@ The update function will write to data buffer, which is DACQ_INFO file, with gaz
 I have one thread to update the data buffer. Either in real-time or when requested. 
 I have another thread to fetch data from the buffer when required. The buffer will be locked during fetching. 
 */
-EyeData* OpenIrisClient_Data_buffer_init(){
+EyesData* OpenIrisClient_Data_buffer_init(){
     EyesData* eyesdata = (EyesData*)malloc(sizeof(EyesData)); //Here is the EyesData Pointer Buffer. 
     if (eyesdata!=NULL) {
         return eyesdata;
     }else{
         printf("Memory allocation failed. No EyesData inited. \n");
+		return NULL;
     }
 }
 void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug) {
-    Eyesdata_init(OpenIrisClient_fetch_data_json(client, debug),eyesdata);
+    EyesData_init(OpenIrisClient_fetch_data_json(client, debug),eyesdata);
 }
 
 // Function to close the client (similar to __exit__ in Python)

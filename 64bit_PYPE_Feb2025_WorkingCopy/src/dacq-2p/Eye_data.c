@@ -21,7 +21,7 @@ Point* Point_sub(Point* point1,Point* point2){
     Point* point3 = malloc(sizeof(Point));
     if (point3 != NULL){
         point3->x = point1->x - point2->x;
-        point3->y = point1->y - point3->y;
+        point3->y = point1->y - point2->y;
         return point3;
     }else{
         printf("Warning: new point not created due to memory allocation failed. \n");
@@ -32,7 +32,7 @@ Point* Point_add(Point* point1,Point* point2){
     Point* point3 = malloc(sizeof(Point));
     if (point3 != NULL){
         point3->x = point1->x + point2->x;
-        point3->y = point1->y + point3->y;
+        point3->y = point1->y + point2->y;
         return point3;
     }else{
         printf("Warning: new point not created due to memory allocation failed. \n");
@@ -94,7 +94,7 @@ static void EyeData_init(EyeData* data,json_object* json){
 /*-------------------------------------------------------
 Eyesdata-related function.
 ----------------------------------------------------------*/
-void Eyesdata_update(json_object* json,EyesData* eyesdata){
+void EyesData_init(json_object* json,EyesData* eyesdata){
     json_object* temp = json_object_object_get(json,"Left");
     EyeData_init(&(eyesdata->left),temp);
     temp = json_object_object_get(json,"Left");

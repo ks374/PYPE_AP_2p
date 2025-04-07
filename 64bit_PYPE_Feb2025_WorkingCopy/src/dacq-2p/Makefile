@@ -19,14 +19,15 @@ INCETH32 = /usr/include/
 CFLAGS = -O6 -g -Wall -I$(INCEYELINK) -I$(INCETH32) -I./include \
 		$(GLOBAL_CFLAGS) $(PYTHONINC) $(DEBUG) -fPIC #edited in May 2019
 CC = gcc
-LDFLAGS = -ljson-c
+LDFLAGS = -ljson-c -lm
+OPENIRIS_OBJS = Openiris_server.o Openiris_client.o sigs.o psems.o Eye_data.o
 
 all: build install
 
 build: das16_server das08_server _dacqmodule.so iscan_server comedi Openiris_server
 
 sigs.o: sigs.c sigs.h
-	$(CC) $(CFLAGS) -c sigs.c #edited in May 2019
+	$(CC) $(CFLAGS) -c $< #edited in May 2019
 
 psems.o: psems.c psems.h
 	$(CC) $(CFLAGS) -c psems.c #edited in May 2019
@@ -63,14 +64,14 @@ das08_server.o: das08_server.c das_common.c das_common.h \
 das08_server: das08_server.o dacq.h sigs.o psems.o procname.o
 	$(CC) -o $@ $< sigs.o psems.o procname.o $(LIBEYELINK)
 
-OPENIRIS_SRCS = Openiris_server.c Openiris_client.c sigs.c debug.c psems.c Eye_data.c
-OPENIRIS_OBJS = $(OPENIRIS_SRCS:.c=.o)
-OPENIRIS_DEPS = Openiris_server.h Openiris_client.h dacqinfo.h sigs.h debug.h pasems.h Eye_data.h
 Openiris_server: $(OPENIRIS_OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-%.o:%.c $(OPENIRIS_DEPS)
-	$(CC) $(CFLAGS) -c $< -o $@
+Openiris_server.o: Openiris_server.c Openiris_server.h Openiris_client.h dacqinfo.h sigs.h debug.h psems.h
+	$(CC) $(CFLAGS) -c $<
+Openiris_client.o: Openiris_client.c Openiris_client.h Eye_data.h
+	$(CC) $(CFLAGS) -c $<
+Eye_data.o: Eye_data.c Eye_data.h
+	$(CC) $(CFLAGS) -c $<
 
 #iscan_server: iscan_server.o dacq.h sigs.o  psems.o procname.o libez
 #	@echo "NOTE: can't tell if libez is fresh, will relink iscan_server"
@@ -99,11 +100,9 @@ dacq_wrap.o: dacq_wrap.c
 _dacq.so: dacq_wrap.o dacq.o psems.o
 	$(CC) -shared dacq_wrap.o dacq.o psems.o -o $@
 
-install: das16_server das08_server _dacq.so iscan_server comedi
-	cp das16_server $(PYPEDIR)/bin
-	cp das08_server $(PYPEDIR)/bin
-	cp iscan_server $(PYPEDIR)/bin
-    cp Openiris_server $(PYPEDIR)/bin
+#install: das16_server das08_server _dacq.so iscan_server comedi Openiris_server
+install: _dacq.so comedi Openiris_server
+	cp Openiris_server $(PYPEDIR)/bin
 	cp dacq.py $(PYPEDIR)/lib
 	cp _dacq.so $(PYPEDIR)/lib
 	#cp libeyelinkcore.so $(PYPEDIR)/lib
@@ -127,5 +126,4 @@ clean:
 	#@(rm libezV24-0.0.3/libezV24-0.a || \
 	#	echo libezV24-0.a not built so not cleaning)
 	@rm -f das16_server comedi_server das08_server _dacq.so 
-    @rm -f *.0 Openiris_server
-
+	@rm -f *.o Openiris_server
