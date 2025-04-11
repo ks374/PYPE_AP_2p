@@ -56,7 +56,7 @@
 
 
 
-static char *_tmodes[] = { "ANALOG", "ISCAN", "EYELINK", "EYELINK_TEST" };
+static char *_tmodes[] = { "ANALOG", "ISCAN", "EYELINK", "EYELINK_TEST","OPENIRIS" };
 #define ANALOG		0
 #define ISCAN		1
 #define EYELINK		2
@@ -108,6 +108,7 @@ static double find_clockfreq()	/* get clock frequency in Hz */
 
 static void openiris_init(char *server, char *dev, char *address, int port, double timeout)
 {
+  fprintf(stderr,"Starting function openiris_init()\n");
   int pid, k;
 
   LOCK(semid);
@@ -115,9 +116,14 @@ static void openiris_init(char *server, char *dev, char *address, int port, doub
   dacq_data->openiris_ready = 0;
   UNLOCK(semid);
   if ((pid = fork()) == 0) {
-    execlp(server, server, dev, address,port,timeout,NULL);
+	  fprintf(stderr,"Starting the child process for openiris_server\n");
+	  char str_port[8];
+	  snprintf(str_port,sizeof(str_port),"%d",port);
+	  char str_timeout[20];
+	  snprintf(str_timeout,sizeof(str_timeout),"%.2f",timeout);
+    execlp(server, dev, address,str_port,str_timeout,NULL);
   } else {
-    fprintf(stderr, "%s: waiting for iscan_ready\n", progname);
+    fprintf(stderr, "%s: waiting for openiris_ready\n", progname);
     do {
       LOCK(semid);
       k = dacq_data->openiris_ready;
@@ -398,6 +404,7 @@ static void resched(int rt)
 
 static void mainloop(void)
 {
+  fprintf(stderr,"comedi_server:Entering comedi_server mainloop.\n");
   register int i, lastpri, setpri;
   register float x, y, z, pa, tmp, calx, caly;
   float tx, ty, tp;
@@ -439,7 +446,7 @@ static void mainloop(void)
     setpri = 0;
     lastpri = 0;
   }
-
+  fprintf(stderr,"comedi_server: Finish bumping priority. \n");
   timestamp(1);			/* initialize the timestamp to 0 */
 
   fprintf(stderr, "%s: tracker_mode=%s (%d)\n", progname,
@@ -759,14 +766,16 @@ int main(int ac, char **av, char **envp)
     fprintf(stderr, "%s: can't init semaphore\n", progname);
     exit(1);
   }
-
+  fprintf(stderr, "Trying to init comedi_server\n");
   init();
   fprintf(stderr, "%s: initted\n", progname);
   
 
-  //fprintf(stderr, "av[1]=<%s>\n", av[1]);
-  //fprintf(stderr, "av[2]=<%s>\n", av[2]);
-
+  fprintf(stderr, "av[1]=<%s>\n", av[1]);
+  fprintf(stderr, "av[2]=<%s>\n", av[2]);
+  fprintf(stderr, "av[3]=<%s>\n", av[3]);
+  
+  
   if (av[1] && (strcmp(av[1], "-eyelink") == 0)) {
     eyelink_init(av[2]);
   } else if (getenv("EYELINK_TEST") != NULL) {
@@ -784,16 +793,19 @@ int main(int ac, char **av, char **envp)
   } else if ((ac > 2)&&(ac<4)) {
     iscan_init(av[1], av[2]);
   } else if (ac >= 4) {
-	  int port = atoi(av[4]);
-	  double timeout = atof(av[5]);
-      openiris_init(av[1],av[2],av[3],port,timeout);
+	  fprintf(stderr,"calling openiris_init. ");
+	  int port = atoi(av[2]);
+	  double timeout = atof(av[3]);
+	  fprintf(stderr,"argument: %s,%d,%.2f\n",av[1],port,timeout);
+	  char *openiris_server_name = "Openiris_server";
+      openiris_init(openiris_server_name,openiris_server_name,av[1],port,timeout);
+	  fprintf(stderr,"Comedi_server: Finish Openiris_init\n");
   }
 
   if (getenv("XXSWAP_XY")) {
     swap_xy = 1;
     fprintf(stderr, "%s: swapping X and Y\n", progname);
   }
-
   mainloop();
   fprintf(stderr, "%s: bye bye\n", progname);
   exit(0);

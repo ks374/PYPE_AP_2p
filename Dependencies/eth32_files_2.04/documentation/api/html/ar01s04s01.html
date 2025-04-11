@@ -1,0 +1,83 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>C/C++</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04.html" title="Programming Languages"><link rel="prev" href="ar01s04.html" title="Programming Languages"><link rel="next" href="c_error_handling.html" title="Error Handling"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">C/C++</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04.html">Prev</a> </td><th width="60%" align="center">Programming Languages</th><td width="20%" align="right"> <a accesskey="n" href="c_error_handling.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id3481348"></a>C/C++</h3></div></div></div><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="c_getting_started"></a>Getting Started</h4><p>
+       There are just a few steps needed to use the ETH32 API from the C or C++
+       language.  First you must copy the eth32.h header file from the API distribution 
+       files into your project's source code directory (unless you have already copied the 
+       header into your system's or compiler's header directory).  There is a slightly 
+       different header file for Windows and Linux, so be sure to copy the correct one.
+       Then, simply include the file at the top of any 
+       code module that uses functions from the API, as follows:
+       </p><pre class="programlisting">
+       #include "eth32.h"
+       </pre><p>
+      </p><p>
+       The only other special step is ensuring that your application is correctly 
+       linked with the ETH32 API library when your application is compiled.
+       This varies depending on the compiler and the platform which you are using.
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id2523266"></a>Microsoft Visual Studio C/C++ (Unmanaged)</h5><p>
+        These instructions apply to MS Visual Studio 4-6 as well 
+        as Visual Studio .NET when compiling unmanaged C++ applications (project type 
+        of Win32 Project).  The term unmanaged means that the code is not using the 
+        .NET framework and garbage collection system.  If you are using managed C++.NET, 
+        please see the instructions in the section for .NET languages.
+       </p><p>
+        In order for your application to link successfully, the compiler must 
+        be instructed to link with the eth32api.lib file.  The purpose of the eth32api.lib file is to 
+        inform the compiler and linker of which functions are included in the eth32api.dll file.  
+        After your program is built (compiled and linked), your resulting application is 
+        not dependent on the eth32api.lib file, only on the eth32api.dll file.
+       </p><p>
+        </p><div class="itemizedlist"><p class="title"><b>For Visual Studio 4-6:</b></p><ul type="disc"><li><p>Copy the eth32api.lib file into the same directory as your project source code.</p></li><li><p>
+           Open the project properties (depending on Visual Studio version, called 
+           Project Properties, Project Settings, or Build Settings)
+          </p></li><li><p>Under the Link tab, add eth32api.lib to the list of libraries in the Object/library modules list</p></li></ul></div><p>
+        
+        </p><div class="itemizedlist"><p class="title"><b>For Visual Studio .NET Unmanaged (Win32) Projects:</b></p><ul type="disc"><li><p>Copy the eth32api.lib file into the same directory as your project source code.</p></li><li><p>Open the Project Properties (Right-click on the project in the Solution Explorer tree-view and select Properties).</p></li><li><p>Navigate to the Configuration Properties -&gt; Linker -&gt; Input configuration page</p></li><li><p>Under Additional Dependencies, enter eth32api.lib</p></li></ul></div><p>
+       </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478528"></a>Borland C/C++ Compilers</h5><p>
+        Borland C/C++ compilers also must have a .lib file in order to link successfully.  However, 
+        the eth32api.lib file is in Microsoft (COFF) format and must be converted to the 
+        Borland format (OMF).  A file is included in the API distribution that has already been 
+        converted to the OMF format and is named beth32api.lib
+       </p><p>
+        For your reference, the eth32api.lib file was converted to the beth32api.lib file with 
+        Borland's COFF2OMF utility using the command:
+        </p><pre class="programlisting">
+        COFF2OMF -lib:ca eth32api.lib beth32api.lib
+        </pre><p>
+       </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3480310"></a>GNU C/C++ Compiler (GCC) on Linux</h5><p>
+        In order for your application to link successfully, the compiler must be instructed 
+        to link with the libeth32 library.  Both shared and static versions of the library 
+        are provided in the distribution.  We recommend using the shared library because it 
+        allows your applications to benefit from future updates of the library without recompiling 
+        each application.  Note that before using the shared library, it must be installed 
+        in one of the system library directories (typically /usr/lib).  This is already done 
+        if you have successfully run the Linux installation script.
+       </p><p>
+        Because the ETH32 API is multithreaded, you must compile your applications with the 
+        -pthread compiler flag.  This is always necessary, even if your application doesn't directly 
+        create its own threads.  Note that if you forget to include this flag, your application may 
+        work, but will exhibit strange behavior or crash in certain situations.  If you ever notice 
+        this happening, please double check that you included the -pthread flag.
+       </p><p>
+        The compiler command for using the shared library will be similar to:
+        </p><pre class="programlisting">
+        gcc -pthread <span class="emphasis"><em>myfile.c</em></span> -leth32
+        </pre><p>
+        When using the static library, copy the libeth32.a file into your 
+        source code directory and use a compiler command similar to:
+        </p><pre class="programlisting">
+        gcc -pthread <span class="emphasis"><em>myfile.c</em></span> libeth32.a
+        </pre><p>
+       </p><p>
+        The shared library may also be used with the dlopen() and related functions, 
+        although most people will have no need to do so.  If you do, though, please 
+        observe these points:
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Compile your application with the -pthread flag.</p></li><li><p>
+           Never dlclose() the library.  There are a few situations where doing so can 
+           cause problems, so the best policy is to never dlclose() the library.
+          </p></li></ul></div><p>
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="c_error_handling.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Programming Languages </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Error Handling</td></tr></table></div></body></html>

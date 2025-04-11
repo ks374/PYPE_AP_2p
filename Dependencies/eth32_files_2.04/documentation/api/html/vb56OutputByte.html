@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OutputByte Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56OutputBit.html" title="OutputBit Method"><link rel="next" href="vb56ProductID.html" title="ProductID Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">OutputByte Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56OutputBit.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56ProductID.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56OutputByte"></a>OutputByte Method</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Sub OutputByte(ByVal port As Long, ByVal value As Long)</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908786"></a>Summary</h6></div></div><div></div></div><p>
+          This method writes a new output value to one of the digital I/O ports on the device.  When 
+          the port is configured as an output port (using the <a href="vb56SetDirection.html" title="SetDirection Method">SetDirection Method</a>),
+          each bit of the output value determines the voltage (0 or 5V) of the corresponding bit of the port.  
+          When the port is configured as an input port, any 1-bits in the output value enables a weak 
+          pullup for that bit of the port.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909763"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>port - The port number to write to (0-5).</p></li><li><p>value - The new value for the port.  This may be 0-255 for ports 0-3 and 0-1 
+                           for the single-bit ports 4 and 5.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909843"></a>Return Value</h6></div></div><div></div></div><p>
+         This method does not return a value.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909769"></a>Remarks</h6></div></div><div></div></div><p>
+         Port 3 shares its pins with the analog channels.  When the ADC is enabled, all pins 
+         of port 3 are forced into input mode and the output value is set to zero.  Port 3's 
+         output value cannot be modified while the ADC is enabled. 
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909409"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' .... Your code that establishes a connection here
+
+
+    ' Set port 0 pins to be outputs
+    dev.SetDirection 0, 255
+    
+    ' Write a new value for port 0
+    dev.OutputByte 0, 85
+
+    
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+        </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909907"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56InputByte.html" title="InputByte Method">InputByte Method</a>, <a href="vb56OutputBit.html" title="OutputBit Method">OutputBit Method</a>, <a href="vb56Readback.html" title="Readback Method">Readback Method</a>, <a href="vb56SetDirection.html" title="SetDirection Method">SetDirection Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56OutputBit.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56ProductID.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OutputBit Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ProductID Property</td></tr></table></div></body></html>

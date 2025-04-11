@@ -1,0 +1,68 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Digital I/O</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_connections.html" title="Connections"><link rel="next" href="topic_special_digital_io.html" title="Special-Purpose Digital I/O"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Digital I/O</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_connections.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_special_digital_io.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_digital_io"></a>Digital I/O</h3></div></div></div><p>
+     The I/O pins of the ETH32 are grouped into what are called <span class="emphasis"><em>ports</em></span>.  
+     There are four ports 8-bit ports (eight I/O lines per port) and two 1-bit ports.  
+     Please see the ETH32 user manual for further description of the ports and the 
+     pinout of the connectors.
+    </p><p>
+     Each digital I/O pin can be individually configured as an input or output pin.  
+     Each port has a <span class="emphasis"><em>direction register</em></span> which controls which of 
+     its bits are inputs and which are outputs.  Functions are provided that can read 
+     or write the entire 8-bit direction register of a port or alternatively one bit 
+     at a time.  When a direction register for a port is modified, that setting 
+     remains in effect until either you change it again, you reset the device, or 
+     the device is powered off.  At powerup or reset, all I/O pins are configured as inputs.  
+    </p><p>
+     The input value of a port indicates the status (high or low) of each bit of 
+     the port.  If a bit is in output mode, the input value is still available and 
+     will be the same as the output value (with the possible exception of the pin 
+     being shorted or loaded much more than it should be).
+    </p><p>
+     The output value of a port controls the output voltage of the port's pins when 
+     the pins are in output mode.  The output value also has a second purpose.  When 
+     the pins are in input mode, any 1-bit in the output value will enable a weak 
+     pullup resistor on that pin.  A 0-bit will disable the pullup resistor.  
+     A function is also provided that can read back the output value from the ETH32 device, 
+     regardless of whether the pins are in input mode or output mode.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478594"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Write direction register</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_direction.html" title="eth32_set_direction">eth32_set_direction</a><br>
+<a class="xref" href="eth32_set_direction_bit.html" title="eth32_set_direction_bit">eth32_set_direction_bit</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="netSetDirection.html" title="SetDirection Method">SetDirection Method</a><br>
+<a class="xref" href="netSetDirectionBit.html" title="SetDirectionBit Method">SetDirectionBit Method</a></p></div></td><td>
+<div class="literallayout"><p><a class="xref" href="vb6SetDirection.html" title="SetDirection Method">SetDirection Method</a><br>
+<a class="xref" href="vb6SetDirectionBit.html" title="SetDirectionBit Method">SetDirectionBit Method</a></p></div>
+          </td></tr><tr><td>Read direction register</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_get_direction.html" title="eth32_get_direction">eth32_get_direction</a><br>
+<a class="xref" href="eth32_get_direction_bit.html" title="eth32_get_direction_bit">eth32_get_direction_bit</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="netGetDirection.html" title="GetDirection Method">GetDirection Method</a><br>
+<a class="xref" href="netGetDirectionBit.html" title="GetDirectionBit Method">GetDirectionBit Method</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="vb6GetDirection.html" title="GetDirection Method">GetDirection Method</a><br>
+<a class="xref" href="vb6GetDirectionBit.html" title="GetDirectionBit Method">GetDirectionBit Method</a></p></div>
+          </td></tr><tr><td>Write output value</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_output_byte.html" title="eth32_output_byte">eth32_output_byte</a><br>
+<a class="xref" href="eth32_output_bit.html" title="eth32_output_bit">eth32_output_bit</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="netOutputByte.html" title="OutputByte Method">OutputByte Method</a><br>
+<a class="xref" href="netOutputBit.html" title="OutputBit Method">OutputBit Method</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="vb6OutputByte.html" title="OutputByte Method">OutputByte Method</a><br>
+<a class="xref" href="vb6OutputBit.html" title="OutputBit Method">OutputBit Method</a></p></div>
+          </td></tr><tr><td>Read back output value</td><td><a class="xref" href="eth32_readback.html" title="eth32_readback">eth32_readback</a></td><td><a class="xref" href="netReadback.html" title="Readback Method">Readback Method</a></td><td><a class="xref" href="vb6Readback.html" title="Readback Method">Readback Method</a></td></tr><tr><td>Read input value</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_input_byte.html" title="eth32_input_byte">eth32_input_byte</a><br>
+<a class="xref" href="eth32_input_bit.html" title="eth32_input_bit">eth32_input_bit</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="netInputByte.html" title="InputByte Method">InputByte Method</a><br>
+<a class="xref" href="netInputBit.html" title="InputBit Method">InputBit Method</a></p></div>
+          </td><td>
+<div class="literallayout"><p><a class="xref" href="vb6InputByte.html" title="InputByte Method">InputByte Method</a><br>
+<a class="xref" href="vb6InputBit.html" title="InputBit Method">InputBit Method</a></p></div>
+          </td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_connections.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_special_digital_io.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Connections </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Special-Purpose Digital I/O</td></tr></table></div></body></html>

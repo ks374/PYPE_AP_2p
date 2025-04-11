@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_set_analog_reference</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_set_analog_eventdef.html" title="eth32_set_analog_eventdef"><link rel="next" href="eth32_set_analog_state.html" title="eth32_set_analog_state"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_set_analog_reference</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_set_analog_eventdef.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_set_analog_state.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_set_analog_reference"></a>eth32_set_analog_reference</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_set_analog_reference(eth32 handle, int reference);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487608"></a>Summary</h6></div></div></div><p>
+          This function instructs the Analog to Digital Converter to select the specified source as the reference 
+          voltage for conversions. The reference voltage determines the voltage level that will give the highest 
+          possible analog reading value. There are three possible voltages that may be used: An externally-generated 
+          voltage supplied on the analog reference pin, internal 5V, and internally generated 2.56V.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487326"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>reference - A code indicating which voltage source to select.  This may be 
+                           the constants REF_EXTERNAL, REF_INTERNAL (internal 5V), or REF_256 (internal 2.56V)</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487458"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487585"></a>Remarks</h6></div></div></div><p>
+          Note that whatever voltage source is selected will be internally connected to the 
+          external voltage reference pin.  So for example, if you have a 4V source connected to 
+          the external reference pin, you should NOT configure the reference for REF_INTERNAL 
+          or REF_256 until you have disconnected the external reference pin.
+         </p><p>
+          Also note that if you connect a voltage to the external reference pin, it must not 
+          exceed 5V or go below 0V.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487610"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_get_analog_reference.html" title="eth32_get_analog_reference">eth32_get_analog_reference</a>, <a class="xref" href="eth32_input_analog.html" title="eth32_input_analog">eth32_input_analog</a>, <a class="xref" href="eth32_set_analog_state.html" title="eth32_set_analog_state">eth32_set_analog_state</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_set_analog_eventdef.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_set_analog_state.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_set_analog_eventdef </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_set_analog_state</td></tr></table></div></body></html>

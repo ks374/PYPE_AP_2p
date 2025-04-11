@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>EEPROM Memory</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_timeouts_errors.html" title="Timeouts and Errors"><link rel="next" href="topic_other.html" title="Other Functionality"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">EEPROM Memory</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_timeouts_errors.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_other.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_eeprom"></a>EEPROM Memory</h3></div></div></div><p>
+    The ETH32 provides 256 bytes of EEPROM memory on the
+microcontroller which you can use for any data that you wish to store.
+The contents of the memory are preserved through power losses and
+reset, so it is perfect for storing device identification, calibration data,
+or other non-volatile data. EEPROM storage functionality is included
+with firmware v3.000 and greater.
+    </p><p>
+    Writing to EEPROM memory is a relatively slow process, which will temporarily 
+    disrupt event monitoring on the device.  See the user manual for specific timing information.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3480508"></a>Applicable Functions and Information</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Read EEPROM Bytes</td><td><a class="xref" href="eth32_get_eeprom.html" title="eth32_get_eeprom">eth32_get_eeprom</a></td><td><a class="xref" href="netGetEeprom.html" title="GetEeprom Method">GetEeprom Method</a></td><td><a class="xref" href="vb6GetEeprom.html" title="GetEeprom Method">GetEeprom Method</a></td></tr><tr><td>Write EEPROM Bytes</td><td><a class="xref" href="eth32_set_eeprom.html" title="eth32_set_eeprom">eth32_set_eeprom</a></td><td><a class="xref" href="netSetEeprom.html" title="SetEeprom Method">SetEeprom Method</a></td><td><a class="xref" href="vb6SetEeprom.html" title="SetEeprom Method">SetEeprom Method</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_timeouts_errors.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_other.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Timeouts and Errors </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Other Functionality</td></tr></table></div></body></html>

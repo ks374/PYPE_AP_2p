@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Digital Events</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="topic_events.html" title="Events"><link rel="prev" href="topic_events.html" title="Events"><link rel="next" href="ar01s03s05s02.html" title="Analog Events"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Digital Events</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_events.html">Prev</a> </td><th width="60%" align="center">Events</th><td width="20%" align="right"> <a accesskey="n" href="ar01s03s05s02.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id3480621"></a>Digital Events</h4></div></div></div><p>
+      Digital events are used to monitor the input value of a port, a bit within 
+      a port, or both.  When enabled, a digital event sends a notification whenever 
+      the monitored bit or bits change value.  Note that although digital events are 
+      typically used with bits that are in input mode, this is not enforced.  If a 
+      digital event is enabled on a bit in output mode, it will fire an event every 
+      time you change the output value.
+     </p><p>
+      Digital events are supported on all bits of the ETH32's four 8-bit ports.  
+      Events may be enabled on any or all of these bits simultaneously.  In order to 
+      achieve the fastest event monitoring speeds and use network traffic efficiently, 
+      you should only enable events on the bits where they are needed.
+     </p><p>
+      There are two types of digital events: <span class="emphasis"><em>port events</em></span> and 
+      <span class="emphasis"><em>bit events</em></span>.  Port events monitor the entire 8-bit value of 
+      a port and notify you whenever that 8-bit value changes.  Bit events monitor a 
+      single bit and notify whenever that bit changes.
+     </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3479352"></a>Applicable Functions</h5><p>
+       </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Enable event notification</td><td><a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a></td><td><a class="xref" href="netEnableEvent.html" title="EnableEvent Method">EnableEvent Method</a></td><td><a class="xref" href="vb6EnableEvent.html" title="EnableEvent Method">EnableEvent Method</a></td></tr><tr><td>Disable event notification</td><td><a class="xref" href="eth32_disable_event.html" title="eth32_disable_event">eth32_disable_event</a></td><td><a class="xref" href="netDisableEvent.html" title="DisableEvent Method">DisableEvent Method</a></td><td><a class="xref" href="vb6DisableEvent.html" title="DisableEvent Method">DisableEvent Method</a></td></tr></tbody></table></div><p>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_events.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="topic_events.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s03s05s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Events </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Analog Events</td></tr></table></div></body></html>

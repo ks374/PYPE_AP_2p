@@ -1,0 +1,55 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Pulse Width Modulation Outputs</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_counters.html" title="Counters"><link rel="next" href="topic_leds.html" title="Built-in LEDs"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Pulse Width Modulation Outputs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_counters.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_leds.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_pwm"></a>Pulse Width Modulation Outputs</h3></div></div></div><p>
+     The ETH32 includes two Pulse Width Modulation (PWM) output channels.  
+     PWM channels allow you to continuously output a configurable square wave pattern.  
+    </p><p>
+     One typical use of a PWM signal is to provide variable speed control in a motor circuit. 
+     Like all outputs of the ETH32, the PWM outputs are low-current logic level outputs.  
+     Therefore in order to drive a load like a motor or other device, you will need to 
+     implement an appropriate transistor or FET circuit.  With a PWM output, the transistor/FET 
+     will always be either fully off or fully on.  Instead of controlling motor speed by 
+     altering voltage, the PWM signal alters the <span class="emphasis"><em>duty cycle</em></span> of the motor.  
+     For example, the PWM signal may be configured to output a 10KHZ wave.  If the PWM output 
+     is on for 75% of each wave cycle, the motor will run at a slower speed than if the PWM 
+     output is on for 100% of each cycle.
+    </p><p>
+     Some other typical uses of a PWM signal include more efficiently driving 
+     LED's and mechanical relays.  For example, in the case of a mechanical relay, 
+     the signal can be briefly set to 100% duty cycle in order to pull the relay closed and 
+     then reduced to hold the relay closed, thereby reducing the current used  
+     in holding the relay closed.
+    </p><p>
+     Functions are provided by the API that make configuring the PWM channels very 
+     straightforward (eth32_set_pwm_parameters or SetPwmParameters).  In addition, functions 
+     are provided that allow you to individually control several aspects of the 
+     PWM outputs.  For those, you'll need a brief overview of the internal workings of 
+     the PWM outputs.
+    </p><p>
+     The PWM outputs are internally implemented using a 16-bit digital counter.  Both outputs 
+     share the same counter.  The counter is clocked at a rate of 2MHZ and the clock may 
+     be enabled or disabled at any time.  For each output cycle, the square wave is created 
+     as follows:  When the counter starts out at zero, the output signal is initially high.  
+     The counter clocks up and hits a configurable threshold at which point the output signal 
+     is set low.  The counter continues clocking until it reaches the configurable rollover 
+     point, which resets the counter back to zero, sets the output signal high, and starts 
+     the entire cycle over again.
+    </p><p>
+     The rollover point of the counter is called the <span class="emphasis"><em>base period</em></span> since 
+     it determines the length of each square wave output cycle.  The threshold point is 
+     called the <span class="emphasis"><em>duty period</em></span> since it determines how long the output 
+     will be on for each cycle.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3480980"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Set PWM parameters (user friendly)</td><td><a class="xref" href="eth32_set_pwm_parameters.html" title="eth32_set_pwm_parameters">eth32_set_pwm_parameters</a></td><td><a class="xref" href="netSetPwmParameters.html" title="SetPwmParameters Method">SetPwmParameters Method</a></td><td><a class="xref" href="vb6SetPwmParameters.html" title="SetPwmParameters Method">SetPwmParameters Method</a></td></tr><tr><td>Get PWM parameters (user friendly)</td><td><a class="xref" href="eth32_get_pwm_parameters.html" title="eth32_get_pwm_parameters">eth32_get_pwm_parameters</a></td><td><a class="xref" href="netGetPwmParameters.html" title="GetPwmParameters Method">GetPwmParameters Method</a></td><td><a class="xref" href="vb6GetPwmParameters.html" title="GetPwmParameters Method">GetPwmParameters Method</a></td></tr><tr><td>Enable/disable PWM clock</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_pwm_clock_state.html" title="eth32_set_pwm_clock_state">eth32_set_pwm_clock_state</a><br>
+<a class="xref" href="eth32_get_pwm_clock_state.html" title="eth32_get_pwm_clock_state">eth32_get_pwm_clock_state</a></p></div></td><td><a class="xref" href="netPwmClockState.html" title="PwmClockState Property">PwmClockState Property</a></td><td><a class="xref" href="vb6PwmClockState.html" title="PwmClockState Property">PwmClockState Property</a></td></tr><tr><td>Enable/disable PWM channel</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_pwm_channel.html" title="eth32_set_pwm_channel">eth32_set_pwm_channel</a><br>
+<a class="xref" href="eth32_get_pwm_channel.html" title="eth32_get_pwm_channel">eth32_get_pwm_channel</a></p></div></td><td><a class="xref" href="netPwmChannel.html" title="PwmChannel Property">PwmChannel Property</a></td><td><a class="xref" href="vb6PwmChannel.html" title="PwmChannel Property">PwmChannel Property</a></td></tr><tr><td>Configure base period</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_pwm_base_period.html" title="eth32_set_pwm_base_period">eth32_set_pwm_base_period</a><br>
+<a class="xref" href="eth32_get_pwm_base_period.html" title="eth32_get_pwm_base_period">eth32_get_pwm_base_period</a></p></div></td><td><a class="xref" href="netPwmBasePeriod.html" title="PwmBasePeriod Property">PwmBasePeriod Property</a></td><td><a class="xref" href="vb6PwmBasePeriod.html" title="PwmBasePeriod Property">PwmBasePeriod Property</a></td></tr><tr><td>Configure duty period</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_pwm_duty_period.html" title="eth32_set_pwm_duty_period">eth32_set_pwm_duty_period</a><br>
+<a class="xref" href="eth32_get_pwm_duty_period.html" title="eth32_get_pwm_duty_period">eth32_get_pwm_duty_period</a></p></div></td><td><a class="xref" href="netPwmDutyPeriod.html" title="PwmDutyPeriod Property">PwmDutyPeriod Property</a></td><td><a class="xref" href="vb6PwmDutyPeriod.html" title="PwmDutyPeriod Property">PwmDutyPeriod Property</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_counters.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_leds.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Counters </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Built-in LEDs</td></tr></table></div></body></html>

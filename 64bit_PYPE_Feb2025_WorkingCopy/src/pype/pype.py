@@ -313,6 +313,15 @@ class PypeApp:
 
         self.config.set('EYELINK_OUT',     'RAW',       override=None)
         os.environ['EYE_OUT'] = self.config.get('EYELINK_OUT') 
+        
+        #Added for Openiris: 
+        self.config.set('IP_ADDRESS',     '128.95.53.155',       override=None)
+        os.environ['IP_ADDRESS'] = self.config.get('IP_ADDRESS') 
+        self.config.set('OPENIRIS_PORT',     '5000',       override=None)
+        os.environ['OPENIRIS_PORT'] = self.config.get('OPENIRIS_PORT') 
+        self.config.set('OPENIRIS_TIMEOUT',     '10',       override=None)
+        os.environ['OPENIRIS_TIMEOUT'] = self.config.get('OPENIRIS_TIMEOUT') 
+
 
         # Wed Oct 21 11:46:00 2009 mvarotto
         # added for ETH32 adapter configuration 
@@ -685,6 +694,9 @@ class PypeApp:
             elif et == 'ANALOG':
                 self.rig_common.set('eyetracker', et)
                 self.rig_common.set('eyelag', '0')
+            elif et == 'OPENIRIS':
+                self.rig_common.set('eyetracker', et)
+                self.rig_common.set('eyelag', '0')
             else:
                 sys.stderr.write('%s is not a valid EYETRACKER.\n' % et)
                 sys.exit(1)
@@ -954,7 +966,6 @@ class PypeApp:
                    self.config.get('EYETRACKER_DEV'))
         self.dacq_going = 1
         self.eyeset()
-
         # while we're possibly still running as root, get access
         # to the parallel port, if possible.  PPORT=1 for default
         # otherwise, specify port in hex: 0xNNN
@@ -1028,6 +1039,7 @@ class PypeApp:
         root_take()
 
         if framebuffer:
+            sys.stderr.write('pype: Trying to init framebuffer\n')
             self.init_framebuffer()
             self._testpat = None
             # added automatic detection of framerate (13-jan-2004 JAM):
@@ -1374,7 +1386,7 @@ class PypeApp:
         else:
             flags = 0
 
-        self.fb = FrameBuffer(self.config.get('SDLDPY'),
+        '''self.fb = FrameBuffer(self.config.get('SDLDPY'),
                               self.config.iget('DPYW'),
                               self.config.iget('DPYH'),
                               self.config.iget('DPYBITS'),
@@ -1384,6 +1396,18 @@ class PypeApp:
                               syncx=self.config.iget('SYNCX'),
                               syncy=self.config.iget('SYNCY'),
                               synclevel=self.config.iget('SYNCLEVEL'),
+                              fopengl=self.config.iget('OPENGL'))'''
+        self.fb = FrameBuffer(self.config.get('SDLDPY'),
+                              self.config.iget('DPYW'),
+                              self.config.iget('DPYH'),
+                              self.config.iget('DPYBITS'),
+                              flags, 1,
+                              syncsize=self.config.iget('SYNCSIZE'),
+                              syncx=self.config.iget('SYNCX'),
+                              syncy=self.config.iget('SYNCY'),
+                              synclevel=self.config.iget('SYNCLEVEL'),
+                              videodriver=self.config.get('VIDEODRIVER'),
+                              dga = -1,
                               fopengl=self.config.iget('OPENGL'))
 
 

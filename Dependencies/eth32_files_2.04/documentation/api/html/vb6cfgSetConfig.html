@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>SetConfig Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03s07.html" title="Eth32Config Member Reference"><link rel="prev" href="vb6cfgSerialNumString.html" title="SerialNumString Method"><link rel="next" href="ar01s04s03s08.html" title="Eth32ConfigPlugin Member Reference"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SetConfig Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb6cfgSerialNumString.html">Prev</a> </td><th width="60%" align="center">Eth32Config Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="ar01s04s03s08.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="vb6cfgSetConfig"></a>SetConfig Method</h5></div></div></div><p>
+        </p><pre class="programlisting">Friend Sub SetConfig(config_data As eth32cfg_data)</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3506854"></a>Summary</h6></div></div></div><p>
+        This method is used to store new configuration settings into an ETH32 device.  The device's 
+        Allow Config switch must be set to Yes, or the new configuration will be rejected.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3507107"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>config_data - The new configuration data and product identification information</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3507151"></a>Return Value</h6></div></div></div><p>
+         This method does not return a value.  If any error occurs, an error will be raised.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3506837"></a>Remarks</h6></div></div></div><p>
+         The MAC address and serial number information members of the <a class="xref" href="ar01s04s03s06s02.html#vb6cfgeth32cfg_data" title="eth32cfg_data Structure">eth32cfg_data Structure</a> identify 
+         which device is to be configured.  If those members are not set correctly, the device will simply ignore the 
+         settings, or worst-case, if they match a different device you were not intending to configure, that device 
+         will accept the new configuration.  Therefore, in most cases, although it is not required, it is best to take the <a class="xref" href="ar01s04s03s06s02.html#vb6cfgeth32cfg_data" title="eth32cfg_data Structure">eth32cfg_data Structure</a> from the 
+         <a class="xref" href="vb6cfgResult.html" title="Result Property">Result Property</a>, modify as needed, and then provide that to this method.
+        </p><p>
+         Under normal circumstances, the device will accept the configuration and return a confirmation packet, which will 
+         cause the method to immediately return without raising any errors.  If the device's Allow Config switch is set to No,
+         it will return a rejection packet, which will cause the method to raise the EthErrorConfigReject error.
+         If no response is received from the device, the method will raise the EthErrorConfigNoAck error after a short timeout.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3506645"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="ar01s04s03s06s02.html#vb6cfgeth32cfg_data" title="eth32cfg_data Structure">eth32cfg_data Structure</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb6cfgSerialNumString.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s04s03s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SerialNumString Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Eth32ConfigPlugin Member Reference</td></tr></table></div></body></html>

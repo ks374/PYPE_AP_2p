@@ -1,0 +1,43 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Analog Events</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="topic_events.html" title="Events"><link rel="prev" href="ar01s03s05s01.html" title="Digital Events"><link rel="next" href="ar01s03s05s03.html" title="Counter Events"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Analog Events</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s03s05s01.html">Prev</a> </td><th width="60%" align="center">Events</th><td width="20%" align="right"> <a accesskey="n" href="ar01s03s05s03.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id3480322"></a>Analog Events</h4></div></div></div><p>
+      Analog event monitoring is a little more involved than digital events.  Analog 
+      events are based on event thresholds (also called an <span class="emphasis"><em>event definition</em></span>), 
+      which are completely configurable by you.  An event definition consists of a 
+      <span class="emphasis"><em>lo-mark</em></span> and a <span class="emphasis"><em>hi-mark</em></span>.  These are two 
+      values which are configured within the ETH32 and allow the ETH32 to assign one 
+      of two values, low or high, to the event.  When the analog reading is &lt;= the 
+      lo-mark, the event will be considered low.  When the analog reading is &gt;= the 
+      hi-mark, the event will be considered high.  When the reading is in between the 
+      two marks, the event keeps its previous state, allowing hysteresis to be built 
+      into the event.  The ETH32 sends an event notification whenever the event state changes 
+      from low to high or from high to low.
+     </p><p>
+      The ETH32 allows a total of 16 analog event definitions to be in effect.  These 
+      are organized into two <span class="emphasis"><em>banks</em></span>, each having one analog 
+      event definition per <span class="emphasis"><em>logical channel</em></span> (logical channels 
+      are described in the <a class="xref" href="topic_analog_inputs.html" title="Analog Inputs">Analog Inputs</a> section).  This means 
+      that there are two analog event definitions per logical channel.  Be aware that 
+      analog event definitions remain in effect on a logical channel even if you reassign 
+      the logical channel to obtain its reading from a different physical channel.
+     </p><p>
+      The lo-mark and hi-mark are specified as 8-bit numbers, while the analog 
+      readings are 10-bit numbers.  The lo-mark and hi-mark specify the eight 
+      Most Significant Bits (MSB) of the analog reading.  If you know the threshold 
+      you would like to set, represented as a 10-bit number, you can obtain the 
+      eight MSB's by doing an integer division by 4.  There are no restrictions on 
+      the permissible values of the lo-mark and hi-mark other than that they must 
+      be 8-bit numbers (range 0-255) and that the lo-mark must be at least one less 
+      than the hi-mark.
+     </p><p>
+      The analog event definition banks are shared among all connections.  However, the event 
+      notifications generated from the event definitions are enabled and disabled on 
+      a per-connection basis (just like digital events).  Note that setting an 
+      analog event definition does not automatically enable receiving its event notifications - 
+      that must be done separately.
+     </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3480371"></a>Applicable Functions</h5><p>
+       </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Set event definition</td><td><a class="xref" href="eth32_set_analog_eventdef.html" title="eth32_set_analog_eventdef">eth32_set_analog_eventdef</a></td><td><a class="xref" href="netSetAnalogEventDef.html" title="SetAnalogEventDef Method">SetAnalogEventDef Method</a></td><td><a class="xref" href="vb6SetAnalogEventDef.html" title="SetAnalogEventDef Method">SetAnalogEventDef Method</a></td></tr><tr><td>Get event definition</td><td><a class="xref" href="eth32_get_analog_eventdef.html" title="eth32_get_analog_eventdef">eth32_get_analog_eventdef</a></td><td><a class="xref" href="netGetAnalogEventDef.html" title="GetAnalogEventDef Method">GetAnalogEventDef Method</a></td><td><a class="xref" href="vb6GetAnalogEventDef.html" title="GetAnalogEventDef Method">GetAnalogEventDef Method</a></td></tr><tr><td>Enable event notification</td><td><a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a></td><td><a class="xref" href="netEnableEvent.html" title="EnableEvent Method">EnableEvent Method</a></td><td><a class="xref" href="vb6EnableEvent.html" title="EnableEvent Method">EnableEvent Method</a></td></tr><tr><td>Disable event notification</td><td><a class="xref" href="eth32_disable_event.html" title="eth32_disable_event">eth32_disable_event</a></td><td><a class="xref" href="netDisableEvent.html" title="DisableEvent Method">DisableEvent Method</a></td><td><a class="xref" href="vb6DisableEvent.html" title="DisableEvent Method">DisableEvent Method</a></td></tr></tbody></table></div><p>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s03s05s01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="topic_events.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s03s05s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Digital Events </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Counter Events</td></tr></table></div></body></html>

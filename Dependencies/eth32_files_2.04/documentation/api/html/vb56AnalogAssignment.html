@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>AnalogAssignment Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="ar01s04s03s04.html" title="Member Reference"><link rel="next" href="vb56AnalogReference.html" title="AnalogReference Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AnalogAssignment Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04s03s04.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56AnalogReference.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56AnalogAssignment"></a>AnalogAssignment Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property AnalogAssignment(ByVal channel As Long) As Eth32AnalogChannel</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906169"></a>Summary</h6></div></div><div></div></div><p>
+         When this property is written, it assigns a logical analog channel to one of the 
+         physical channels.  When it is read, it returns the current physical channel assignment 
+         for the specified logical channel.  The logical channel assignment specifies which physical 
+         pins are used to determine the value of the analog reading when that logical channel is read or 
+         monitored for events.  There are eight logical channels, each of which may be arbitrarily 
+         assigned to physical channels using this property.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906057"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>channel - The logical channel number (0-7).</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906177"></a>Value</h6></div></div><div></div></div><p>
+         This property is a Eth32AnalogChannel value, which is an enumerator containing 
+         constants defining the possible channel assignments.  The possible values of this 
+         enumerator are defined in the Remarks section below.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906212"></a>Remarks</h6></div></div><div></div></div><p>
+          The logical channels simply provide a way to select which of the many physical 
+          channel sources listed below will be continually updated for reading on the device
+          and, if configured to do so, monitored for analog events.
+         </p><p>
+          The assignments given to the logical channels may be completely arbitrary.  Also, 
+          it is permissible to have more than one logical analog channel assigned to the same 
+          physical channel source.  This can occasionally be advantageous for event monitoring.  
+          Since there are two possible event definitions per logical channel, assigning more than 
+          one logical channel to the same physical channel allows more than two event definitions 
+          on that physical channel.
+         </p><p>
+          When the device is first powered up or the <a href="vb56ResetDevice.html" title="ResetDevice Method">ResetDevice Method</a> is called, 
+          the logical channel assignments revert to their defaults.  Logical channel 0 is 
+          assigned to single-ended channel 0, logical channel 1 to single-ended channel 1 
+          and so on.
+         </p><p>
+          The assignments made with this property are effective until they are either 
+          overwritten by setting the property again or the board is reset (hard reset or 
+          by calling the <a href="vb56ResetDevice.html" title="ResetDevice Method">ResetDevice Method</a>).  There is no limitation on how often you may 
+          reassign logical channels.
+         </p><p>
+          The following constants are defined in the Eth32AnalogChannel enumerator.  
+          These are the valid physical channel sources to which a 
+          logical channel may be assigned.  The constant definition should typically 
+          be used in your source code, but its hexadecimal value is shown for reference.
+         </p><p>
+          For single-ended channels, the reading comes from the voltage of the specified 
+          pin with respect to ground.
+         </p><div class="table"><a name="id2906284"></a><p class="title"><b>Table 7. Single-Ended Channels</b></p><table summary="Single-Ended Channels" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Constant</th><th>Value</th><th>Physical Pin</th></tr></thead><tbody><tr><td>ANALOG_SE0</td><td>&amp;H00</td><td>Port 3, Bit 0</td></tr><tr><td>ANALOG_SE1</td><td>&amp;H01</td><td>Port 3, Bit 1</td></tr><tr><td>ANALOG_SE2</td><td>&amp;H02</td><td>Port 3, Bit 2</td></tr><tr><td>ANALOG_SE3</td><td>&amp;H03</td><td>Port 3, Bit 3</td></tr><tr><td>ANALOG_SE4</td><td>&amp;H04</td><td>Port 3, Bit 4</td></tr><tr><td>ANALOG_SE5</td><td>&amp;H05</td><td>Port 3, Bit 5</td></tr><tr><td>ANALOG_SE6</td><td>&amp;H06</td><td>Port 3, Bit 6</td></tr><tr><td>ANALOG_SE7</td><td>&amp;H07</td><td>Port 3, Bit 7</td></tr></tbody></table></div><p>
+          For differential channels, the reading comes from the voltage difference between two pins.  It is 
+          permissible for either to be positive or negative with respect to the other.  They are simply labeled 
+          positive and negative inputs to specify how the reading is determined.  Please note that the voltage on 
+          each pin must still remain within the range of 0 to 5V with respect to the ground of the device.
+         </p><div class="table"><a name="id2906390"></a><p class="title"><b>Table 8. Differential Channels</b></p><table summary="Differential Channels" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Constant</th><th>Value</th><th>Positive Input</th><th>Negative Input</th><th>Gain</th></tr></thead><tbody><tr><td>ANALOG_DI00X10</td><td>&amp;H08</td><td>Port 3, Bit 0</td><td>Port 3, Bit 0</td><td>10x</td></tr><tr><td>ANALOG_DI10X10</td><td>&amp;H09</td><td>Port 3, Bit 1</td><td>Port 3, Bit 0</td><td>10x</td></tr><tr><td>ANALOG_DI00X200</td><td>&amp;H0A</td><td>Port 3, Bit 0</td><td>Port 3, Bit 0</td><td>200x</td></tr><tr><td>ANALOG_DI10X200</td><td>&amp;H0B</td><td>Port 3, Bit 1</td><td>Port 3, Bit 0</td><td>200x</td></tr><tr><td>ANALOG_DI22X10</td><td>&amp;H0C</td><td>Port 3, Bit 2</td><td>Port 3, Bit 2</td><td>10x</td></tr><tr><td>ANALOG_DI32X10</td><td>&amp;H0D</td><td>Port 3, Bit 3</td><td>Port 3, Bit 2</td><td>10x</td></tr><tr><td>ANALOG_DI22X200</td><td>&amp;H0E</td><td>Port 3, Bit 2</td><td>Port 3, Bit 2</td><td>200x</td></tr><tr><td>ANALOG_DI32X200</td><td>&amp;H0F</td><td>Port 3, Bit 3</td><td>Port 3, Bit 2</td><td>200x</td></tr><tr><td>ANALOG_DI01X1</td><td>&amp;H10</td><td>Port 3, Bit 0</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI11X1</td><td>&amp;H11</td><td>Port 3, Bit 1</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI21X1</td><td>&amp;H12</td><td>Port 3, Bit 2</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI31X1</td><td>&amp;H13</td><td>Port 3, Bit 3</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI41X1</td><td>&amp;H14</td><td>Port 3, Bit 4</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI51X1</td><td>&amp;H15</td><td>Port 3, Bit 5</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI61X1</td><td>&amp;H16</td><td>Port 3, Bit 6</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI71X1</td><td>&amp;H17</td><td>Port 3, Bit 7</td><td>Port 3, Bit 1</td><td>1x</td></tr><tr><td>ANALOG_DI02X1</td><td>&amp;H18</td><td>Port 3, Bit 0</td><td>Port 3, Bit 2</td><td>1x</td></tr><tr><td>ANALOG_DI12X1</td><td>&amp;H19</td><td>Port 3, Bit 1</td><td>Port 3, Bit 2</td><td>1x</td></tr><tr><td>ANALOG_DI22X1</td><td>&amp;H1A</td><td>Port 3, Bit 2</td><td>Port 3, Bit 2</td><td>1x</td></tr><tr><td>ANALOG_DI32X1</td><td>&amp;H1B</td><td>Port 3, Bit 3</td><td>Port 3, Bit 2</td><td>1x</td></tr><tr><td>ANALOG_DI42X1</td><td>&amp;H1C</td><td>Port 3, Bit 4</td><td>Port 3, Bit 2</td><td>1x</td></tr><tr><td>ANALOG_DI52X1</td><td>&amp;H1D</td><td>Port 3, Bit 5</td><td>Port 3, Bit 2</td><td>1x</td></tr></tbody></table></div><p>
+          Note that the entries above which show both the positive side and negative side with the 
+          same input pin can be used for calibration of the differential amplifier.  Any nonzero reading 
+          from those indicates an offset error within the differential amplifier which you can subtract 
+          out of other channels that share the same negative input and gain.
+         </p><div class="table"><a name="id2906452"></a><p class="title"><b>Table 9. Calibration Reference Channels</b></p><table summary="Calibration Reference Channels" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Constant</th><th>Value</th><th>Description</th></tr></thead><tbody><tr><td>ANALOG_122V</td><td>&amp;H1E</td><td>Internal 1.22V Voltage Reference</td></tr><tr><td>ANALOG_0V</td><td>&amp;H1F</td><td>0V (Ground)</td></tr></tbody></table></div><p>
+          The above two entries connect a logical channel to internal chip voltages.  They can 
+          be used as calibration points to determine errors within the analog conversions.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906460"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' .... Your code that establishes a connection here
+
+    If dev.AnalogAssignment(0) = ANALOG_SE0 Then
+        ' Logical channel 0 is configured for physical
+        ' single-ended channel 0 (the default)
+    End If
+    
+    ' Configure logical channel 7:  Assign it to the
+    ' difference between bit 4 and bit 1 with 1X gain.
+    dev.AnalogAssignment(7) = ANALOG_DI41X1
+
+    
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+       </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906260"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56AnalogReference.html" title="AnalogReference Property">AnalogReference Property</a>, <a href="vb56AnalogState.html" title="AnalogState Property">AnalogState Property</a>, <a href="vb56InputAnalog.html" title="InputAnalog Method">InputAnalog Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04s03s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56AnalogReference.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Member Reference </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AnalogReference Property</td></tr></table></div></body></html>

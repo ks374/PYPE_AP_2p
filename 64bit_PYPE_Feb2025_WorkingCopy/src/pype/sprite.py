@@ -282,8 +282,12 @@ class FrameBuffer:
 
         self.driver = os.environ['SDL_VIDEODRIVER']
         
+        sys.stderr.write('spirte: Trying to init pygame\n')
+        
         pygame.init()
         
+        sys.stderr.write('spirte: width = %d\n' % width)
+        sys.stderr.write('spirte: height = %d\n' % height)
         if width is None or height is None:
             modes = pygame.display.list_modes(bpp, flags)
             if len(modes) > 0:
@@ -299,7 +303,8 @@ class FrameBuffer:
         self.h = height
         self.hw = width / 2
         self.hh = height / 2
-
+        
+        
         try:
             maxbpp = pygame.display.mode_ok((self.w, self.h), flags, bpp)
         except pygame.error:
@@ -465,7 +470,7 @@ class FrameBuffer:
             intervals.append(b-a)
             a = b
 
-        print("Times between page flips: %s" % repr(intervals))
+        #print("Times between page flips: %s" % repr(intervals))
             
         self.do_sync = oldsync
 

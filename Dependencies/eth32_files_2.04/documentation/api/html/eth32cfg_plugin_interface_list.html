@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32cfg_plugin_interface_list</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s07.html" title="Plugin Function Reference"><link rel="prev" href="eth32cfg_plugin_interface_address.html" title="eth32cfg_plugin_interface_address"><link rel="next" href="eth32cfg_plugin_interface_list_free.html" title="eth32cfg_plugin_interface_list_free"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32cfg_plugin_interface_list</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32cfg_plugin_interface_address.html">Prev</a> </td><th width="60%" align="center">Plugin Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32cfg_plugin_interface_list_free.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="eth32cfg_plugin_interface_list"></a>eth32cfg_plugin_interface_list</h5></div></div></div><p>
+        </p><pre class="programlisting">eth32cfgiflist eth32cfg_plugin_interface_list(int *numd, int *result);</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3491470"></a>Summary</h6></div></div></div><p>
+        This function loads the list of available network interface cards on the PC.  
+        A plugin which provides this functionality must be loaded first before calling this function.  This functionality is 
+        provided by both the System and the WinPcap plugins, but not by the None plugin.  Once the function 
+        returns, details of each interface can be accessed using <a class="xref" href="eth32cfg_plugin_interface_address.html" title="eth32cfg_plugin_interface_address">eth32cfg_plugin_interface_address</a>, 
+        <a class="xref" href="eth32cfg_plugin_interface_type.html" title="eth32cfg_plugin_interface_type">eth32cfg_plugin_interface_type</a>, and <a class="xref" href="eth32cfg_plugin_interface_name.html" title="eth32cfg_plugin_interface_name">eth32cfg_plugin_interface_name</a>.  
+        Once you are done with the network interface list, the memory used by the interface list must be freed
+        with <a class="xref" href="eth32cfg_plugin_interface_list_free.html" title="eth32cfg_plugin_interface_list_free">eth32cfg_plugin_interface_list_free</a>.  This must be done before changing the plugin 
+        with <a class="xref" href="eth32cfg_plugin_load.html" title="eth32cfg_plugin_load">eth32cfg_plugin_load</a>.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3491475"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>numd - Pointer to a variable which will receive the number of network interfaces in the resulting list.</p></li><li><p>result - Pointer to a variable which will receive an error code.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490443"></a>Return Value</h6></div></div></div><p>
+          The return type is defined as eth32cfgiflist, which is a handle typedef'ed as a void pointer.
+          This function returns a nonzero handle on success, or zero on failure.  However, if the function 
+          returns zero and the result code is also zero (indicating success), then it simply means that 
+          no network interfaces were found.  In case of failure, the specific 
+          error code is stored into the result parameter, if provided.  A valid nonzero handle can be used with other 
+          functions to obtain details about the network interfaces.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490859"></a>Remarks</h6></div></div></div><p>
+         If the currently-loaded plugin does not provide this functionality, an ETH_NOT_SUPPORTED error 
+         will be stored into result, and zero will be returned.
+        </p><p>
+         
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3491620"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="eth32cfg_plugin_interface_list_free.html" title="eth32cfg_plugin_interface_list_free">eth32cfg_plugin_interface_list_free</a>, <a class="xref" href="eth32cfg_plugin_interface_address.html" title="eth32cfg_plugin_interface_address">eth32cfg_plugin_interface_address</a>, 
+        <a class="xref" href="eth32cfg_plugin_interface_type.html" title="eth32cfg_plugin_interface_type">eth32cfg_plugin_interface_type</a>, <a class="xref" href="eth32cfg_plugin_interface_name.html" title="eth32cfg_plugin_interface_name">eth32cfg_plugin_interface_name</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32cfg_plugin_interface_address.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32cfg_plugin_interface_list_free.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32cfg_plugin_interface_address </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32cfg_plugin_interface_list_free</td></tr></table></div></body></html>

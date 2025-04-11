@@ -1,0 +1,46 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Overview</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="prev" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="next" href="installation.html" title="Installation"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Overview</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="installation.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="overview"></a>Overview</h2></div></div></div><p>
+     The ETH32 API (Application Programming Interface) is a set of 
+     programming libraries provided by Winford Engineering to make the 
+     control of the ETH32 I/O device easier for customers.  You can use 
+     the API in the applications you develop so you don't have to get 
+     involved in all the details of communicating with the ETH32.  This 
+     greatly increases the speed of development and reduces the opportunities 
+     for bugs and errors.  Although Winford Engineering recommends 
+     using the API in your application development, it is not required.  
+     The communication protocol used by the ETH32 is fully documented 
+     (in another document), allowing you to directly communicate with it 
+     over your own TCP/IP connection.
+    </p><h3 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="platforms_languages"></a>Platform and Language Support</h3><p>
+     The ETH32 API is available for the following platforms:
+     </p><div class="itemizedlist"><ul type="disc"><li><p>Microsoft Windows 95, NT4, 98, 98SE, Me, 2000, XP, Vista, Windows 7</p><p>A 64-bit version of the ETH32 API DLL is included for 64-bit Windows platforms, in addition to 
+                     the standard 32-bit version.</p></li><li><p>Linux</p></li></ul></div><p>
+     The following programming languages are supported:
+     </p><div class="itemizedlist"><ul type="disc"><li><p>C</p></li><li><p>C++</p></li><li><p>Microsoft Visual Basic 6 and .NET</p></li><li><p>Microsoft Visual Studio .NET Languages</p></li></ul></div><p>
+     </p><h3 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="thread_safety"></a>Thread Safety</h3><p>
+     The ETH32 API is thread-safe, meaning that if your application is multithreaded, 
+     it is permissible to have multiple threads simultaneously calling API functions 
+     on the same handle (or object).  The API itself is also multithreaded, creating and 
+     managing its own threads for each device connection.  For the most part, this is 
+     transparent to you, the programmer.  The only area you need to be aware of it is 
+     in event handling.  If you use a callback function to receive events, your callback 
+     function will execute in a thread created by the API.  Alternately, if you want to receive events 
+     without involving another thread, you can use one of the other event handler mechanisms.
+     </p><p>
+     In Visual Basic 6, multithreading can be very troublesome.  For this reason, the 
+     VB 6 Eth32 class implements event handling internally without using extra threads 
+     or callback functions.  From the programmer's perspective, you simply need to write 
+     an event routine and the rest is automatically taken care of within the class.
+     </p><p>
+     In Visual Studio .NET languages, multithreading is fully supported, so the Eth32 .NET 
+     class implements event handling with a separate thread.  This is 
+     all handled automatically within the class, so you simply need to write your own event 
+     routine.  The advantage of being implemented with a separate thread is that events can 
+     be received and processed at the same time that the rest of your application is tied up 
+     with other tasks.  Because it is executed in a separate thread, you must be careful that 
+     any operations you perform within your event routine are thread safe.
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="installation.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Winford Engineering ETH32 API Version 2 Documentation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Installation</td></tr></table></div></body></html>

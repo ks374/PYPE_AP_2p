@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_get_product_id</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_get_led.html" title="eth32_get_led"><link rel="next" href="eth32_get_pwm_base_period.html" title="eth32_get_pwm_base_period"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_get_product_id</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_get_led.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_get_pwm_base_period.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_get_product_id"></a>eth32_get_product_id</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_get_product_id(eth32 handle, int *prodid);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485420"></a>Summary</h6></div></div></div><p>
+          This function retrieves the product ID from the device, which identifies the type/model 
+          of the device.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485428"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>prodid - Pointer to a variable which will receive the product ID.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485414"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485387"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_get_serialnum.html" title="eth32_get_serialnum">eth32_get_serialnum</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_get_led.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_get_pwm_base_period.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_get_led </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_get_pwm_base_period</td></tr></table></div></body></html>

@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Other Functionality</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_eeprom.html" title="EEPROM Memory"><link rel="next" href="topic_deviceconfig.html" title="Configuration and Detection"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Other Functionality</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_eeprom.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_deviceconfig.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_other"></a>Other Functionality</h3></div></div></div><p>
+     The ETH32 provides a reset command that allows you to reset the port 
+     settings back to their poweron default values.  For example, 
+     this sets all ports back to input mode and disables PWM channels, etc.  
+     The full list of settings that are affected is included in the description 
+     of the reset function.  Note that doing a reset does not affect the 
+     network configuration of the device (its IP address, etc).
+    </p><p>
+     The ETH32 maintains a set of <span class="emphasis"><em>connection flags</em></span> for 
+     each active connection to the device.  Currently, the connection flags 
+     are used to indicate whether there was ever any data that the ETH32 
+     had to discard for that connection due to lack of outgoing buffer space.  
+     These flags are informational only and in the majority of cases you 
+     do not need to consider them at all.  More information is provided in the 
+     function reference, linked to below.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3481213"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Reset</td><td><a class="xref" href="eth32_reset.html" title="eth32_reset">eth32_reset</a></td><td><a class="xref" href="netResetDevice.html" title="ResetDevice Method">ResetDevice Method</a></td><td><a class="xref" href="vb6ResetDevice.html" title="ResetDevice Method">ResetDevice Method</a></td></tr><tr><td>Read/reset connection flags</td><td><a class="xref" href="eth32_connection_flags.html" title="eth32_connection_flags">eth32_connection_flags</a></td><td><a class="xref" href="netConnectionFlags.html" title="ConnectionFlags Method">ConnectionFlags Method</a></td><td><a class="xref" href="vb6ConnectionFlags.html" title="ConnectionFlags Method">ConnectionFlags Method</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_eeprom.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_deviceconfig.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">EEPROM Memory </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Configuration and Detection</td></tr></table></div></body></html>

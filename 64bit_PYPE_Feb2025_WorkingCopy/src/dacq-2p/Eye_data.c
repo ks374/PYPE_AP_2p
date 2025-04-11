@@ -70,25 +70,24 @@ static void EyeData_init(EyeData* data,json_object* json){
         temp = json_object_array_get_idx(temp,0);
         temp = json_object_object_get(temp,"X");
         Point_set_x(&(data->cr),json_object_get_double(temp));
+		//fprintf(stderr,"Get an x position: %.2f\n",json_object_get_double(temp));
         temp = json_object_object_get(json,"CRs");
         temp = json_object_array_get_idx(temp,0);
         temp = json_object_object_get(temp,"Y");
         Point_set_y(&(data->cr),json_object_get_double(temp));
+		//fprintf(stderr,"Get an y position: %.2f\n",json_object_get_double(temp));
     }else{
         printf("No cr position received from OpenIris. \n");
     }
     temp = json_object_object_get(json,"CRs");
-    if (json_object_object_length(temp)>=4){
-        temp = json_object_array_get_idx(temp,3);
-        temp = json_object_object_get(temp,"X");
-        Point_set_x(&(data->p4),json_object_get_double(temp));
-        temp = json_object_object_get(json,"CRs");
-        temp = json_object_array_get_idx(temp,3);
-        temp = json_object_object_get(temp,"Y");
-        Point_set_y(&(data->p4),json_object_get_double(temp));
-    }else{
-        printf("No cr4 position received from OpenIris. \n");
-    }
+
+    temp = json_object_array_get_idx(temp,3);
+    temp = json_object_object_get(temp,"X");
+    Point_set_x(&(data->p4),json_object_get_double(temp));
+    temp = json_object_object_get(json,"CRs");
+    temp = json_object_array_get_idx(temp,3);
+    temp = json_object_object_get(temp,"Y");
+    Point_set_y(&(data->p4),json_object_get_double(temp));
 }
 
 /*-------------------------------------------------------
@@ -97,6 +96,8 @@ Eyesdata-related function.
 void EyesData_init(json_object* json,EyesData* eyesdata){
     json_object* temp = json_object_object_get(json,"Left");
     EyeData_init(&(eyesdata->left),temp);
-    temp = json_object_object_get(json,"Left");
+	//printf("Openiris_server: Finish get left eye data \n");
+    temp = json_object_object_get(json,"Right");
     EyeData_init(&(eyesdata->right),temp);
+	//printf("Openiris_server: Finish get right eye data \n");
 }

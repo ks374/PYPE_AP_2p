@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32cfg_ip_to_string</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s06.html" title="Configuration / Detection Function Reference"><link rel="prev" href="eth32cfg_get_config.html" title="eth32cfg_get_config"><link rel="next" href="eth32cfg_query.html" title="eth32cfg_query"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32cfg_ip_to_string</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32cfg_get_config.html">Prev</a> </td><th width="60%" align="center">Configuration / Detection Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32cfg_query.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="eth32cfg_ip_to_string"></a>eth32cfg_ip_to_string</h5></div></div></div><p>
+        </p><pre class="programlisting">int eth32cfg_ip_to_string(const eth32cfg_ip_t *ipbinary, char *ipstring);</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490780"></a>Summary</h6></div></div></div><p>
+        This function converts the eth32cfg_ip_t binary representation into a string.  You must provide an valid 
+        buffer of at least 16 bytes to the function where the string will be written.  The function will
+        null-terminate the string.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490450"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>ipbinary - The IP address to be converted.</p></li><li><p>ipstring - Pointer to a string buffer where the string representation will be written.  This buffer must be at least 16 bytes long or memory corruption could occur.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490886"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490639"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="eth32cfg_string_to_ip.html" title="eth32cfg_string_to_ip">eth32cfg_string_to_ip</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32cfg_get_config.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32cfg_query.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32cfg_get_config </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32cfg_query</td></tr></table></div></body></html>

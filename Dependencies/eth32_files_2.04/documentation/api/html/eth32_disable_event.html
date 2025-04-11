@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_disable_event</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_dequeue_event.html" title="eth32_dequeue_event"><link rel="next" href="eth32_empty_event_queue.html" title="eth32_empty_event_queue"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_disable_event</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_dequeue_event.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_empty_event_queue.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_disable_event"></a>eth32_disable_event</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_disable_event(eth32 handle, int type, int port, int bit);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483603"></a>Summary</h6></div></div></div><p>
+          This function instructs the ETH32 device to stop sending event notifications 
+          for the specified event on this connection to the device.  It performs the opposite 
+          task of <a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a>.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483078"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>
+             type - The type of event to enable.  The valid event types are:
+             </p><div class="itemizedlist"><ul type="circle"><li><p>EVENT_DIGITAL - Digital I/O event.  This includes port events and bit events.</p></li><li><p>EVENT_ANALOG - Analog event based on thresholds defined with the 
+                              <a class="xref" href="eth32_set_analog_eventdef.html" title="eth32_set_analog_eventdef">eth32_set_analog_eventdef</a> function.</p></li><li><p>EVENT_COUNTER_ROLLOVER - Counter rollover event, which occurs when the counter 
+                              rolls over to zero.</p></li><li><p>EVENT_COUNTER_THRESHOLD - Counter threshold event, which occurs when the counter 
+                              passes a threshold defined with <a class="xref" href="eth32_set_counter_threshold.html" title="eth32_set_counter_threshold">eth32_set_counter_threshold</a>.</p></li><li><p>EVENT_HEARTBEAT - Periodic event sent by the device to indicate the TCP/IP 
+                              connection is still good.</p></li></ul></div><p>
+            </p></li><li><p>port - For digital events, specifies the port number, for analog events, specifies the 
+                           bank number, and for either counter event, specifies the counter number.</p></li><li><p>bit - For digital events, this should be -1 for port events or the bit 
+                           number (0-7) for bit events.  For analog events, this specifies the analog 
+                           channel number (0-7).</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483837"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483750"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_dequeue_event.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_empty_event_queue.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_dequeue_event </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_empty_event_queue</td></tr></table></div></body></html>

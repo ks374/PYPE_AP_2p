@@ -1,0 +1,82 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Structures</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="vb6_config.html" title="Configuration / Detection Functionality"><link rel="prev" href="ar01s04s03s06s01.html" title="Error Handling"><link rel="next" href="ar01s04s03s07.html" title="Eth32Config Member Reference"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Structures</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04s03s06s01.html">Prev</a> </td><th width="60%" align="center">Configuration / Detection Functionality</th><td width="20%" align="right"> <a accesskey="n" href="ar01s04s03s07.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id3505903"></a>Structures</h5></div></div></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="vb6cfg_eth32cfg_ip"></a>eth32cfg_ip Structure</h6></div></div></div><p>
+        The eth32cfg_ip structure holds an IP address in binary form.  It is used to represent IP 
+        address information in the ETH32 device configuration structure, to specify the broadcast address, 
+        and to retrieve IP address information about the PC's network interfaces.
+        </p><pre class="programlisting">
+Public Type eth32cfg_ip
+    buf(3) As Byte
+End Type
+        </pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>buf - Array containing individual octets of the IP address.  Index 0 contains the most significant, e.g. 192 from the address 192.168.1.100</p></li></ul></div><p>
+       </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="vb6cfg_eth32cfg_mac"></a>eth32cfg_mac Structure</h6></div></div></div><p>
+        The eth32cfg_mac structure holds a MAC address in binary form.  It is used within the ETH32 device configuration 
+        structure.
+        </p><pre class="programlisting">
+Public Type eth32cfg_mac
+    buf(5) As Byte
+End Type
+        </pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>buf - Array containing individual octets of the MAC address.  Index 0 contains the first and most significant octet.</p></li></ul></div><p>
+       </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="vb6cfgeth32cfg_data"></a>eth32cfg_data Structure</h6></div></div></div><p>
+        The eth32cfg_data structure holds all of the network configuration and device information data 
+        for a particular ETH32 device.  It is provided to your application when retrieving information 
+        about detected devices.  Your application can also fill in or modify the information and provide it
+        to the API to store new configuration into a device.
+        </p><pre class="programlisting">
+Public Type eth32cfg_data
+    product_id As Byte
+    firmware_major As Byte
+    firmware_minor As Byte
+    config_enable As Byte
+    mac As eth32cfg_mac
+    pad1 As Byte
+    pad2 As Byte
+    serialnum_batch As Integer
+    serialnum_unit As Integer
+    config_ip As eth32cfg_ip
+    config_gateway As eth32cfg_ip
+    config_netmask As eth32cfg_ip
+    active_ip As eth32cfg_ip
+    active_gateway As eth32cfg_ip
+    active_netmask As eth32cfg_ip
+    dhcp As Byte
+End Type
+        </pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>product_id - Contains the product ID code for the device.  This will be 105 for ETH32 devices.  This makes up a portion of the serial number.</p></li><li><p>firmware_major - Contains the major portion of the firmware version, e.g. 3 from 3.000</p></li><li><p>firmware_minor - Contains the minor portion of the firmware version, e.g. 0 from 3.000</p></li><li><p>config_enable - Nonzero if the device's Allow Config switch is set to Yes</p></li><li><p>mac - The MAC address of the device</p></li><li><p>pad1 - Reserved.  Padding byte for proper structure alignment</p></li><li><p>pad2 - Reserved.  Padding byte for proper structure alignment</p></li><li><p>serialnum_batch - The batch number portion of the device's serial number</p></li><li><p>serialnum_unit - The unit number portion of the device's serial number</p></li><li><p>config_ip - The static IP address stored in the device.  This is ignored if DHCP is active.</p></li><li><p>config_gateway - The static gateway IP address stored in the device.  This is ignored if DHCP is active.</p></li><li><p>config_netmask - The static network mask stored in the device.  This is ignored if DHCP is active.</p></li><li><p>active_ip - The IP address being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>active_gateway - The gateway IP address being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>active_netmask - The network mask being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>dhcp - Nonzero if DHCP is being used by the device, or zero if the static settings (config_ip, etc) are being used.</p></li></ul></div><p>
+       </p><p>
+       If a device is using DHCP, then active_ip will most likely be different than the static (stored) config_ip, and so 
+       on for the gateway and netmask.  If DHCP is not being used, then active_ip will be the same as config_ip, and so on 
+       for the gateway and netmask.
+       </p><p>
+       When using this structure with the <a class="xref" href="vb6cfgSetConfig.html" title="SetConfig Method">SetConfig Method</a>, you may modify the 
+       config_ip, config_gateway, config_netmask, and dhcp members in order to update the corresponding settings
+       within the ETH32 device.  The other members of the structure should not be modified, since they will either 
+       be ignored, or are required for the new configuration to be accepted by the device.  Specifically, the 
+       MAC address and serial number information must match the device's information, or the device will ignore 
+       the new configuration data.
+       </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="vb6cfgplugin_Eth32ConfigPluginInterface"></a>Eth32ConfigPluginInterface Structure</h6></div></div></div><p>
+        The Eth32ConfigPluginInterface structure holds information about a network interface card of the PC.  This information 
+        can be provided by a plugin loaded into the ETH32 API.
+        </p><pre class="programlisting">
+Public Type Eth32ConfigPluginInterface
+    Ip As eth32cfg_ip
+    Netmask As eth32cfg_ip
+    InterfaceType As Eth32ConfigInterfaceType
+    StandardName As String
+    FriendlyName As String
+    Description As String
+End Type
+        </pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Ip - The IP address of the network interface</p></li><li><p>Netmask - The network mask of the network interface</p></li><li><p>InterfaceType - The type of network that this network interface is for.  This can be one of these values:
+           </p><div class="itemizedlist"><ul type="circle"><li><p>ETH32CFG_IFTYPE_NONE - This is used if the current plugin doesn't provide information about the network interface type.</p></li><li><p>ETH32CFG_IFTYPE_OTHER - This is used if the plugin provides information about the interface type, but it isn't one of the predefined constants.</p></li><li><p>ETH32CFG_IFTYPE_ETHERNET - Ethernet interface</p></li><li><p>ETH32CFG_IFTYPE_TOKENRING - Token Ring interface</p></li><li><p>ETH32CFG_IFTYPE_FDDI - FDDI (Fiber Distributed Data Interface) interface</p></li><li><p>ETH32CFG_IFTYPE_PPP - PPP (Point-to-Point Protocol) interface</p></li><li><p>ETH32CFG_IFTYPE_LOOPBACK - Local loopback interface (e.g. 127.0.0.1)</p></li><li><p>ETH32CFG_IFTYPE_SLIP - SLIP (Serial Line Internet Protocol) interface</p></li></ul></div><p>
+          </p></li><li><p>StandardName - This is typically an internal identifier string that identifies
+         the interface, but is not very human-readable.  The exact value depends on the plugin being used.</p></li><li><p>FriendlyName - The human-readable name for the interface.  For example, Local Area Connection.  
+                         This member will be empty when the WinPcap plugin is being used.</p></li><li><p>Description - A description of the interface.  The value of this member depends on the plugin being 
+                         used, but typically includes the manufacturer or model of the card.  This member will be available 
+                         when using the System plugin or when using the WinPcap plugin.</p></li></ul></div><p>
+       </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04s03s06s01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="vb6_config.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s04s03s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Error Handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Eth32Config Member Reference</td></tr></table></div></body></html>

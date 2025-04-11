@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ErrorString Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56EnableEvent.html" title="EnableEvent Method"><link rel="next" href="vb56EventQueueCurrentSize.html" title="EventQueueCurrentSize Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">ErrorString Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56EnableEvent.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56EventQueueCurrentSize.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56ErrorString"></a>ErrorString Method</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Function ErrorString(errorcode As EthError) As String</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907917"></a>Summary</h6></div></div><div></div></div><p>
+          This method translates an error code into a string which briefly describes 
+          the error.  It is not necessary to have a connection to the ETH32 device 
+          in order to use this method.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908383"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>
+            errorcode - The error code to translate into a string.  This parameter is 
+                        a EthError enumerator type.  Possible error codes are listed 
+                        in the <a href="vb56_error_handling.html#vb56_error_codes">Error Codes</a> section.
+           </p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908187"></a>Return Value</h6></div></div><div></div></div><p>
+         This method returns a string, which provides a brief description of the given 
+         error code.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908343"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' .... Your code that establishes a connection here
+
+	' .... More of your code that performs operations on the device or other things.
+	
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+        </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908467"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56_error_handling.html" title="Error Handling">Error Handling</a> Section
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56EnableEvent.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56EventQueueCurrentSize.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">EnableEvent Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> EventQueueCurrentSize Property</td></tr></table></div></body></html>

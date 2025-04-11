@@ -1,0 +1,33 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Counters</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="ar01s03s05s03.html" title="Counter Events"><link rel="next" href="topic_pwm.html" title="Pulse Width Modulation Outputs"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Counters</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s03s05s03.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_pwm.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_counters"></a>Counters</h3></div></div></div><p>
+     The ETH32 device includes two digital counters, which are useful for 
+     counting the number of pulses that occur on an I/O line.  Counters are implemented 
+     directly in hardware and are therefore able to catch faster 
+     pulses than events are capable of catching (since they are implemented in ETH32 firmware).
+    </p><p>
+     Each counter can be independently enabled or disabled and configured 
+     to increment its count on either the falling edge of the input signal 
+     (transition from high to low) or the rising edge (transition from 
+     low to high).  When a counter is disabled it simply means that its 
+     count will not increment regardless of the input signal.  The counter's 
+     value can be read at any time.  The counter's value may also be written 
+     to a specific value, which may be necessary during initialization.
+    </p><p>
+     Counter 0 is a 16-bit counter, while counter 1 is an 8-bit counter.  
+     Both counters allow you to configure a rollover value.  When a counter 
+     reaches the rollover value, the next increment of the counter will 
+     reset the counter's value back to zero.  The rollover values default 
+     to the maximum values of the counters on powerup or reset.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3480688"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Enable/disable counter, configure edge</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_counter_state.html" title="eth32_set_counter_state">eth32_set_counter_state</a><br>
+<a class="xref" href="eth32_get_counter_state.html" title="eth32_get_counter_state">eth32_get_counter_state</a></p></div></td><td><a class="xref" href="netCounterState.html" title="CounterState Property">CounterState Property</a></td><td><a class="xref" href="vb6CounterState.html" title="CounterState Property">CounterState Property</a></td></tr><tr><td>Read/write counter value</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_get_counter_value.html" title="eth32_get_counter_value">eth32_get_counter_value</a><br>
+<a class="xref" href="eth32_set_counter_value.html" title="eth32_set_counter_value">eth32_set_counter_value</a></p></div></td><td><a class="xref" href="netCounterValue.html" title="CounterValue Property">CounterValue Property</a></td><td><a class="xref" href="vb6CounterValue.html" title="CounterValue Property">CounterValue Property</a></td></tr><tr><td>Configure counter rollover</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_counter_rollover.html" title="eth32_set_counter_rollover">eth32_set_counter_rollover</a><br>
+<a class="xref" href="eth32_get_counter_rollover.html" title="eth32_get_counter_rollover">eth32_get_counter_rollover</a></p></div></td><td><a class="xref" href="netCounterRollover.html" title="CounterRollover Property">CounterRollover Property</a></td><td><a class="xref" href="vb6CounterRollover.html" title="CounterRollover Property">CounterRollover Property</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s03s05s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_pwm.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Counter Events </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Pulse Width Modulation Outputs</td></tr></table></div></body></html>

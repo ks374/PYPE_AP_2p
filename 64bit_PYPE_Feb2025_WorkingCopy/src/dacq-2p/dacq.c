@@ -249,7 +249,6 @@ int dacq_start(int boot, int testmode, char *tracker_type,
       return(-1);
     }
   }
-
   /* don't need to LOCK/UNLOCK until child processes are
    * running ... so don't bother here..
    */
@@ -328,7 +327,6 @@ int dacq_start(int boot, int testmode, char *tracker_type,
     }  
     else {
           signal(SIGCHLD, dacq_sigchld_handler);
-
           if ((dacq_server_pid = fork()) == 0) {
 	          /* child process execs the dacq_server */
 	          if (strcmp(tracker_type, "ISCAN") == 0) {
@@ -341,12 +339,19 @@ int dacq_start(int boot, int testmode, char *tracker_type,
 	            //fprintf(stderr, "dacqmodule: starting analog\n");
 	            execlp(dacq_server, dacq_server, NULL);
 	          } else if (strcmp(tracker_type, "OPENIRIS") == 0) {
-                  char *ip_address = getenv("IP_ADDRESS");
-                  int port = atoi(getenv("OPENIRIS_PORT"));
-                  double timeout = atoi(getenv("OPENIRIS_TIMEOUT"));
+				  fprintf(stderr,"New compile_10\n");
+				  char *ip_address = getenv("IP_ADDRESS");
+				  fprintf(stderr,"IP_ADDRESS: %s\n",ip_address);
+				  char *test_address = getenv("ETH32_IP");
+				  fprintf(stderr,"eth32_ADDRESS: %s\n",test_address);
+                  //int port = atoi(getenv("OPENIRIS_PORT"));
+                  //double timeout = atoi(getenv("OPENIRIS_TIMEOUT"));
+				  char *port = getenv("OPENIRIS_PORT");
+				  char *timeout = getenv("OPENIRIS_TIMEOUT");
+				  fprintf(stderr,"Start dacq_server: %s\n",dacq_server);
                   execlp(dacq_server, dacq_server, ip_address, port, timeout, NULL);
               }
-
+				
 	          perror(dacq_server);
     	      exit(1);
           } 

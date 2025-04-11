@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Connect Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56CheckEvents.html" title="CheckEvents Method"><link rel="next" href="vb56Connected.html" title="Connected Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Connect Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56CheckEvents.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56Connected.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56Connect"></a>Connect Method</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">
+Public Sub Connect(ByVal address As String, Optional ByVal port As Long = ETH32_PORT, _
+                   Optional ByVal timeout As Long = 0)
+</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906869"></a>Summary</h6></div></div><div></div></div><p>
+          The Connect method is used to open a connection to an ETH32 device.  You must 
+          call Connect and successfully connect to an ETH32 device before calling other methods 
+          or accessing other properties of the Eth32 object.  
+          This method does NOT reset the device or change its configuration in any way.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906935"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>address - The IP address or DNS name of the ETH32 device.</p></li><li><p>port - The TCP port to connect to.  If an overloaded method without this parameter 
+                          is called, the constant ETH32_PORT (7152) is used, which is the port the 
+                          ETH32 listens on.</p></li><li><p>timeout - Specifies the maximum time, in milliseconds, that the connection attempt 
+                           may take, excluding resolving DNS.  You may specify a timeout of zero to use the default 
+                           timeout from the system's TCP/IP stack, which is the default if this parameter is not 
+                           specified.  Note that the method may time out in less time 
+                           than you specify if the system's timeout is shorter than what you specify.  If the 
+                           method does time out, it will raise an EthErrorTimeout error.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907114"></a>Return Value</h6></div></div><div></div></div><p>
+         This method does not have a return value.  If any error occurs, an error will be raised.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907110"></a>Remarks</h6></div></div><div></div></div><p>
+         Once an object is connected to a device, you may not call Connect again on that object 
+         unless you first disconnect using the <a href="vb56Disconnect.html" title="Disconnect Method">Disconnect Method</a>.
+         Note that your application may have connections open to several ETH32 devices at once. 
+         Each requires a separate Eth32 object to be created in your application.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906846"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' NOTE: Substitute the IP address or DNS name of your device here.
+    dev.Connect "192.168.1.100", ETH32_PORT, 10000
+    
+    ' Now that we're connected, turn on an LED:
+    dev.Led(0) = True
+
+    Exit Sub
+myerror:
+    If Err.Number = EthErrorTimeout Then
+        MsgBox "Timed out while connecting to ETH32."
+    Else
+        MsgBox "Error connecting to ETH32: " &amp; dev.ErrorString(Err.Number)
+    End If
+End Sub
+        </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907046"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56Connected.html" title="Connected Property">Connected Property</a>, <a href="vb56Disconnect.html" title="Disconnect Method">Disconnect Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56CheckEvents.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56Connected.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CheckEvents Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Connected Property</td></tr></table></div></body></html>

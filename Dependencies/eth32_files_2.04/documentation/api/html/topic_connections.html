@@ -1,0 +1,57 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Connections</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="ar01s03.html" title="Topics"><link rel="next" href="topic_digital_io.html" title="Digital I/O"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Connections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s03.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_digital_io.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_connections"></a>Connections</h3></div></div></div><p>
+     The first thing your application must do in order to use the ETH32 device is 
+     create a connection to the device.  A connection must be made before any 
+     other functions or members of the API are called, unless otherwise specified.
+    </p><p>
+     After your application has finished using the ETH32 device, it should 
+     be sure to disconnect the connection to the ETH32 device.  The ETH32 device 
+     has a relatively small number of simultaneous connections available, so 
+     leaving a connection open unnecessarily could in some cases prevent 
+     other applications from opening a connection.  When your application exits, 
+     the operating system will automatically close any open connections.  However, 
+     Visual Basic 6 programmers should see the Remarks section of the 
+     <a class="xref" href="vb6Disconnect.html" title="Disconnect Method">Disconnect Method</a> for precautions.
+    </p><p>
+     You may connect and disconnect from the device as often as you'd like.  The 
+     decision of when to do this should be made depending on the type 
+     of application you are creating.  If your application only performs an 
+     operation on the ETH32 once in a while and has long periods of inactivity, 
+     you may decide to connect and disconnect each time.  However, most applications 
+     will simply connect once and remain connected until the application exits or it 
+     is completely finished using the ETH32.  That is the simplest approach in most cases.  
+    </p><p>
+     If at any point in your code, you have a connection but would like to verify that 
+     data is still being transferred over the connection properly, you may do so using the 
+     "<span class="emphasis"><em>verify connection</em></span>" function.  This sends a small command 
+     over your existing connection, which the ETH32 device will simply return without 
+     performing any other operation.  If for any reason the data isn't returned within 
+     the timeout period, the function will return or generate an error.
+    </p><p>
+     In .NET languages as well as Visual Basic 6, the class provides a 
+     <span class="emphasis"><em>Connected</em></span> property to indicate whether the object 
+     currently holds a connection to an ETH32 device.  This property does not 
+     actually verify the integrity of the connection.  When true, it simply 
+     indicates that a connection has been successfully created and that 
+     <span class="emphasis"><em>Disconnect</em></span> has not been called since then.  
+     This is often useful during application shutdown in determining 
+     whether the <span class="emphasis"><em>Disconnect</em></span> method needs to be
+     called in order to free resources.
+    </p><p>
+     Note that the ETH32 libraries allow your application to simultaneously 
+     use as many ETH32 devices as resources allow.  In certain circumstances, you may 
+     even want to open two connections to the same ETH32 device from within one 
+     application.  
+    </p><p>
+     Almost all of the resources of the ETH32 are shared among its connections and are 
+     not affected by connections being opened or closed.  So, for example, opening a new 
+     connection to the ETH32 does not affect the direction registers of any ports.  
+     One notable exception is that each connection individually selects which event notifications 
+     it will receive.  Therefore, each new connection starts out with all event notifications disabled.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id2523161"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Open connection</td><td><a class="xref" href="eth32_open.html" title="eth32_open">eth32_open</a></td><td><a class="xref" href="netConnect.html" title="Connect Method">Connect Method</a></td><td><a class="xref" href="vb6Connect.html" title="Connect Method">Connect Method</a></td></tr><tr><td>Verify connection</td><td><a class="xref" href="eth32_verify_connection.html" title="eth32_verify_connection">eth32_verify_connection</a></td><td><a class="xref" href="netVerifyConnection.html" title="VerifyConnection Method">VerifyConnection Method</a></td><td><a class="xref" href="vb6VerifyConnection.html" title="VerifyConnection Method">VerifyConnection Method</a></td></tr><tr><td>Determine if object is connected</td><td> </td><td><a class="xref" href="netConnected.html" title="Connected Property">Connected Property</a></td><td><a class="xref" href="vb6Connected.html" title="Connected Property">Connected Property</a></td></tr><tr><td>Disconnect</td><td><a class="xref" href="eth32_close.html" title="eth32_close">eth32_close</a></td><td><a class="xref" href="netDisconnect.html" title="Disconnect Method">Disconnect Method</a></td><td><a class="xref" href="vb6Disconnect.html" title="Disconnect Method">Disconnect Method</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_digital_io.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Topics </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Digital I/O</td></tr></table></div></body></html>

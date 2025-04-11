@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Getting Started</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03.html" title="Visual Basic 6"><link rel="prev" href="ar01s04s03.html" title="Visual Basic 6"><link rel="next" href="vb6_error_handling.html" title="Error Handling"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Getting Started</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04s03.html">Prev</a> </td><th width="60%" align="center">Visual Basic 6</th><td width="20%" align="right"> <a accesskey="n" href="vb6_error_handling.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="vb6_getting_started"></a>Getting Started</h4></div></div></div><p>
+       The Visual Basic 6 class is distributed with the ETH32 API as a set of 
+       three source files that you must add to your application.  The following 
+       steps are necessary:
+       </p><div class="itemizedlist"><ul type="disc"><li><p>Copy the files from the ETH32 distribution 
+                  into your project directory (same directory as your source files).  
+                  By default, the installer places these files in the 
+                  C:\Program Files\winford\eth32\api\windows\vb6 directory.  These 
+                  files are also on the CD in the api\windows\vb6 directory.  
+                  It includes five files:
+</p><pre class="programlisting">
+eth32.bas
+Eth32.cls
+eth32_form.frm
+Eth32Config.cls
+Eth32ConfigPlugin.cls
+</pre><p>
+         </p></li><li><p>Add the files to your project.  This is done one file at a time 
+                        using the "Add File..." option of the "Project" menu.  To include 
+                        all functionality, be sure to add all five files.  If your application 
+                        does not need the ability to detect or re-configure the 
+                        network settings of ETH32 devices on the local network, you may omit the 
+                        Eth32Config.cls and Eth32ConfigPlugin.cls files.</p></li></ul></div><p>
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="vb6_basic_declaration"></a>Basic Declaration</h5><p>
+        The main class that is provided is named Eth32.  Because it provides an event that 
+        is fired when an event on the device fires, you must declare your object 
+        variable using the WithEvents keyword.  Declaring an object WithEvents is not 
+        allowed in modules (.bas files) or in procedure-level variables, which means you 
+        should declare the object at the top of your form source code before any procedures, 
+        as follows (substituting any valid variable name for dev):
+</p><pre class="programlisting">
+Dim WithEvents dev As Eth32
+</pre><p>
+        Later in your code, at the point you wish to instantiate the object and connect to 
+        the device, your code should be similar to the following (substituting the variable 
+        name you used in the Dim statement for dev and the actual address or DNS name of 
+        your device for 192.168.1.100)
+</p><pre class="programlisting">
+Set dev = New Eth32
+dev.Connect "192.168.1.100"
+</pre><p>
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb6_error_handling.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Visual Basic 6 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Error Handling</td></tr></table></div></body></html>

@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Timeouts and Errors</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_product_id.html" title="Product Identification"><link rel="next" href="topic_eeprom.html" title="EEPROM Memory"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Timeouts and Errors</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_product_id.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_eeprom.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_timeouts_errors"></a>Timeouts and Errors</h3></div></div></div><p>
+     One potential source of errors when using the ETH32 device is 
+     from network problems.  When the ETH32 is used on a Local Area 
+     Network (LAN), these kinds of problems should typically be quite 
+     small, but if the ETH32 is used over the internet, the probability 
+     of dropped packets or broken connections will increase.  The ETH32 
+     uses the TCP/IP protocol for all communications.  TCP/IP is a 
+     robust, time-tested standard that includes data buffering and the 
+     provision for retrying data transmission, allowing connections to recover 
+     from lost or corrupted packets.
+    </p><p>
+     One problem that may occur due to network problems is a delay in 
+     receiving a response back from the ETH32.  To deal with that the API 
+     includes a timeout setting.  The timeout setting applies to any 
+     function that queries the ETH32 for data and waits for the response.  
+     For example, it would apply to reading the state of an LED, but it 
+     would not apply to setting the state of an LED.  The timeout setting 
+     specifies a maximum amount of time the API should wait for a response.  
+     If the timeout period is ever exceeded, an error is generated or returned 
+     by the API.  When a timeout occurs, it does not necessarily mean that 
+     the connection has been completely broken.  The TCP/IP retransmissions may 
+     still recover from the error.
+    </p><p>
+     If communication is completely cut off, further requests will continue to 
+     time out until the TCP/IP stack of your operating system decides to 
+     give up and close the connection.  After that happens, any further API calls that 
+     communicate with the ETH32 in any way will immediately fail with a 
+     network error.
+    </p><p>
+     Besides timeouts and broken connections, other errors include things such as 
+     specifying a value for a setting that is outside of the allowable limits, 
+     internal API errors, and others.
+    </p><p>
+     The way your application is notified of errors depends on the programming 
+     language you are using.  Please see the Error Handling section for your 
+     programming language below.  When errors are provided, an error code is 
+     included to identify the cause of the error.  The error codes and their 
+     meanings are included in this document.  The API also provides a function 
+     which will translate an error code into a string that briefly 
+     describes the error.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478752"></a>Applicable Functions and Information</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Configure API Timeout</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_timeout.html" title="eth32_set_timeout">eth32_set_timeout</a><br>
+<a class="xref" href="eth32_get_timeout.html" title="eth32_get_timeout">eth32_get_timeout</a></p></div></td><td><a class="xref" href="netTimeout.html" title="Timeout Property">Timeout Property</a></td><td><a class="xref" href="vb6Timeout.html" title="Timeout Property">Timeout Property</a></td></tr><tr><td>Translate error codes</td><td><a class="xref" href="eth32_error_string.html" title="eth32_error_string">eth32_error_string</a></td><td><a class="xref" href="netErrorString.html" title="ErrorString Method">ErrorString Method</a></td><td><a class="xref" href="vb6ErrorString.html" title="ErrorString Method">ErrorString Method</a></td></tr><tr><td>Error handling</td><td><a class="xref" href="c_error_handling.html" title="Error Handling">Error Handling</a></td><td><a class="xref" href="net_error_handling.html" title="Error Handling">Error Handling</a></td><td><a class="xref" href="vb6_error_handling.html" title="Error Handling">Error Handling</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_product_id.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_eeprom.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Product Identification </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> EEPROM Memory</td></tr></table></div></body></html>

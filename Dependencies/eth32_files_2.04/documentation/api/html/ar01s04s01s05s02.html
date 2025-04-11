@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Structures</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ccpp_config.html" title="Configuration / Detection"><link rel="prev" href="ar01s04s01s05s01.html" title="Error Handling"><link rel="next" href="ar01s04s01s06.html" title="Configuration / Detection Function Reference"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Structures</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04s01s05s01.html">Prev</a> </td><th width="60%" align="center">Configuration / Detection</th><td width="20%" align="right"> <a accesskey="n" href="ar01s04s01s06.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id3490024"></a>Structures</h5></div></div></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="ccppcfg_eth32cfg_ip_t"></a>eth32cfg_ip_t Structure</h6></div></div></div><p>
+        The eth32cfg_ip_t structure holds an IP address in binary form.  It is used to represent IP 
+        address information in the ETH32 device configuration structure, to specify the broadcast address, 
+        and to retrieve IP address information about the PC's network interfaces.
+        </p><pre class="programlisting">
+typedef struct
+{ 
+	unsigned char byte[4];
+} eth32cfg_ip_t;
+        </pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>byte - Array containing individual octets of the IP address.  Index 0 contains the most significant, e.g. 192 from the address 192.168.1.100</p></li></ul></div><p>
+       </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="ccppcfgeth32cfg_data_t"></a>eth32cfg_data_t Structure</h6></div></div></div><p>
+        The eth32cfg_data_t structure holds all of the network configuration and device information data 
+        for a particular ETH32 device.  It is provided to your application when retrieving information 
+        about detected devices.  Your application can also fill in or modify the information and provide it
+        to the API to store new configuration into a device.
+        </p><pre class="programlisting">
+typedef struct
+{
+	unsigned char product_id;
+	unsigned char firmware_major;
+	unsigned char firmware_minor;
+	unsigned char config_enable;
+	unsigned char mac[8];
+	unsigned short serialnum_batch;
+	unsigned short serialnum_unit; 
+	eth32cfg_ip_t config_ip;
+	eth32cfg_ip_t config_gateway;
+	eth32cfg_ip_t config_netmask;
+	eth32cfg_ip_t active_ip;
+	eth32cfg_ip_t active_gateway;
+	eth32cfg_ip_t active_netmask;
+	unsigned char dhcp;
+
+} eth32cfg_data_t;
+</pre><p>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>product_id - Contains the product ID code for the device.  This will be 105 for ETH32 devices.  This makes up a portion of the serial number.</p></li><li><p>firmware_major - Contains the major portion of the firmware version, e.g. 3 from 3.000</p></li><li><p>firmware_minor - Contains the minor portion of the firmware version, e.g. 0 from 3.000</p></li><li><p>config_enable - Nonzero if the device's Allow Config switch is set to Yes</p></li><li><p>mac - The MAC address of the device.  Not that this is an eight-element array.  Only the first six are used, and the last two are for proper structure alignment.</p></li><li><p>serialnum_batch - The batch number portion of the device's serial number</p></li><li><p>serialnum_unit - The unit number portion of the device's serial number</p></li><li><p>config_ip - The static IP address stored in the device.  This is ignored if DHCP is active.</p></li><li><p>config_gateway - The static gateway IP address stored in the device.  This is ignored if DHCP is active.</p></li><li><p>config_netmask - The static network mask stored in the device.  This is ignored if DHCP is active.</p></li><li><p>active_ip - The IP address being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>active_gateway - The gateway IP address being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>active_netmask - The network mask being used by the device, whether it was provided by DHCP or statically configured.</p></li><li><p>dhcp - Nonzero if DHCP is being used by the device, or zero if the static settings (config_ip, etc) are being used.</p></li></ul></div><p>
+       </p><p>
+       If a device is using DHCP, then active_ip will most likely be different than the static (stored) config_ip, and so 
+       on for the gateway and netmask.  If DHCP is not being used, then active_ip will be the same as config_ip, and so on 
+       for the gateway and netmask.
+       </p><p>
+       When using this structure with the <a class="xref" href="eth32cfg_set_config.html" title="eth32cfg_set_config">eth32cfg_set_config</a>, you may modify the 
+       config_ip, config_gateway, config_netmask, and dhcp members in order to update the corresponding settings
+       within the ETH32 device.  The other members of the structure should not be modified, since they will either 
+       be ignored, or are required for the new configuration to be accepted by the device.  Specifically, the 
+       MAC address and serial number information must match the device's information, or the device will ignore 
+       the new configuration data.
+       </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04s01s05s01.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ccpp_config.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s04s01s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Error Handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Configuration / Detection Function Reference</td></tr></table></div></body></html>

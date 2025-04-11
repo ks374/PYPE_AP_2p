@@ -1,0 +1,73 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_set_pwm_duty_period</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_set_pwm_clock_state.html" title="eth32_set_pwm_clock_state"><link rel="next" href="eth32_set_pwm_parameters.html" title="eth32_set_pwm_parameters"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_set_pwm_duty_period</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_set_pwm_clock_state.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_set_pwm_parameters.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_set_pwm_duty_period"></a>eth32_set_pwm_duty_period</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_set_pwm_duty_period(eth32 handle, int channel, int period);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489215"></a>Summary</h6></div></div></div><p>
+          This function sets the duty period for a PWM channel, which is the length of time the 
+          PWM output is active during each PWM cycle.  The duty period is specified as PWM clock 
+          counts less one.  In other words, when the PWM channel state is in normal mode, the 
+          PWM output will be high for (period + 1) counts of the PWM clock and low for the 
+          remainder of the clock counts in the cycle.  The length of the PWM cycle is called the 
+          base period and set using the <a class="xref" href="eth32_set_pwm_base_period.html" title="eth32_set_pwm_base_period">eth32_set_pwm_base_period</a> function.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489812"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>channel - Specifies the PWM channel number (0 or 1).</p></li><li><p>period - Specifies the duty period for the channel, in terms of PWM clock counts (0-65535).</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489834"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489862"></a>Remarks</h6></div></div></div><p>
+          Remember that the base period (set with <a class="xref" href="eth32_set_pwm_base_period.html" title="eth32_set_pwm_base_period">eth32_set_pwm_base_period</a>) 
+          is shared between both PWM channels on the device.  However, 
+          the duty period (set with this function) is individually configurable for each channel.  
+          The recommended approach is 
+          to choose a PWM frequency that is appropriate for both channels and set the base period 
+          accordingly once during initialization.  After that point, the individual duty periods for 
+          each channel should be set whenever necessary in order to alter the percentage of time the channel is on (duty cycle).
+         </p><p>
+          Any 16-bit value can be specified for the period, from 0 to 65535.  Note that if a 
+          duty period is given that is greater than or equal to the current PWM base period, 
+          the output will be a solid high (in normal mode) or a solid low (in inverted mode).  
+          If a duty period of 0 is given, the output will not be solid, but rather it 
+          will have a short spike during each period of the PWM clock.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489861"></a>Example</h6></div></div></div><pre class="programlisting">
+// Error handling is omitted for clarity
+eth32 handle;
+
+// .... Your code that establishes a connection here
+
+
+// Set up PWM channel 0 to have a 10 KHZ, 60% PWM signal:
+
+// First, set up the base period to give a frequency of 10 KHZ
+// This is calculated as:
+//   (2,000,000)/(10,000) - 1
+// We subtracted one since the base period takes one clock 
+// cycle longer than the value we load in.
+eth32_set_pwm_base_period(handle, 199);
+
+// Set up this PWM channel's duty period to take up 60% of 
+// each base period cycle.  The base period takes 200 clock
+// cycles, so we want the duty period to take:
+//   200 * 0.60 = 120 clock cycles
+// Since the duty period takes one cycle longer than the value 
+// we load into it, we specify 119 here:
+eth32_set_pwm_duty_period(handle, 0, 119);
+
+
+// Put the PWM pin into output mode
+// PWM 0's output pin is on Port 2, bit 4
+eth32_set_direction_bit(handle, 2, 4, 1);
+
+// Enable the main PWM clock
+eth32_set_pwm_clock_state(handle, PWM_CLOCK_ENABLED);
+
+// Finally, enable the PWM channel
+eth32_set_pwm_channel(handle, 0, PWM_CHANNEL_NORMAL);
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3489539"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_get_pwm_duty_period.html" title="eth32_get_pwm_duty_period">eth32_get_pwm_duty_period</a>, 
+          <a class="xref" href="eth32_set_pwm_base_period.html" title="eth32_set_pwm_base_period">eth32_set_pwm_base_period</a>, 
+          <a class="xref" href="eth32_set_pwm_channel.html" title="eth32_set_pwm_channel">eth32_set_pwm_channel</a>, 
+          <a class="xref" href="eth32_set_pwm_clock_state.html" title="eth32_set_pwm_clock_state">eth32_set_pwm_clock_state</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_set_pwm_clock_state.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_set_pwm_parameters.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_set_pwm_clock_state </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_set_pwm_parameters</td></tr></table></div></body></html>

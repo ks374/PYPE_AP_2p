@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>AnalogReference Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03s04.html" title="Eth32 Member Reference"><link rel="prev" href="vb6AnalogAssignment.html" title="AnalogAssignment Property"><link rel="next" href="vb6AnalogState.html" title="AnalogState Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AnalogReference Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb6AnalogAssignment.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb6AnalogState.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb6AnalogReference"></a>AnalogReference Property</h5></div></div></div><p>
+        </p><pre class="programlisting">Public Property AnalogReference As Eth32AnalogReference</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3500651"></a>Summary</h6></div></div></div><p>
+          This property configures the voltage source to be used by the Analog to Digital Converter as the reference voltage 
+          for analog conversions. The reference voltage determines the voltage level that will give the highest 
+          possible analog reading value. There are three possible voltages that may be used: An externally-generated 
+          voltage supplied on the analog reference pin, internal 5V, and internally generated 2.56V.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3500646"></a>Parameters</h6></div></div></div><p>
+         This property does not have any parameters.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3500631"></a>Value</h6></div></div></div><p>
+         This property is a Eth32AnalogReference enumerator type, which has the following valid values:
+         </p><div class="itemizedlist"><ul type="disc"><li><p>REF_EXTERNAL - Selects the external, user-supplied voltage.</p></li><li><p>REF_INTERNAL - Selects the internal 5V source.</p></li><li><p>REF_256 - Selects the internal 2.56V reference.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3500875"></a>Remarks</h6></div></div></div><p>
+          Note that whatever voltage source is selected will be internally connected to the 
+          external voltage reference pin.  So for example, if you have a 4V source connected to 
+          the external reference pin, you should NOT configure the reference for REF_INTERNAL 
+          or REF_256 until you have disconnected the external reference pin.
+         </p><p>
+          Also note that if you connect a voltage to the external reference pin, it must not 
+          exceed 5V or go below 0V.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501264"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="vb6AnalogState.html" title="AnalogState Property">AnalogState Property</a>, <a class="xref" href="vb6InputAnalog.html" title="InputAnalog Method">InputAnalog Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb6AnalogAssignment.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb6AnalogState.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AnalogAssignment Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> AnalogState Property</td></tr></table></div></body></html>

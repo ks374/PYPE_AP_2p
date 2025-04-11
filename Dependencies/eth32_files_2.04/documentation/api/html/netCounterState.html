@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>CounterState Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02s04.html" title="Eth32 Member Reference"><link rel="prev" href="netCounterRollover.html" title="CounterRollover Property"><link rel="next" href="netCounterThreshold.html" title="CounterThreshold Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CounterState Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="netCounterRollover.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="netCounterThreshold.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="netCounterState"></a>CounterState Property</h5></div></div></div><p>
+        </p><pre class="programlisting">Eth32CounterState CounterState[int counter]</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3493558"></a>Summary</h6></div></div></div><p>
+          This property allows you to control or retrieve the state of the two 
+          counters on the ETH32 device.  The counter state configures which 
+          input signal edge (rising or falling) will increment the counter value 
+          or whether the counter is disabled.  Setting or accessing this property 
+          does not affect the current counter value in any way.  For example,
+          a counter that is disabled and then enabled again will retain its value.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3493748"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>int counter - Specifies the counter number (0 or 1).</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3493776"></a>Value</h6></div></div></div><p>
+         This property is a Eth32CounterState enumerator type, which has the following valid values:
+         </p><div class="itemizedlist"><ul type="disc"><li><p>Eth32CounterState.Disabled - The counter is disabled.  The counter value may still be accessed, but 
+                              the counter will not increment as a result of input signals.</p></li><li><p>Eth32CounterState.Falling - The counter will increment on the falling edge of the input signal.</p></li><li><p>Eth32CounterState.Rising - The counter will increment on the rising edge of the input signal.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3494004"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="netCounterRollover.html" title="CounterRollover Property">CounterRollover Property</a>, <a class="xref" href="netCounterValue.html" title="CounterValue Property">CounterValue Property</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="netCounterRollover.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="netCounterThreshold.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CounterRollover Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> CounterThreshold Property</td></tr></table></div></body></html>

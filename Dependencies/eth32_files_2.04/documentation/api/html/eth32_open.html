@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_open</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_input_successive.html" title="eth32_input_successive"><link rel="next" href="eth32_output_bit.html" title="eth32_output_bit"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_open</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_input_successive.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_output_bit.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_open"></a>eth32_open</h5></div></div></div><p>
+         </p><pre class="programlisting">eth32 eth32_open(char *address, WORD port, unsigned int timeout, int *result);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486606"></a>Summary</h6></div></div></div><p>
+          The eth32_open function is used to open a new connection to an ETH32 device.  It returns a handle 
+          which you must save and pass to any other API functions you call.  Note that your application may have  
+          connections open to several ETH32 devices at once, so the handle serves to identify each connection.  
+          This function does not reset the device or change its configuration in any way.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486612"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>address - The IP address or DNS name of the ETH32 device.</p></li><li><p>port - The TCP port to connect to.  The ETH32 listens on TCP port 7152.  The constant ETH32_PORT may be used here.</p></li><li><p>timeout - Specifies the maximum time, in milliseconds, that the connection attempt 
+                           may take, excluding resolving DNS.  You may specify a timeout of zero to use the default 
+                           timeout from the system's TCP/IP stack.  Note that the function may time out in less time 
+                           than you specify if the system's timeout is shorter.</p></li><li><p>result - Receives the result/error code of the function.  You may specify NULL if you are 
+                           not interested in the error code.  On a successful connection, a value of zero is stored 
+                           to this parameter.  On error, the error code is stored.  See the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section 
+                           for possible error codes.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483426"></a>Return Value</h6></div></div></div><p>
+          This function returns a handle to the device if it was successfully opened.  You must save the 
+          handle value and pass it as a parameter to any other API functions that you call.  The only return 
+          value that indicates an error is zero.  If you want to receive the actual error code in the 
+          event of an error, use the <span class="emphasis"><em>result</em></span> parameter specified above.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486693"></a>Example</h6></div></div></div><pre class="programlisting">
+eth32 handle;
+int result;
+
+handle=eth32_open("192.168.1.100", ETH32_PORT, 0, &amp;result);
+if(handle==0)
+{
+	printf("Error connecting to ETH32: %s\n", eth32_error_string(result));
+	// handle error as appropriate in your code, prevent falling through
+	// to code below.	
+}
+// Now that we're connected, turn on an LED:
+eth32_set_led(handle, 0, 1);
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486760"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_close.html" title="eth32_close">eth32_close</a>, <a class="xref" href="eth32_verify_connection.html" title="eth32_verify_connection">eth32_verify_connection</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_input_successive.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_output_bit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_input_successive </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_output_bit</td></tr></table></div></body></html>

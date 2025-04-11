@@ -1,0 +1,82 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>InputAnalog Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56GetPwmParameters.html" title="GetPwmParameters Method"><link rel="next" href="vb56InputBit.html" title="InputBit Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">InputAnalog Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56GetPwmParameters.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56InputBit.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56InputAnalog"></a>InputAnalog Method</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Function InputAnalog(ByVal channel As Long) As Long</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909052"></a>Summary</h6></div></div><div></div></div><p>
+          This method retrieves an analog reading from one of the analog channels on the device.  The analog 
+          readings are only meaningful when the ADC has been enabled (see the <a href="vb56AnalogState.html" title="AnalogState Property">AnalogState Property</a>).
+          The analog readings are 10-bit values.  See below for further explanation of their meaning.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909050"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>channel - Specifies the logical analog channel (0-7) to read.  Note that each logical 
+                           analog channel may be arbitrarily assigned to physical channels using the 
+                           <a href="vb56AnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a>.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909166"></a>Return Value</h6></div></div><div></div></div><p>
+         This method returns a Long.  The return value is the reading from the specified channel.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909237"></a>Remarks</h6></div></div><div></div></div><p>
+          The reading that is obtained with this method is a 10-bit value (range of 0-1023) representing the 
+          voltage level relative to the analog reference voltage.  The exact interpretation depends 
+          on whether a single-ended or differential channel has been selected (see the 
+          <a href="vb56AnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a>).
+         </p><p>
+          For single-ended channels, the reading is:
+          </p><pre class="programlisting">(analog reading) = (channel voltage * 1024) / (voltage reference)</pre><p>
+          For example, a reading of 0 means 0V and a reading of 1023 means a voltage just under the 
+          voltage reference (assuming internal 5V reference, about 4.99V).
+          Once you have the analog reading, you can calculate the input voltage 
+          that produced it by calculating:
+          </p><pre class="programlisting">voltage = (analog reading)/1024 * (voltage reference)</pre><p>
+         </p><p>
+          For differential channels, the reading is:
+          </p><pre class="programlisting">(analog reading) = 512 + (positive side voltage - negative side voltage) * GAIN * 512 / (voltage reference)</pre><p>
+          For example, assuming a gain of 1X, a reading of 0 means the positive pin is (voltage reference) volts less than
+          the negative pin, a reading of 512 means the positive pin and negative pin are at the same voltage, and a reading 
+          of 1023 means the positive pin is almost (voltage reference) volts higher than the negative pin.  
+          Once you have the analog reading, you can calculate the voltage of the positive pin relative to the 
+          negative pin by calculating:
+          </p><pre class="programlisting">voltage = (analog reading - 512) / 512 * (voltage reference)</pre><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908734"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    Dim chan0 As Long
+    Dim voltage As Double
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' .... Your code that establishes a connection here
+
+    ' Enable the Analog to Digital Converter
+    dev.AnalogState = ADC_ENABLED
+    
+    ' Configure logical channel 0 to read the physical channel 0 relative to ground (single-ended)
+    ' This is the power-on default anyway, but is shown here for completeness:
+    dev.AnalogAssignment(0) = ANALOG_SE0
+    
+    ' Configure the analog voltage reference to be the internal 5V source
+    dev.AnalogReference = REF_INTERNAL
+    
+    ' Finally, read the voltage on channel 0
+    chan0 = dev.InputAnalog(0)
+    
+    ' Now, determine whether the voltage was &gt;= 3V.  Remember
+    ' we're using a 5V voltage reference.
+    If chan0 &gt;= (3# / 5# * 1024) Then
+        ' The voltage on channel 0 was at least 3V
+    Else
+        ' The voltage was less than 3V
+    End If
+    
+    ' If you want to calculate the voltage:
+    voltage = chan0 / 1024# * 5#
+
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+        </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908992"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56AnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a>, <a href="vb56AnalogReference.html" title="AnalogReference Property">AnalogReference Property</a>, <a href="vb56AnalogState.html" title="AnalogState Property">AnalogState Property</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56GetPwmParameters.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56InputBit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">GetPwmParameters Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> InputBit Method</td></tr></table></div></body></html>

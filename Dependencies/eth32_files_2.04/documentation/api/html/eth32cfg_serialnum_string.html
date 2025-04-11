@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32cfg_serialnum_string</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s06.html" title="Configuration / Detection Function Reference"><link rel="prev" href="eth32cfg_query.html" title="eth32cfg_query"><link rel="next" href="eth32cfg_set_config.html" title="eth32cfg_set_config"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32cfg_serialnum_string</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32cfg_query.html">Prev</a> </td><th width="60%" align="center">Configuration / Detection Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32cfg_set_config.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="eth32cfg_serialnum_string"></a>eth32cfg_serialnum_string</h5></div></div></div><p>
+        </p><pre class="programlisting">int eth32cfg_serialnum_string(unsigned char product_id, unsigned short batch, unsigned short unit, 
+                            char *serialstring, int bufsize);</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490999"></a>Summary</h6></div></div></div><p>
+        This function takes the numeric components of the ETH32 serial number and formats a serial number string 
+        in the same way that it is printed on the ETH32 device enclosure.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3491008"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>product_id - The product ID portion of the serial number</p></li><li><p>batch - The batch number portion of the serial number</p></li><li><p>unit - The unit number portion of the serial number</p></li><li><p>serialstring - Pointer to a string buffer where the string representation will be written.</p></li><li><p>bufsize - Specifies how many bytes long the serialstring buffer is.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3490823"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  If the buffer size according to 
+          the bufsize parameter is not long enough to receive the entire serial number string, it will not be written, 
+          and the function will return the ETH_BUFSIZE error.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="title"><a name="id3491162"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="ar01s04s01s05s02.html#ccppcfgeth32cfg_data_t" title="eth32cfg_data_t Structure">eth32cfg_data_t Structure</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32cfg_query.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s06.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32cfg_set_config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32cfg_query </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32cfg_set_config</td></tr></table></div></body></html>

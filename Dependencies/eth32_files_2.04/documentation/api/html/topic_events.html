@@ -1,0 +1,77 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Events</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_analog_inputs.html" title="Analog Inputs"><link rel="next" href="ar01s03s05s01.html" title="Digital Events"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Events</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_analog_inputs.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="ar01s03s05s01.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_events"></a>Events</h3></div></div></div><p>
+     One of the powerful and useful features of the ETH32 is its event monitoring capabilities.  
+     In a nutshell, event monitoring allows the ETH32 to monitor different input signals 
+     and send a notification to your application when that signal has changed or met 
+     your criteria.  Since the monitoring is constantly performed directly by the ETH32, it 
+     provides a much better alternative to polling.  It provides 
+     faster response, is very efficient with network traffic and CPU resources, and is 
+     typically much easier to implement in your application.
+    </p><p>
+     Notifications of specific events are enabled and disabled on a per-connection basis 
+     on the ETH32.  This means that each connection may individually select which events 
+     it wants to be notified of.  This also provides efficient use of network traffic and 
+     the processing time of the ETH32.  When events are sent from the ETH32 device, they are 
+     received on the PC side by the ETH32 API and then passed to your application, 
+     allowing your application to react accordingly.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3479988"></a>Handling Events in Your Application</h4><p>
+      Handling events in your application is very easy although there are a few steps that must be 
+      performed first depending on your programming language.  Essentially you must 
+      set up the mechanism that allows the ETH32 API to pass event information to 
+      your application whenever events occur.
+     </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478787"></a>.NET Languages and Visual Basic 6</h5><p>
+       In .NET languages and Visual Basic 6, events are handled by your application 
+       in a manner very similar to the way that Click events of buttons are handled.  
+       In other words, you must write an event handler routine that will be automatically called 
+       whenever events occur.  If events occur faster than your code is processing them, they 
+       will be held in an internal queue.  Class members are provided that allow you to configure the 
+       maximum size of the queue, to configure the queue behavior if the queue ever becomes full, and 
+       to retrieve the current number of events waiting in the queue.  Events 
+       in the queue cannot be retrieved by calling a member function, but rather they 
+       are automatically passed to your event handler routine.
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3479206"></a>C/C++</h5><p>
+       In C/C++, there are two separate ways of receiving event data and/or being notified 
+       of new events.  First, there is an <span class="emphasis"><em>event handler</em></span> 
+       mechanism that you may configure to one of the predefined mechanisms, either a callback 
+       or a Windows message.  The callback
+       mechanism causes the API to call a function that you have written and pass 
+       in all of the information about the event each time an event fires.  The Windows 
+       message mechanism sends a 
+       configurable Windows message to a window that you specify.  The Windows message notifies you that 
+       an event has occurred, but does not include the information about the event.
+       The second way of receiving event data is the <span class="emphasis"><em>event queue</em></span>.  
+       If enabled, each event is added to the queue along with its event information.  
+       Events are stored in the queue until you have a chance to retrieve them.  The event 
+       queue can be used independently of the event handler, but using them together can 
+       be very appropriate for the Windows message event handler.  In other words, a 
+       Windows message can notify you that an event has occurred, which prompts you to 
+       retrieve the event information from the event queue.
+      </p><p>
+       The C/C++ function <a class="xref" href="eth32_dequeue_event.html" title="eth32_dequeue_event">eth32_dequeue_event</a> allows you to efficiently 
+       wait for new events to arrive if the event queue is empty.  This capability can 
+       be used to synchronously wait for and process events, which can be desirable in 
+       some situations.  Note that since the <span class="emphasis"><em>event handler</em></span> and the 
+       <span class="emphasis"><em>event queue</em></span> are independent of each other, 
+       both will receive a copy of each event that occurs if they are both enabled at 
+       the same time.  For example, if the event handler 
+       is configured with a callback function and the event queue is enabled, both will receive 
+       a copy of the event information for each event that fires.
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3479403"></a>Applicable Functions and Information</h5><p>
+       </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Create event handler</td><td>
+<div class="literallayout"><p><a class="xref" href="callback_function.html" title="Event Callback Function">Event Callback Function</a><br>
+<a class="xref" href="eth32_set_event_handler.html" title="eth32_set_event_handler">eth32_set_event_handler</a><br>
+<a class="xref" href="eth32_get_event_handler.html" title="eth32_get_event_handler">eth32_get_event_handler</a></p></div></td><td><a class="xref" href="net_event_handler.html" title="Event Handler">Event Handler</a></td><td><a class="xref" href="vb6_event_handler.html" title="Event Handler">Event Handler</a></td></tr><tr><td>Configure event queue</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_event_handler.html" title="eth32_set_event_handler">eth32_set_event_handler</a><br>
+<a class="xref" href="eth32_set_event_queue_config.html" title="eth32_set_event_queue_config">eth32_set_event_queue_config</a><br>
+<a class="xref" href="eth32_get_event_queue_status.html" title="eth32_get_event_queue_status">eth32_get_event_queue_status</a></p></div></td><td>
+<div class="literallayout"><p><a class="xref" href="netEventQueueLimit.html" title="EventQueueLimit Property">EventQueueLimit Property</a><br>
+<a class="xref" href="netEventQueueCurrentSize.html" title="EventQueueCurrentSize Property">EventQueueCurrentSize Property</a><br>
+<a class="xref" href="netEventQueueMode.html" title="EventQueueMode Property">EventQueueMode Property</a></p></div></td><td>
+<div class="literallayout"><p><a class="xref" href="vb6EventQueueLimit.html" title="EventQueueLimit Property">EventQueueLimit Property</a><br>
+<a class="xref" href="vb6EventQueueCurrentSize.html" title="EventQueueCurrentSize Property">EventQueueCurrentSize Property</a><br>
+<a class="xref" href="vb6EventQueueMode.html" title="EventQueueMode Property">EventQueueMode Property</a></p></div></td></tr><tr><td>Empty event queue</td><td><a class="xref" href="eth32_empty_event_queue.html" title="eth32_empty_event_queue">eth32_empty_event_queue</a></td><td><a class="xref" href="netEmptyEventQueue.html" title="EmptyEventQueue Method">EmptyEventQueue Method</a></td><td><a class="xref" href="vb6EmptyEventQueue.html" title="EmptyEventQueue Method">EmptyEventQueue Method</a></td></tr><tr><td>Retrieve event from queue</td><td><a class="xref" href="eth32_dequeue_event.html" title="eth32_dequeue_event">eth32_dequeue_event</a></td><td>Not applicable</td><td>Not applicable</td></tr></tbody></table></div><p>
+      </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_analog_inputs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s03s05s01.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Analog Inputs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Digital Events</td></tr></table></div></body></html>

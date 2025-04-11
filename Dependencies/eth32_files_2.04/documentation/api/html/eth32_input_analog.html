@@ -1,0 +1,78 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_input_analog</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_get_timeout.html" title="eth32_get_timeout"><link rel="next" href="eth32_input_bit.html" title="eth32_input_bit"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_input_analog</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_get_timeout.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_input_bit.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_input_analog"></a>eth32_input_analog</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_input_analog(eth32 handle, int channel, int *value);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485957"></a>Summary</h6></div></div></div><p>
+          This function retrieves an analog reading from one of the analog channels on the device.  The analog 
+          readings are only meaningful when the ADC has been enabled (see <a class="xref" href="eth32_set_analog_state.html" title="eth32_set_analog_state">eth32_set_analog_state</a>).
+          The analog readings are 10-bit values.  See below for further explanation of their meaning.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486342"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>channel - Specifies the logical analog channel (0-7) to read.  Note that each logical 
+                           analog channel may be arbitrarily assigned to physical channels using 
+                           <a class="xref" href="eth32_set_analog_assignment.html" title="eth32_set_analog_assignment">eth32_set_analog_assignment</a>.</p></li><li><p>value - Pointer to a variable which will receive the reading from the specified channel.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486050"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3486378"></a>Remarks</h6></div></div></div><p>
+          The reading that is obtained with this function is a 10-bit value (range of 0-1023) representing the 
+          voltage level relative to the analog reference voltage.  The exact interpretation depends 
+          on whether a single-ended or differential channel has been selected (see 
+          <a class="xref" href="eth32_set_analog_assignment.html" title="eth32_set_analog_assignment">eth32_set_analog_assignment</a>).
+         </p><p>
+          For single-ended channels, the reading is:
+          </p><pre class="programlisting">(analog reading) = (channel voltage * 1024) / (voltage reference)</pre><p>
+          For example, a reading of 0 means 0V and a reading of 1023 means a voltage just under the 
+          voltage reference (assuming internal 5V reference, about 4.99V).
+          Once you have the analog reading, you can calculate the input voltage 
+          that produced it by calculating:
+          </p><pre class="programlisting">voltage = (analog reading)/1024 * (voltage reference)</pre><p>
+         </p><p>
+          For differential channels, the reading is:
+          </p><pre class="programlisting">(analog reading) = 512 + (positive side voltage - negative side voltage) * GAIN * 512 / (voltage reference)</pre><p>
+          For example, assuming a gain of 1X, a reading of 0 means the positive pin is (voltage reference) volts less than
+          the negative pin, a reading of 512 means the positive pin and negative pin are at the same voltage, and a reading 
+          of 1023 means the positive pin is almost (voltage reference) volts higher than the negative pin.  
+          Once you have the analog reading, you can calculate the voltage of the positive pin relative to the 
+          negative pin by calculating:
+          </p><pre class="programlisting">voltage = (analog reading - 512) / 512 * (voltage reference)</pre><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483861"></a>Example</h6></div></div></div><pre class="programlisting">
+// NOTE: Error handling omitted for clarity
+eth32 handle;
+int result;
+int chan0;
+float voltage;
+
+// .... Your code that establishes a connection here
+
+// Enable the Analog to Digital Converter
+eth32_set_analog_state(handle, ADC_ENABLED);
+
+// Configure logical channel 0 to read the physical channel 0 relative to ground (single-ended)
+// This is the power-on default anyway, but is shown here for completeness:
+eth32_set_analog_assignment(handle, 0, ANALOG_SE0);
+
+// Configure the analog voltage reference to be the internal 5V source
+eth32_set_analog_reference(handle, REF_INTERNAL);
+
+// Finally, read the voltage on channel 0
+eth32_input_analog(handle, 0, &amp;chan0);
+
+// Now, determine whether the voltage was &gt;= 3V.  Remember
+// we're using a 5V voltage reference.
+if( chan0 &gt;= (3.0/5.0 * 1024) )
+{
+	// The voltage on channel 0 was at least 3V
+}
+else
+{
+	// The voltage was less than 3V
+}
+
+// If you want to calculate the voltage:
+voltage = chan0 / 1024.0 * 5.0;
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483805"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_set_analog_assignment.html" title="eth32_set_analog_assignment">eth32_set_analog_assignment</a>, <a class="xref" href="eth32_set_analog_reference.html" title="eth32_set_analog_reference">eth32_set_analog_reference</a>, <a class="xref" href="eth32_set_analog_state.html" title="eth32_set_analog_state">eth32_set_analog_state</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_get_timeout.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_input_bit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_get_timeout </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_input_bit</td></tr></table></div></body></html>

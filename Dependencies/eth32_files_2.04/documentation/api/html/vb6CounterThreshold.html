@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>CounterThreshold Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03s04.html" title="Eth32 Member Reference"><link rel="prev" href="vb6CounterState.html" title="CounterState Property"><link rel="next" href="vb6CounterValue.html" title="CounterValue Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CounterThreshold Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb6CounterState.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb6CounterValue.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb6CounterThreshold"></a>CounterThreshold Property</h5></div></div></div><p>
+        </p><pre class="programlisting">Public Property CounterThreshold(ByVal counter As Long) As Long</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501881"></a>Summary</h6></div></div></div><p>
+          This property defines a counter event threshold that will cause an event to fire as the 
+          counter value passes the threshold.  On the ETH32 device, only Counter 0 supports this 
+          (although both counters support rollover thresholds).  An event is fired as 
+          a result of the counter surpassing the threshold, not meeting it. For example, with a 
+          threshold of 9, the counter's value would increment from 8 to 9 without firing the event,
+          but it would fire as the counter incremented from 9 to 10.  The valid range for a counter 
+          event threshold is from 0 to the maximum possible counter value (65535 for 16-bit counter 0). 
+          The powerup default threshold is 0. The threshold has no other side-effects on the counter - 
+          it does not reset the counter to 0 like the rollover threshold.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501411"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>counter - Specifies the counter number.  This must be 0.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501953"></a>Value</h6></div></div></div><p>
+         This property is a Long.  The valid range 
+         is from 0 to the maximum possible counter value (65535 for 16-bit counter 0).
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501908"></a>Remarks</h6></div></div></div><p>
+          Please note that defining a threshold with this property does not enable 
+          the current connection to actually receive the event notifications when they occur.  
+          These must be enabled separately using the <a class="xref" href="vb6EnableEvent.html" title="EnableEvent Method">EnableEvent Method</a>. 
+          Also note that event thresholds are common to all connections.  Changing 
+          the thresholds will affect other connections if they are utilizing that particular 
+          counter event.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3501826"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="vb6CounterState.html" title="CounterState Property">CounterState Property</a>, <a class="xref" href="vb6CounterRollover.html" title="CounterRollover Property">CounterRollover Property</a>, <a class="xref" href="vb6EnableEvent.html" title="EnableEvent Method">EnableEvent Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb6CounterState.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb6CounterValue.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CounterState Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> CounterValue Property</td></tr></table></div></body></html>

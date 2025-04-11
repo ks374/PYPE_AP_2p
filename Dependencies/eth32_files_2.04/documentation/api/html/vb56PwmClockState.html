@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PwmClockState Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56PwmChannel.html" title="PwmChannel Property"><link rel="next" href="vb56PwmDutyPeriod.html" title="PwmDutyPeriod Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">PwmClockState Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56PwmChannel.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56PwmDutyPeriod.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56PwmClockState"></a>PwmClockState Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property PwmClockState As Eth32PwmClock</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2910057"></a>Summary</h6></div></div><div></div></div><p>
+          This property enables or disables the PWM clock from counting.  The PWM clock is shared 
+          between both PWM outputs of the device.  When the PWM clock is disabled, the PWM outputs 
+          will be idle (not pulsing). The PWM clock may be enabled or disabled independently of 
+          whether the individual PWM channel outputs are enabled or disabled.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2910256"></a>Parameters</h6></div></div><div></div></div><p>
+         This property does not have any parameters.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2910107"></a>Value</h6></div></div><div></div></div><p>
+         This property is a Eth32PwmClock enumerator type, which has the following valid values:
+         </p><div class="itemizedlist"><ul type="disc"><li><p>PWM_CLOCK_DISABLED - Disables the PWM clock.</p></li><li><p>PWM_CLOCK_ENABLED - Enables the PWM clock.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2910171"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56PwmBasePeriod.html" title="PwmBasePeriod Property">PwmBasePeriod Property</a>, <a href="vb56PwmChannel.html" title="PwmChannel Property">PwmChannel Property</a>, <a href="vb56PwmDutyPeriod.html" title="PwmDutyPeriod Property">PwmDutyPeriod Property</a>, <a href="vb56SetPwmParameters.html" title="SetPwmParameters Method">SetPwmParameters Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56PwmChannel.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56PwmDutyPeriod.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">PwmChannel Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> PwmDutyPeriod Property</td></tr></table></div></body></html>

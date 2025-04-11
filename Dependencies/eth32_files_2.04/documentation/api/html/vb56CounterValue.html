@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>CounterValue Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56CounterThreshold.html" title="CounterThreshold Property"><link rel="next" href="vb56DisableEvent.html" title="DisableEvent Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CounterValue Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56CounterThreshold.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56DisableEvent.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56CounterValue"></a>CounterValue Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property CounterValue(ByVal counter As Long) As Long</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907659"></a>Summary</h6></div></div><div></div></div><p>
+         This property allows you to read or write the current value of the counters 
+         on the ETH32 device.  After you have enabled the counter with the <a href="vb56CounterState.html" title="CounterState Property">CounterState Property</a>, 
+         the value of the counter indicates how many times the counter has been incremented by the 
+         external counter input.  This property can also be written in order to set the 
+         counter value, which can be useful for initializing the counter.  All counters 
+         begin with a value of zero after powerup or reset. 
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907628"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>counter - Specifies the counter number (0 or 1).</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907657"></a>Value</h6></div></div><div></div></div><p>
+         This property is a Long.  For counter 0 (a 16-bit counter), this may range 
+         from 0-65535.  For counter 1 (an 8-bit counter), this may range from 0-255.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907678"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56CounterState.html" title="CounterState Property">CounterState Property</a>, <a href="vb56CounterRollover.html" title="CounterRollover Property">CounterRollover Property</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56CounterThreshold.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56DisableEvent.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CounterThreshold Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DisableEvent Method</td></tr></table></div></body></html>

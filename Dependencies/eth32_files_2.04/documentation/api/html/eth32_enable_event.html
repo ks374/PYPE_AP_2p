@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_enable_event</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_empty_event_queue.html" title="eth32_empty_event_queue"><link rel="next" href="eth32_error_string.html" title="eth32_error_string"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_enable_event</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_empty_event_queue.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_error_string.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_enable_event"></a>eth32_enable_event</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_enable_event(eth32 handle, int type, int port, int bit, int id);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484083"></a>Summary</h6></div></div></div><p>
+          This function enables reception of the specified event on the current connection.  The ETH32 device 
+          only sends event notifications to those connections that specifically request them, so this function 
+          requests notification for the specified event from the device, as well as internally assigns the 
+          event an ID number provided by you.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484180"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>
+             type - The type of event to enable.  The valid event types are:
+             </p><div class="itemizedlist"><ul type="circle"><li><p>EVENT_DIGITAL - Digital I/O event.  This includes port events and bit events.</p></li><li><p>EVENT_ANALOG - Analog event based on thresholds defined with the 
+                              <a class="xref" href="eth32_set_analog_eventdef.html" title="eth32_set_analog_eventdef">eth32_set_analog_eventdef</a> function.</p></li><li><p>EVENT_COUNTER_ROLLOVER - Counter rollover event, which occurs when the counter 
+                              rolls over to zero.</p></li><li><p>EVENT_COUNTER_THRESHOLD - Counter threshold event, which occurs when the counter 
+                              passes a threshold defined with <a class="xref" href="eth32_set_counter_threshold.html" title="eth32_set_counter_threshold">eth32_set_counter_threshold</a>.</p></li><li><p>EVENT_HEARTBEAT - Periodic event sent by the device to indicate the TCP/IP 
+                              connection is still good.</p></li></ul></div><p>
+            </p></li><li><p>port - For digital events, specifies the port number, for analog events, specifies the 
+                           bank number, and for either counter event, specifies the counter number.</p></li><li><p>bit - For digital events, this should be -1 for port events or the bit 
+                           number (0-7) for bit events.  For analog events, this specifies the analog 
+                           channel number (0-7).</p></li><li><p>id - You may specify any number to be associated with this event.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483903"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483996"></a>Remarks</h6></div></div></div><p>
+          The <span class="emphasis"><em>id</em></span> parameter allows you to assign any arbitrary number to this 
+          particular event.  The ID you assign is included with the event information whenever this 
+          event fires.  The idea is that you can identify a particular event with a single comparison rather 
+          than needing to inspect several pieces of data such as the event type, port number, and bit number. 
+          The ID number is completely arbitrary and multiple events may be given the same ID 
+          number if desired.  The ID numbers are stored within the API and are not sent to the 
+          ETH32 device.
+         </p><p>
+          One other minor technicality is that the heartbeat event is permanently enabled on the ETH32
+          device itself for purposes of connection maintenance.  Therefore, for the heartbeat event, 
+          this function simply enables the event within the API, meaning that when the event comes in, rather than being 
+          discarded it will be added to the event queue (if it is enabled) and handled by the configured 
+          event handler.  The one small side-effect to this fact is that if you have enabled 
+          reception of the heartbeat event and another connection calls <a class="xref" href="eth32_reset.html" title="eth32_reset">eth32_reset</a>, 
+          you will continue to receive heartbeat events, whereas all other event types will have been 
+          disabled on the device itself.  Note that if you call eth32_reset on your own connection, it 
+          automatically disables the heartbeat event within the API for your connection, so in that case 
+          it is not an issue.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483332"></a>Example</h6></div></div></div><pre class="programlisting">
+eth32 handle;
+int result;
+eth32_event event_info;
+
+
+// .... Your code that establishes a connection here
+
+
+// This example shows using the event queue to receive events ...
+// you could use a callback function instead.
+// Enable the event queue
+result=eth32_set_event_queue_config(handle, 1000, QUEUE_DISCARD_NEW);
+if(result)
+{
+	// handle error
+}
+
+// Enable an event that will fire whenever port 2, bit 5 changes state
+// Assign it an arbitrary ID of 1000
+result=eth32_enable_event(handle, EVENT_DIGITAL, 2, 5, 1000);
+if(result)
+{
+	// handle error
+}
+
+// Enable the rollover event on Counter 0
+// Assign it an arbitrary ID of 1001
+result=eth32_enable_event(handle, EVENT_COUNTER_ROLLOVER, 0, 0, 1001);
+if(result)
+{
+	// handle error
+}
+
+
+// Somewhere later in your code .... you want to process any events in the 
+// queue.  Do not wait at all for events - just process the ones already 
+// in the queue.  eth32_dequeue_event will return zero as long as there 
+// was an event in the queue.
+while( (result=eth32_dequeue_event(handle, &amp;event_info, 0)) == 0 )
+{
+	switch(event_info.id)
+	{
+		case 1000:
+			printf("Port 2 bit 5 has changed to have value %d\n", 
+			       event_info.value);
+			break;
+		case 1001:
+			printf("Counter 0 has rolled over %d times "
+			       "since we last received this event.\n", 
+			       event_info.value);
+			break;
+	}
+}
+
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484258"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="callback_function.html" title="Event Callback Function">Event Callback Function</a>, <a class="xref" href="eth32_disable_event.html" title="eth32_disable_event">eth32_disable_event</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_empty_event_queue.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_error_string.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_empty_event_queue </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_error_string</td></tr></table></div></body></html>

@@ -78,28 +78,44 @@ OpenIrisClient* OpenIrisClient_init(char* server_address, int port, double timeo
 
 // Function to send a request and receive raw data
 static char* OpenIrisClient_fetch_data_raw(OpenIrisClient* client, int debug) {
-    const char* message = "WAITFORDATA";
-    sendto(client->sock, message, strlen(message), 0, (struct sockaddr*)&client->server_address, sizeof(client->server_address));
+    //fprintf(stderr,"Openiris_server: calling fetch_data_raw. \n");
+	//fprintf(stderr, "Openiris_server: fetch data IP address: %s, Port: %d\n", 
+    //    inet_ntoa(client->server_address.sin_addr), ntohs(client->server_address.sin_port));
+	
+	const char* message = "WAITFORDATA";
+	socklen_t len = sizeof(client->server_address);
     
-    char* data = (char*)malloc(MAX_BUFFER_SIZE);
-    socklen_t len = sizeof(client->server_address);
-    
-    int bytes_received = recvfrom(client->sock, data, MAX_BUFFER_SIZE, 0, (struct sockaddr*)&client->server_address, &len);
-    if (bytes_received < 0) {
-        if (debug) {
-            perror("Error receiving data");
-        }
-        free(data);
-        return "{}";  // Return empty JSON object in case of error
+	char* data = (char*)malloc(MAX_BUFFER_SIZE);
+	if (!data) {
+        if (debug) perror("Malloc failed");
+        return NULL;
     }
-    
+	//fprintf(stderr,"OpenirisClient: Entering fetch data raw looping: \n");
+    while (1){
+		ssize_t sent_bytes = sendto(client->sock, message, strlen(message), 0, (struct sockaddr*)&client->server_address, sizeof(client->server_address));
+		if (sent_bytes < 0){
+			perror("Error sending message");
+			continue;
+		}
+		int bytes_received = recvfrom(client->sock, data, MAX_BUFFER_SIZE, 0, (struct sockaddr*)&client->server_address, &len);
+		//fprintf(stderr,"bytes_received = %d\n",bytes_received);
+		if (bytes_received < 0) {
+			fprintf(stderr,"No data. ");
+			if (debug) {
+				perror("Error receiving data");
+			}
+			continue;
+		}
+    //fprintf(stderr,"receiving actual data\n");
     data[bytes_received] = '\0';  // Null terminate the received string
     return data;
+	}
 }
 
 // Function to fetch data as a JSON object
 static json_object* OpenIrisClient_fetch_data_json(OpenIrisClient* client, int debug) {
-    char* raw_data = OpenIrisClient_fetch_data_raw(client, debug);
+    //fprintf(stderr,"Openiris_server: calling fetch_data json. \n");
+	char* raw_data = OpenIrisClient_fetch_data_raw(client, debug);
     if (strcmp(raw_data, "{}") == 0){
         perror("Error receiving data");
         return NULL;
@@ -130,6 +146,7 @@ EyesData* OpenIrisClient_Data_buffer_init(){
     }
 }
 void OpenIrisClient_fetch_data(EyesData* eyesdata, OpenIrisClient* client, int debug) {
+	//fprintf(stderr,"Openiris_server: calling fetch_data. \n");
     EyesData_init(OpenIrisClient_fetch_data_json(client, debug),eyesdata);
 }
 

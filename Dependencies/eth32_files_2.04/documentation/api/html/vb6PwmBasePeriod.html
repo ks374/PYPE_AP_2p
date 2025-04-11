@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PwmBasePeriod Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03s04.html" title="Eth32 Member Reference"><link rel="prev" href="vb6PulseBit.html" title="PulseBit Method"><link rel="next" href="vb6PwmChannel.html" title="PwmChannel Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">PwmBasePeriod Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb6PulseBit.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb6PwmChannel.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb6PwmBasePeriod"></a>PwmBasePeriod Property</h5></div></div></div><p>
+        </p><pre class="programlisting">Public Property PwmBasePeriod As Long</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3504164"></a>Summary</h6></div></div></div><p>
+          This property configures the main PWM clock to have a cycle period of the 
+          given number of counts.  This defines the base frequency that will be used 
+          for the PWM channels.  The base frequency is not individually selectable for 
+          each channel, so this property affects both PWM outputs. Each complete 
+          PWM waveform will have a duration of (BasePeriod + 1) PWM clock cycles.  The PWM 
+          clock counts at a rate of 2 MHZ. This means, for example, that specifying a 
+          period of 99 would result in a frequency of 20 KHZ (2,000,000/(99+1)).  The 
+          base period is specified as a 16-bit number that may range from a value of 49 
+          (40 KHZ) to a value of 65,535 (30.5 HZ).
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3503846"></a>Parameters</h6></div></div></div><p>
+         This property does not have any parameters.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3504161"></a>Value</h6></div></div></div><p>
+         This property is a Long.  It specifies the number of PWM clock counts that 
+         make up the base period of the PWM channels.  This may range from 49 - 65535.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3503498"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="vb6PwmChannel.html" title="PwmChannel Property">PwmChannel Property</a>, <a class="xref" href="vb6PwmClockState.html" title="PwmClockState Property">PwmClockState Property</a>, <a class="xref" href="vb6PwmDutyPeriod.html" title="PwmDutyPeriod Property">PwmDutyPeriod Property</a>, <a class="xref" href="vb6SetPwmParameters.html" title="SetPwmParameters Method">SetPwmParameters Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb6PulseBit.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb6PwmChannel.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">PulseBit Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> PwmChannel Property</td></tr></table></div></body></html>

@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Special-Purpose Digital I/O</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_digital_io.html" title="Digital I/O"><link rel="next" href="topic_analog_inputs.html" title="Analog Inputs"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Special-Purpose Digital I/O</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_digital_io.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_analog_inputs.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_special_digital_io"></a>Special-Purpose Digital I/O</h3></div></div></div><p>
+     There are a few special digital I/O functions that are implemented 
+     directly on the ETH32 that may be useful in certain situations.  
+     Firstly, a <span class="emphasis"><em>pulse bit</em></span> command allows you to 
+     rapidly pulse one of the output pins a specified number of times.  
+     This can be useful in initialization of an external device, such as 
+     a counter chip, if a line needs to be clocked a specific number of 
+     times.
+    </p><p>
+     Secondly, the ETH32 implements a command that allows a port's input 
+     value to be read repeatedly until two successive reads match.  This 
+     can be useful if you are reading a multi-bit value such as a counter chip.  
+     Without this functionality, there would be a slight chance of reading 
+     the value during a transition period and obtaining an invalid value.  
+     By requiring that two successive reads match, that possibility is 
+     eliminated.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478650"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Pulse bit</td><td><a class="xref" href="eth32_pulse_bit.html" title="eth32_pulse_bit">eth32_pulse_bit</a></td><td><a class="xref" href="netPulseBit.html" title="PulseBit Method">PulseBit Method</a></td><td><a class="xref" href="vb6PulseBit.html" title="PulseBit Method">PulseBit Method</a></td></tr><tr><td>Successive read</td><td><a class="xref" href="eth32_input_successive.html" title="eth32_input_successive">eth32_input_successive</a></td><td><a class="xref" href="netInputSuccessive.html" title="InputSuccessive Method">InputSuccessive Method</a></td><td><a class="xref" href="vb6InputSuccessive.html" title="InputSuccessive Method">InputSuccessive Method</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_digital_io.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_analog_inputs.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Digital I/O </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Analog Inputs</td></tr></table></div></body></html>

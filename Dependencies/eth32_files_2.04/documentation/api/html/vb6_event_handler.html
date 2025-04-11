@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Event Handler</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s03.html" title="Visual Basic 6"><link rel="prev" href="vb6VerifyConnection.html" title="VerifyConnection Method"><link rel="next" href="vb6_config.html" title="Configuration / Detection Functionality"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Event Handler</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb6VerifyConnection.html">Prev</a> </td><th width="60%" align="center">Visual Basic 6</th><td width="20%" align="right"> <a accesskey="n" href="vb6_config.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="vb6_event_handler"></a>Event Handler</h4></div></div></div><p>
+       When hardware events occur on the ETH32, information about that event is transmitted 
+       to your application if you have enabled it using the <a class="xref" href="vb6EnableEvent.html" title="EnableEvent Method">EnableEvent Method</a>.  
+       When this information is received, the Eth32 class notifies your application of 
+       the event in a manner that is consistent with the way Visual Basic 6 applications typically process 
+       events.  That is, the ETH32 events will be processed by your application in a manner very 
+       similar to the way that the Click event of a form's command button would be processed.
+      </p><p>
+       The event handler function is a function written by you, the programmer.  
+       Because it is a function you write, you have complete freedom to inspect whichever 
+       aspects of the event data you need to and react however you see fit.
+      </p><p>
+       In Visual Basic 6, your event handler function is executed by the same thread 
+       as the rest of your code.  While this is the same situation as command button Click events or other 
+       form events, you should be aware that if some part of your code is tying up the CPU, events 
+       will not be processed until that code is done.  If you ever need ETH32 events to be processed 
+       during a situation such as this, your code may call the <a class="xref" href="vb6CheckEvents.html" title="CheckEvents Method">CheckEvents Method</a> at 
+       the time(s) that any pending events should be processed.
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3505908"></a>Writing and Registering an Event Handler</h5><p>
+        Your event handler function's name must start with the name of your object variable, 
+        be followed by an underscore and EventFired ('_EventFired').  The event handler must also 
+        accept a very specific set of parameters.  Fortunately, Visual Basic will automatically 
+        create an empty event handler function for you.  After you have declared an Eth32 object 
+        variable (see the <a class="xref" href="vb6_getting_started.html#vb6_basic_declaration" title="Basic Declaration">Basic Declaration</a> section above), there will be 
+        an entry in the Object drop-down box (the one on the left) at the top of the VB code editor.  
+        Simply select that entry and VB will automatically create an empty event handler function.  
+        Your code file may now contain something like this:
+</p><pre class="programlisting">
+Option Explicit
+Dim WithEvents dev As Eth32
+
+
+Private Sub dev_EventFired(ByVal id As Long, ByVal eventtype As Long, ByVal port As Long, _
+                           ByVal bit As Long, ByVal prev_value As Long, ByVal value As Long, _
+                           ByVal direction As Long)
+
+End Sub
+</pre><p>
+        The event handler receives the exact same parameters as the members of the 
+        <a class="xref" href="ar01s04s03s03.html#vb6_eth32_event" title="eth32_event">eth32_event</a> structure.  Please see description of that 
+        structure for an explanation of their meaning.  Note that the parameters are 
+        passed to the event handler individually instead of as a structure due to 
+        restrictions of the VB5/6 language.
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb6VerifyConnection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb6_config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">VerifyConnection Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Configuration / Detection Functionality</td></tr></table></div></body></html>

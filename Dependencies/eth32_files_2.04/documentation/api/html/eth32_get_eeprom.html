@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_get_eeprom</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_get_direction_bit.html" title="eth32_get_direction_bit"><link rel="next" href="eth32_get_event_handler.html" title="eth32_get_event_handler"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_get_eeprom</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_get_direction_bit.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_get_event_handler.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_get_eeprom"></a>eth32_get_eeprom</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_get_eeprom(eth32 handle, int address, int length, void *buffer);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485018"></a>Summary</h6></div></div></div><p>
+          This function retrieves data from the non-volatile EEPROM memory of the device.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484982"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>address - The starting location from which data should be retrieved (0-255).</p></li><li><p>length - The number of bytes to retrieve.  Valid values for this parameter depend on what is
+                           provided for the address parameter.  For example, with an address of 0, you may specify 
+                           a length of all 256 bytes, but with an address of 255, length may only be 1.</p></li><li><p>buffer - The buffer into which the data should be stored.  This must be at least as long as 
+                           the number of bytes you are requesting.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485051"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484674"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_set_eeprom.html" title="eth32_set_eeprom">eth32_set_eeprom</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_get_direction_bit.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_get_event_handler.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_get_direction_bit </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_get_event_handler</td></tr></table></div></body></html>

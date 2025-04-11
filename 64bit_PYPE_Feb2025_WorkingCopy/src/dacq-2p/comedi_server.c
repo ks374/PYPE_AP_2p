@@ -95,6 +95,7 @@ static eth32 eth32_handle;
 	
 static int comedi_init()
 {
+  fprintf(stderr, "Start comedi_init\n");  
   const char *devname; //In line 115 with will be assigned a value of static pointer. So it should be const pointer. Changed 11/14. 
   comedi_range *r;
   int n;
@@ -269,7 +270,7 @@ static void dig_in()
 static void dig_out()
 {
   int bits = 0;
-  //int i, success; //changed 11/14. Delete success. 
+  //int i, success; 
   int i;
 
   if (dummymode) {
@@ -279,11 +280,13 @@ static void dig_out()
     for (i = 0; i < 8 && i < NDIGOUT; i++) {
       bits = bits | (dacq_data->dout[i] << i);
     }
-    //UNLOCK(semid);
+    UNLOCK(semid);
     if (use8255) {
-      //success = Eth32_write_byte(eth32_handle, 0, bits&0xFF); //Delete, not used. Changed 11/14
+		Eth32_write_byte(eth32_handle, 0, bits&0xFF); 
+      //success = Eth32_write_byte(eth32_handle, 0, bits&0xFF); 
 //      fprintf(stderr, "Writing %X to Eth32 Port 0\n", bits&0xFF);
-      //success = Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF);  //Delete, not used. Changed 11/14
+      //success = Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF);  
+	  Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF);  
 //      fprintf(stderr, "Writing %X to Eth32 Port 1\n", (bits>>8)&0xFF);
       // if no success... blah blah blah
       bits = bits<<BANK_B;
@@ -300,10 +303,10 @@ static void dig_out()
 static void dig_str_out()
 {
   int bits = 0;
-  int i, sentbyte; 
-  //success, check, ct = 0, strobe_high_time_ms = 2; /changed 11/14
-  //unsigned long t_stamp, t0, t1; //changed 11/14
-  unsigned long t0, t1;
+  //int i, sentbyte, success, check, ct = 0, strobe_high_time_ms = 2;
+  int i; 
+  //unsigned long t_stamp, t0, t1; 
+  unsigned long t0,t1;
   struct timespec ts;
 
   ts.tv_sec = 0;
@@ -322,11 +325,13 @@ static void dig_str_out()
     }
    
     if (use8255) {
-      //success = Eth32_write_byte(eth32_handle, 0, bits&0xFF); //Delete, not used. Changed 11/14
+      //success = Eth32_write_byte(eth32_handle, 0, bits&0xFF); 
+	  Eth32_write_byte(eth32_handle, 0, bits&0xFF); 
 //      fprintf(stderr, "Writing %X to Eth32 Port 0\n", bits&0xFF);
-      //success = Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF); //Delete, not used. Changed 11/14
+      //success = Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF); 
+	  Eth32_write_byte(eth32_handle, 1, (bits>>8)&0xFF); 
 //      fprintf(stderr, "Writing %X to Eth32 Port 1\n", (bits>>8)&0xFF);
-      sentbyte = (bits>>8)&0xFF; // sentbyte: temporarily stores value sent to Eth32 port 1^M 
+      //sentbyte = (bits>>8)&0xFF; // sentbyte: temporarily stores value sent to Eth32 port 1^M 
       bits = bits<<BANK_B;
 //      success = comedi_dio_bitfield(comedi_dev,dig_io,PCI_WRITEMASK,&bits);
 //      fprintf(stderr, "Writing %X to comedi with %X mask\n", bits, PCI_WRITEMASK);
@@ -403,6 +408,7 @@ static void halt(void)
 
 static int init()
 {
+  fprintf(stderr, "comedi_server init\n");
   int shmid;
 
   if (comedi_init()) {
@@ -436,6 +442,7 @@ static int init()
     perror2("mlockall", __FILE__, __LINE__);
     fprintf(stderr, "%s:init -- failed to lock memory\n", progname);
   }
+  //fprintf(stderr,"Lock comedi semid for writing\n");
   LOCK(semid);
   if (dacq_data->dacq_pri != 0) {
     if (nice(dacq_data->dacq_pri) == 0) {
@@ -447,6 +454,7 @@ static int init()
     }
   }
   UNLOCK(semid);
+  //fprintf(stderr,"Unlock comedi semid for writing\n");
 
   atexit(halt);
   catch_signals(progname);

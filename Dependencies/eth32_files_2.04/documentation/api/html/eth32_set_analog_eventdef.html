@@ -1,0 +1,87 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_set_analog_eventdef</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_set_analog_assignment.html" title="eth32_set_analog_assignment"><link rel="next" href="eth32_set_analog_reference.html" title="eth32_set_analog_reference"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_set_analog_eventdef</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_set_analog_assignment.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_set_analog_reference.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_set_analog_eventdef"></a>eth32_set_analog_eventdef</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_set_analog_eventdef(eth32 handle, int bank, int channel, int lomark, int himark, int defaultval);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487846"></a>Summary</h6></div></div></div><p>
+          This function defines the event thresholds for a single logical analog channel in the specified 
+          analog event bank. The thresholds that are defined determine what analog readings will cause 
+          the event to fire. The thresholds allow the event logic on the ETH32 device to assign a 
+          current state (high or low) to the event. The event will be considered high if the analog reading 
+          is at or above the given hi-mark and will be considered low if at or below the given lo-mark. 
+          Whenever the state of the event changes (low to high or high to low), an event notification will be fired.  
+          When the analog reading is between the lo-mark and hi-mark, it will retain its previous value.  
+          This allows "hysteresis" to be built into the event so that a fluctuating signal will not 
+          cause an event to continuously fire.  The thresholds are specified in 8-bit resolution, and 
+          thus they will be compared with the eight Most Significant Bits of the analog readings to 
+          determine when an event should be fired. The given hi-mark must be greater than the lo-mark.
+         </p><p>
+          Normally, the "initial state" (high or low) of the analog event definition is determined 
+          by the current level of the analog reading at the time the event definition is defined. However, 
+          if the current analog reading is between the lo-mark and hi-mark, an initial state cannot 
+          be accurately assigned. To deal with this, this function accepts a parameter that defines 
+          a default state to be used when the initial state cannot be determined.  In all other situations 
+          (when the reading at the time of event definition is &lt;= lo-mark or &gt;= hi-mark) 
+          this parameter will simply be ignored.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484366"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>bank - Specifies the event bank (0 or 1).</p></li><li><p>channel - Specifies the logical channel (0-7).</p></li><li><p>lomark - Low threshold, 8 Most Significant Bits (0-255).</p></li><li><p>himark - High threshold, 8 Most Significant Bits (0-255).</p></li><li><p>defaultval - Specifies whether the event should be considered high or low if the current analog 
+                           reading is between lomark and himark.  ANEVT_DEFAULT_LOW (0) specifies it should be considered 
+                           to be low and ANEVT_DEFAULT_HIGH (1) specifies it should be considered high.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487336"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487568"></a>Remarks</h6></div></div></div><p>
+          Please note that defining the thresholds with this function does not enable 
+          the current connection to actually receive the event notifications when they occur.  
+          These must be enabled using the <a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a> function.  Also note that 
+          the analog event thresholds are common to all connections.  Changing the thresholds 
+          will affect other connections if they are utilizing that particular event.
+         </p><p>
+          Because the ETH32 device has two analog event banks, two events can be defined 
+          for each logical analog channel on the board. Applications can utilize both event 
+          banks independently to implement a number of different event notification schemes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487290"></a>Example</h6></div></div></div><pre class="programlisting">
+// NOTE: Error handling omitted for clarity
+eth32 handle;
+int result;
+int lomark;
+int himark;
+
+// .... Your code that establishes a connection here
+
+// .... Your code that configures an appropriate event handler goes here (or later)
+
+// Enable the Analog to Digital Converter
+eth32_set_analog_state(handle, ADC_ENABLED);
+
+// Configure logical channel 7 to read the physical channel 7 relative to ground (single-ended)
+// This is the power-on default anyway, but is shown here for completeness:
+eth32_set_analog_assignment(handle, 7, ANALOG_SE7);
+
+// Configure the analog voltage reference to be the internal 5V source
+eth32_set_analog_reference(handle, REF_INTERNAL);
+
+
+// Define an event that fires when channel 7 goes above 3.5V or 
+// falls below 3.0V.  Remember that the thresholds must be calculated 
+// knowing the voltage reference (in this case 5V).  They also must be 
+// converted to the 8 Most Significant Bits from 10-bit by dividing by 4.
+// If the current reading happens to be between the low and high threshold,
+// we will default to the event starting out low.
+lomark=3.0 / 5.0 * 1024 / 4;
+himark=3.5 / 5.0 * 1024 / 4;
+eth32_set_analog_eventdef(handle, 0, 7, lomark, himark, ANEVT_DEFAULT_LOW);
+
+// Now that an event is defined in bank 0, channel 7, enable receiving
+// events from it.
+// We'll give this event an arbitrary ID of 8000
+eth32_enable_event(handle, EVENT_ANALOG, 0, 7, 8000);
+
+// You will now receive events through whatever event handler mechanism you 
+// have configured when channel 7 crosses the threshold to being over 3.5V or 
+// crosses to under 3.0V.
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3487418"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a>, <a class="xref" href="eth32_get_analog_eventdef.html" title="eth32_get_analog_eventdef">eth32_get_analog_eventdef</a>, <a class="xref" href="eth32_input_analog.html" title="eth32_input_analog">eth32_input_analog</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_set_analog_assignment.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_set_analog_reference.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_set_analog_assignment </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_set_analog_reference</td></tr></table></div></body></html>

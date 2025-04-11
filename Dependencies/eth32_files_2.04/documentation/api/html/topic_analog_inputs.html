@@ -1,0 +1,60 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Analog Inputs</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_special_digital_io.html" title="Special-Purpose Digital I/O"><link rel="next" href="topic_events.html" title="Events"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Analog Inputs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_special_digital_io.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_events.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_analog_inputs"></a>Analog Inputs</h3></div></div></div><p>
+     There are a few more steps involved in dealing with analog inputs than digital inputs.  
+     First, the entire Analog to Digital Converter (ADC) portion of the ETH32 device 
+     can be enabled or disabled by you at any time.  In order for analog values to 
+     be read, you must enable the ADC.
+    </p><p>
+     You must also ensure that the ETH32 device is configured to use an appropriate 
+     analog voltage reference.  Whenever an analog conversion is performed by the ADC, 
+     this voltage is used as a reference voltage representing the highest possible value.  
+     In other words, the readings are scaled so that a 0V signal on an input channel will 
+     give the lowest reading (0) and an input voltage equal to the reference voltage will 
+     give the highest reading (1023).  Please see the <span class="emphasis"><em>eth32_input_analog</em></span> 
+     function or <span class="emphasis"><em>InputAnalog</em></span> method description for a mathematical 
+     representation of how the analog readings are 
+     obtained.  The analog voltage reference may be supplied by you on one of the pins of 
+     the ETH32 (referred to as the external voltage reference) or it may be obtained from 
+     one of the internal voltages.  The powerup default is the external voltage reference.
+    </p><p>
+     The readings from the eight analog pins may be interpreted in different ways, all of 
+     which are completely selectable by you.  First, you should understand the terms 
+     <span class="emphasis"><em>single-ended</em></span> and <span class="emphasis"><em>differential</em></span>.  A single-ended 
+     input yields a reading representing the input voltage with respect to ground.  A differential 
+     input consists of two input lines and the reading represents the voltage difference between 
+     those two lines.  The value of the reading is not affected by the voltage of either signal 
+     with respect to ground, only the difference between the two voltages.  However, please 
+     note that the signals are not electrically isolated from ground and must remain within 
+     the specified voltage limits of the input signals.
+    </p><p>
+     In this documentation, each of the available possibilities for interpreting the 
+     analog signals is referred to as a <span class="emphasis"><em>physical channel</em></span>.  For example, 
+     a single-ended input from bit 0 is one physical channel, a single-ended input from 
+     bit 1 is another physical channel, and the differential between bit 0 and bit 1 is 
+     another physical channel.  In all, there are 32 physical channels, which are listed 
+     later in this document with the function for configuring analog channel assignments.
+    </p><p>
+     The ETH32 uses the concept of a <span class="emphasis"><em>logical channel</em></span> to allow you 
+     to specify which of the physical channels should be continuously updated on the device 
+     and potentially monitored for event thresholds.  There are eight logical channels.  
+     Each logical channel can be assigned by you to obtain its reading from any 
+     arbitrary physical channel.  At powerup, the eight logical channels default to 
+     obtaining their readings from the eight single-ended physical channels.  If your 
+     application requires using a differential channel, you will need to reassign 
+     one of the logical channels to obtain its reading from the desired differential channel.
+    </p><p>
+     When these settings have been configured appropriately for your application, 
+     you are ready to begin reading in analog values.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3478622"></a>Applicable Functions</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Enable/disable ADC</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_analog_state.html" title="eth32_set_analog_state">eth32_set_analog_state</a><br>
+<a class="xref" href="eth32_get_analog_state.html" title="eth32_get_analog_state">eth32_get_analog_state</a></p></div></td><td><a class="xref" href="netAnalogState.html" title="AnalogState Property">AnalogState Property</a></td><td><a class="xref" href="vb6AnalogState.html" title="AnalogState Property">AnalogState Property</a></td></tr><tr><td>Configure voltage reference</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_analog_reference.html" title="eth32_set_analog_reference">eth32_set_analog_reference</a><br>
+<a class="xref" href="eth32_get_analog_reference.html" title="eth32_get_analog_reference">eth32_get_analog_reference</a></p></div></td><td><a class="xref" href="netAnalogReference.html" title="AnalogReference Property">AnalogReference Property</a></td><td><a class="xref" href="vb6AnalogReference.html" title="AnalogReference Property">AnalogReference Property</a></td></tr><tr><td>Configure channel assignments</td><td>
+<div class="literallayout"><p><a class="xref" href="eth32_set_analog_assignment.html" title="eth32_set_analog_assignment">eth32_set_analog_assignment</a><br>
+<a class="xref" href="eth32_get_analog_assignment.html" title="eth32_get_analog_assignment">eth32_get_analog_assignment</a></p></div></td><td><a class="xref" href="netAnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a></td><td><a class="xref" href="vb6AnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a></td></tr><tr><td>Obtain analog readings</td><td><a class="xref" href="eth32_input_analog.html" title="eth32_input_analog">eth32_input_analog</a></td><td><a class="xref" href="netInputAnalog.html" title="InputAnalog Method">InputAnalog Method</a></td><td><a class="xref" href="vb6InputAnalog.html" title="InputAnalog Method">InputAnalog Method</a></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_special_digital_io.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_events.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Special-Purpose Digital I/O </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Events</td></tr></table></div></body></html>

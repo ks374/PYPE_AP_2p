@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Connected Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56Connect.html" title="Connect Method"><link rel="next" href="vb56ConnectionFlags.html" title="ConnectionFlags Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Connected Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56Connect.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56ConnectionFlags.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56Connected"></a>Connected Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property Connected As Boolean</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907169"></a>Summary</h6></div></div><div></div></div><p>
+         This is a read-only property that indicates whether the 
+         <a href="vb56Connect.html" title="Connect Method">Connect Method</a> has been successfully called on 
+         this object and that the <a href="vb56Disconnect.html" title="Disconnect Method">Disconnect Method</a> has 
+         not been called since then.  Reading this property does not 
+         cause any communication with the device nor does it 
+         verify that the connection to the device is still good.  For that, 
+         see the <a href="vb56VerifyConnection.html" title="VerifyConnection Method">VerifyConnection Method</a>.
+        </p><p>
+         If there is a connection to the device, this property will 
+         read as true.  If there is not a connection to the device, rather 
+         than raising an error, this property will simply read false.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907214"></a>Parameters</h6></div></div><div></div></div><p>
+         This property does not have any parameters.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907117"></a>Value</h6></div></div><div></div></div><p>
+         This property is a boolean type.  A true value means that the object is 
+         connected to an ETH32 device, while false means that it is not.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906371"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    
+    ' .... Your code here
+
+    ' Assume that we don't know for sure whether the dev object
+    ' is connected to a device, but that if it is, we want to
+    ' disconnect it.  This code accomplishes that:
+    If dev.Connected Then
+        dev.Disconnect
+    End If
+    
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+       </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2907056"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56Connect.html" title="Connect Method">Connect Method</a>, <a href="vb56Disconnect.html" title="Disconnect Method">Disconnect Method</a>, <a href="vb56VerifyConnection.html" title="VerifyConnection Method">VerifyConnection Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56Connect.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56ConnectionFlags.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Connect Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ConnectionFlags Method</td></tr></table></div></body></html>

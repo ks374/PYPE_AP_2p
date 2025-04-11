@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>AnalogState Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56AnalogReference.html" title="AnalogReference Property"><link rel="next" href="vb56CheckEvents.html" title="CheckEvents Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">AnalogState Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56AnalogReference.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56CheckEvents.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56AnalogState"></a>AnalogState Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property AnalogState As Eth32AnalogState</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906391"></a>Summary</h6></div></div><div></div></div><p>
+          This property enables or disables the Analog to Digital Converter (ADC) portion of the ETH32 
+          device.  The ADC must first be enabled before any valid analog readings can be obtained.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906423"></a>Parameters</h6></div></div><div></div></div><p>
+         This property does not have any parameters.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906446"></a>Value</h6></div></div><div></div></div><p>
+         This property is a Eth32AnalogState enumerator type, which has the following valid values:
+         </p><div class="itemizedlist"><ul type="disc"><li><p>ADC_DISABLED - The Analog to Digital Converter is disabled.  Analog readings will not be valid.</p></li><li><p>ADC_ENABLED - The Analog to Digital Converter is enabled.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906407"></a>Remarks</h6></div></div><div></div></div><p>
+         Because the analog channels use the same physical pins as digital I/O port 3, enabling 
+         the ADC forces port 3 into input mode and sets the output value of port 3 to zero.  
+         Changes to the direction register or output value of port 3 are disabled while the 
+         ADC remains enabled.  Note that regardless of what port 3's direction register and output 
+         value were at the time the ADC was enabled, if the ADC is later disabled, port 3 will 
+         be left in input mode with an output value of zero.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2906375"></a>See Also</h6></div></div><div></div></div><p>
+         <a href="vb56InputAnalog.html" title="InputAnalog Method">InputAnalog Method</a>, <a href="vb56AnalogAssignment.html" title="AnalogAssignment Property">AnalogAssignment Property</a>, <a href="vb56AnalogReference.html" title="AnalogReference Property">AnalogReference Property</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56AnalogReference.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56CheckEvents.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">AnalogReference Property </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> CheckEvents Method</td></tr></table></div></body></html>

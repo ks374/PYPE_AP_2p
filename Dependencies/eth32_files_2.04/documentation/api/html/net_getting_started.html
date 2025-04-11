@@ -1,0 +1,61 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Getting Started</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02.html" title=".NET Languages"><link rel="prev" href="ar01s04s02.html" title=".NET Languages"><link rel="next" href="net_error_handling.html" title="Error Handling"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Getting Started</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04s02.html">Prev</a> </td><th width="60%" align="center">.NET Languages</th><td width="20%" align="right"> <a accesskey="n" href="net_error_handling.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="net_getting_started"></a>Getting Started</h4></div></div></div><p>
+       In .NET languages, you must add a reference to the Eth32.dll assembly.  
+       In the Visual Studio C# and VB.NET environments, this can be done by following these steps:
+       </p><div class="itemizedlist"><ul type="disc"><li><p>On the Project menu, select "Add Reference".</p></li><li><p>Click the Browse button.  Find the Eth32.dll file from the ETH32
+                        API distribution.  The default installation directory for this file is 
+                        C:\Program Files\winford\eth32\api\windows\ms.net.  This file is also on the  
+                        CD in the api\windows\ms.net directory.</p></li></ul></div><p>
+       Note that adding the reference causes Visual Studio to automatically copy the 
+       Eth32.dll file into your project directory.
+      </p><p>
+       In Managed C++, you must first manually copy the Eth32.dll file from the ETH32 
+       API distribution (default location is C:\Program Files\winford\eth32\api\windows\ms.net) into your project directory 
+       (typically the same directory your source code files for that project are in).  
+       Then, you must include this line near the top of your managed C++ source file:
+       </p><pre class="programlisting">#using &lt;Eth32.dll&gt;</pre><p>
+       At this point, you have provided the compiler with enough information 
+       to successfully compile your application.  In order to allow your application 
+       to run after compiling it, you also must place a copy of the Eth32.dll file 
+       into the subdirectory of your project where your executable is built, typically 
+       the Debug or Release directory.  Those directories may not yet exist if you have not 
+       yet compiled your project.  
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3492025"></a>Namespace</h5><p>
+        Although not required, you will most likely want to add a line to your source file 
+        to use the WinfordEthIO namespace, which contains all of the classes and definitions 
+        in the Eth32.dll assembly.  This line should go near the top of your source 
+        file, and varies depending on language:
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Visual C#.NET
+                         </p><pre class="programlisting">using WinfordEthIO;</pre></li><li><p>Visual Basic.NET
+                         </p><pre class="programlisting">Imports WinfordEthIO</pre></li><li><p>Visual C++.NET (Managed)
+                         </p><pre class="programlisting">using namespace WinfordEthIO;</pre></li></ul></div><p>
+        If you decide not to include a namespace line, you will need to prepend 
+        WinfordEthIO before class names or other definitions you use from the assembly.  
+        Example code provided in this documentation assumes that the namespace line is used.
+       </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3482850"></a>Basic Declaration</h5><p>
+        The main class provided by the assembly is the Eth32 class.  Once an instance 
+        of this class has been created, you can begin using the members of this class, 
+        starting with Connect to create a connection.  The basic code is typically 
+        as follows (substituting any valid variable name for dev and the actual address
+        or DNS name of your device for 192.168.1.100):
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Visual C#.NET
+</p><pre class="programlisting">
+Eth32 dev = new Eth32();
+dev.Connect("192.168.1.100");
+</pre><p>
+         </p></li><li><p>Visual Basic.NET
+</p><pre class="programlisting">
+Dim dev As New Eth32()
+dev.Connect("192.168.1.100")
+</pre><p>
+         </p></li><li><p>Visual C++.NET (Managed)
+</p><pre class="programlisting">
+Eth32 *eth = new Eth32;
+eth-&gt;Connect("192.168.1.100");
+</pre><p>
+         </p></li></ul></div><p>
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="net_error_handling.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">.NET Languages </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Error Handling</td></tr></table></div></body></html>

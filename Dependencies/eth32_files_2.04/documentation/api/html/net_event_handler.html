@@ -1,0 +1,235 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Event Handler</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02.html" title=".NET Languages"><link rel="prev" href="netVerifyConnection.html" title="VerifyConnection Method"><link rel="next" href="net_config.html" title="Configuration / Detection Functionality"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Event Handler</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="netVerifyConnection.html">Prev</a> </td><th width="60%" align="center">.NET Languages</th><td width="20%" align="right"> <a accesskey="n" href="net_config.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="net_event_handler"></a>Event Handler</h4></div></div></div><p>
+       When hardware events occur on the ETH32, information about that event is transmitted 
+       to your application if you have enabled it using the <a class="xref" href="netEnableEvent.html" title="EnableEvent Method">EnableEvent Method</a>.  
+       When this information is received, the .NET Eth32 class notifies your application of 
+       the event in a manner that is consistent with the way .NET applications typically process 
+       events.  That is, the ETH32 events will be processed by your application in a manner very 
+       similar to the way that the Click event of a form's command button would be processed.
+      </p><p>
+       The event handler function is a function written by you, the programmer.  
+       Because it is a function you write, you have complete freedom to inspect whichever 
+       aspects of the event data you need to and react however you see fit.  All of the 
+       information about the event is contained in the second parameter to the function, 
+       the EventArgs object.  An Eth32EventArgs object (which is derived from EventArgs) 
+       is passed to this parameter.  The Eth32EventArgs object has a member called 
+       event_info, which is a <a class="xref" href="ar01s04s02s03.html#net_eth32_event" title="eth32_event">eth32_event</a> structure containing all 
+       of the event information. 
+      </p><p>
+       Your event handler function will be executed by a separate thread.  You should be aware of 
+       this fact if you will be doing any tasks in your function that are not thread safe.  
+       The Eth32 class waits for your function to return before calling it again with the 
+       next event.  Therefore, be aware that if you perform any long operations, it will delay 
+       more events from being processed.  Note that each Eth32 object has its own event 
+       thread, so if you are using a single event handler function for multiple connections (objects), be aware 
+       that at times there may be more than one instance of your function executing.
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3497031"></a>Writing and Registering an Event Handler</h5><p>
+        Your event handler function may be given any name, but regardless of its name, it 
+        must accept specific parameter types.  The syntax of the event handler function 
+        and the code used to register it with an Eth32 object are shown below.  
+        These are not complete examples, in that the code fragments shown here would 
+        typically be within one of your classes in your application.  These 
+        code fragments show functions declared as Private and Static (Shared in Visual Basic), but 
+        neither of those options are required if other options work better in your application.
+        </p><div class="itemizedlist"><ul type="disc"><li><p>Visual C#.NET
+           </p><pre class="programlisting">
+private static void MyEth32EventHandler(Object s, EventArgs e)
+{
+	// If this function was called by Eth32 event processing, then 
+	// s (sender) is actually the Eth32 object that received the event 
+	// and e is actually an Eth32EventArgs object.  But to be safe, 
+	// we'll make sure by using this code:
+	Eth32 sender;
+	Eth32EventArgs args;
+
+	sender = s as Eth32;
+	if(sender == null)
+	{
+		// s wasn't really an Eth32 object - quit
+		return;
+	}
+
+	args = e as Eth32EventArgs;
+	if(args == null)
+	{
+		// The arguments weren't really Eth32EventArgs - quit
+		return;
+	}
+	
+	// You may now easily access the Eth32 object by using sender and 
+	// the event information by using args.event_info
+}
+
+// Later in your code, when you want to register your event handler,
+// assuming dev is your Eth32 object:
+dev.HardwareEvent += new EventHandler(MyEth32EventHandler);
+           </pre><p>
+          </p></li><li><p>Visual Basic.NET
+           </p><pre class="programlisting">
+Private Shared Sub MyEth32EventHandler(ByVal s As System.Object, ByVal e As System.EventArgs)
+	' If this function was called by Eth32 event processing, then 
+	' s (sender) is actually the Eth32 object that received the event 
+	' and e is actually an Eth32EventArgs object.  But to be safe, 
+	' we'll make sure by using this code:
+
+	Dim args As Eth32EventArgs
+	Dim sender As Eth32
+
+
+	If TypeOf s Is Eth32 Then
+		sender = CType(s, Eth32)
+	Else
+		' s wasn't really an Eth32 object - quit
+		Exit Sub
+	End If
+
+	If TypeOf e Is Eth32EventArgs Then
+		args = CType(e, Eth32EventArgs)
+	Else
+		' The arguments weren't really Eth32EventArgs - quit
+		Exit Sub
+	End If
+
+	' You may now easily access the Eth32 object by using sender and 
+	' the event information by using args.event_info
+
+End Sub
+
+' Later in your code, when you want to register your event handler,
+' assuming dev is your Eth32 object:
+AddHandler dev.HardwareEvent, AddressOf MyEth32EventHandler
+           </pre><p>
+          </p></li><li><p>Visual C++.NET (Managed)
+           </p><pre class="programlisting">
+private: 
+static void MyEth32EventHandler(Object* s, EventArgs* e)
+{
+	// If this function was called by Eth32 event processing, then 
+	// s (sender) is actually the Eth32 object that received the event 
+	// and e is actually an Eth32EventArgs object.  But to be safe, 
+	// we'll make sure by using this code:
+	Eth32 *sender;
+	Eth32EventArgs *args;
+
+	sender = dynamic_cast&lt;Eth32*&gt;(s);
+	if(sender == NULL)
+	{
+		// s wasn't really an Eth32 object - quit
+		return;
+	}
+
+	args = dynamic_cast&lt;Eth32EventArgs*&gt;(e);
+	if(args == NULL)
+	{
+		// The arguments weren't really Eth32EventArgs - quit
+		return;
+	}
+	
+	// You may now easily access the Eth32 object by using sender and 
+	// the event information by using args-&gt;event_info
+}
+	
+// Later in your code, when you want to register your event handler,
+// assuming dev is your Eth32 object pointer:
+dev-&gt;HardwareEvent += new EventHandler(0, &amp;MyEth32EventHandler);
+           </pre><p>
+          </p></li></ul></div><p>
+       </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3497867"></a>Example</h5><p>
+        This very simple, yet compilable C# example demonstrates the basics of writing 
+        and registering an event handler function with the ETH32.
+</p><pre class="programlisting">
+using System;
+using WinfordEthIO;
+
+public class MyExample
+{
+	private static void MyEth32EventHandler(Object s, EventArgs e)
+	{
+		// If this function was called by Eth32 event processing, then 
+		// s (sender) is actually the Eth32 object that received the event 
+		// and e is actually an Eth32EventArgs object.  But to be safe, 
+		// we'll make sure by using this code:
+		Eth32 sender;
+		Eth32EventArgs args;
+
+		sender = s as Eth32;
+		if(sender == null)
+		{
+			// s wasn't really an Eth32 object - quit
+			return;
+		}
+
+		args = e as Eth32EventArgs;
+		if(args == null)
+		{
+			// The arguments weren't really Eth32EventArgs - quit
+			return;
+		}
+	
+		
+		switch(args.event_info.id)
+		{
+			case 1000:
+				// React accordingly to Port 1, Bit 3 event
+				// We'll turn on the ETH32's LED 0 if the bit value is high and 
+				// turn it off otherwise.
+				if(args.event_info.val != 0)
+					sender.Led[0]=true;
+				else
+					sender.Led[0]=false;
+				break;
+			case 1001:
+				// React accordingly to Port 1, Bit 4 event
+				// We'll turn on the ETH32's LED 1 if the bit value is high and 
+				// turn it off otherwise.
+				if(args.event_info.val != 0)
+					sender.Led[1]=true;
+				else
+					sender.Led[1]=false;
+				break;
+		}
+	}
+
+
+	static void Main()
+	{
+		try
+		{
+			Eth32 dev;
+
+			dev = new Eth32();
+
+			// NOTE: Substitute the IP address or DNS name of your device here.
+			dev.Connect("192.168.1.100");
+
+			// Register our event handler function to handle all incoming events
+			dev.HardwareEvent += new EventHandler(MyEth32EventHandler);
+
+			// Enable events on Port 1, bits 3 and 4
+			// But first, if these are pushbuttons and need a pullup resistor 
+			// to make them float high, enable that:
+			dev.OutputBit(1, 3, 1);
+			dev.OutputBit(1, 4, 1);
+			// Now enable the event:
+			dev.EnableEvent(Eth32EventType.Digital, 1, 3, 1000);
+			dev.EnableEvent(Eth32EventType.Digital, 1, 4, 1001);
+
+
+			// Display a MessageBox.  This function will not return until the
+			// user clicks OK, so it will keep the application running until then.
+			System.Windows.Forms.MessageBox.Show("When you're finished monitoring events, "
+				+ "click OK to end application.");
+		}
+		catch (Eth32Exception e)
+		{
+			// Handle Eth32 errors here
+			System.Windows.Forms.MessageBox.Show("Eth32 exception: " + e.ToString());
+		}
+	}
+}
+</pre><p>
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="netVerifyConnection.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="net_config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">VerifyConnection Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Configuration / Detection Functionality</td></tr></table></div></body></html>

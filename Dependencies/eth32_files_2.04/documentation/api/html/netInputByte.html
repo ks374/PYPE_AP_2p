@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>InputByte Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02s04.html" title="Eth32 Member Reference"><link rel="prev" href="netInputBitBool.html" title="InputBitBool Method"><link rel="next" href="netInputByteByte.html" title="InputByteByte Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">InputByte Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="netInputBitBool.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="netInputByteByte.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="netInputByte"></a>InputByte Method</h5></div></div></div><p>
+        </p><pre class="programlisting">int InputByte(int port)</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3495490"></a>Summary</h6></div></div></div><p>
+          This method retrieves the current input value of the specified digital I/O port on the device.  
+          When a port is configured as an input port (using the <a class="xref" href="netSetDirection.html" title="SetDirection Method">SetDirection Method</a>), 
+          the input value represents the voltage levels on the port's pins.  For each bit, 
+          a low voltage (close to 0V) yields a 0-bit in the input value and a high voltage (close to 5V) 
+          yields a 1-bit.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3495693"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>port - Specifies the port number (0-5) to read.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3495494"></a>Return Value</h6></div></div></div><p>
+         This method returns an integer.  The return value is the current input 
+         value of the specified port.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3495630"></a>Example</h6></div></div></div><pre class="programlisting">
+Eth32 dev = new Eth32();
+int portval;
+
+try
+{
+	// .... Your code that establishes a connection here
+	
+	// Read the input value of port 2
+	portval=dev.InputByte(2);
+
+	// See whether any of bits 0-3 are high (1)
+	if( (portval &amp; 0x0F) != 0 )
+	{
+		// At least one of bits 0-3 are high
+	}
+	else
+	{
+		// None of bits 0-3 are high
+	}
+
+}
+catch (Eth32Exception e)
+{
+	// Handle Eth32 errors here
+}
+        </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3495241"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="netInputBit.html" title="InputBit Method">InputBit Method</a>, <a class="xref" href="netInputByteByte.html" title="InputByteByte Method">InputByteByte Method</a>, <a class="xref" href="netOutputByte.html" title="OutputByte Method">OutputByte Method</a>, <a class="xref" href="netSetDirection.html" title="SetDirection Method">SetDirection Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="netInputBitBool.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="netInputByteByte.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">InputBitBool Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> InputByteByte Method</td></tr></table></div></body></html>

@@ -1,0 +1,46 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_get_event_handler</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_get_eeprom.html" title="eth32_get_eeprom"><link rel="next" href="eth32_get_event_queue_status.html" title="eth32_get_event_queue_status"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_get_event_handler</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_get_eeprom.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_get_event_queue_status.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_get_event_handler"></a>eth32_get_event_handler</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_get_event_handler(eth32 handle, eth32_handler *handler);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485093"></a>Summary</h6></div></div></div><p>
+          This function retrieves information about the currently installed event handler mechanism 
+          for this connection.  This is all information that is internal to the API, so this function 
+          does not need to retrieve any information from the ETH32 device.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485104"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>handler - Pointer to an <a class="xref" href="ar01s04s01s02.html#eth32_handler" title="eth32_handler">eth32_handler</a> structure which will 
+                           be filled in with the information about the current event handler.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3485002"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3484880"></a>Example</h6></div></div></div><pre class="programlisting">
+eth32 handle;
+int result;
+eth32_handler evhandler;
+
+// .... Your code that establishes a connection here
+
+// Determine which type of event handler is installed
+result=eth32_get_event_handler(handle, &amp;evhandler);
+if(result)
+{
+	// Handle error
+}
+
+switch(evhandler.type)
+{
+	case HANDLER_NONE:
+		// No event handler is enabled
+		break;
+	case HANDLER_CALLBACK:
+		// A callback function is set up as an event handler
+		break;
+	case HANDLER_MESSAGE:
+		// A Windows Message event handler is enabled
+		break;
+}
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483095"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="callback_function.html" title="Event Callback Function">Event Callback Function</a>, <a class="xref" href="eth32_enable_event.html" title="eth32_enable_event">eth32_enable_event</a>, <a class="xref" href="eth32_set_event_handler.html" title="eth32_set_event_handler">eth32_set_event_handler</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_get_eeprom.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_get_event_queue_status.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_get_eeprom </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_get_event_queue_status</td></tr></table></div></body></html>

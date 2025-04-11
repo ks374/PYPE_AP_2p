@@ -1,0 +1,82 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>eth32_connection_flags</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s01s03.html" title="Main Function Reference"><link rel="prev" href="eth32_close.html" title="eth32_close"><link rel="next" href="eth32_dequeue_event.html" title="eth32_dequeue_event"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">eth32_connection_flags</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="eth32_close.html">Prev</a> </td><th width="60%" align="center">Main Function Reference</th><td width="20%" align="right"> <a accesskey="n" href="eth32_dequeue_event.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="eth32_connection_flags"></a>eth32_connection_flags</h5></div></div></div><p>
+         </p><pre class="programlisting">int eth32_connection_flags(eth32 handle, int reset, int *flags);</pre><p>
+        </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483398"></a>Summary</h6></div></div></div><p>
+          The ETH32 device maintains several flag bits for each individual active TCP/IP connection.  
+          The flags indicate conditions that are (or were) present for that connection. Currently, 
+          these flags are used to indicate whether any data that needed to be sent to your application 
+          from the ETH32 device had to be discarded 
+          due to lack of queue space.  This function retrieves the flags for this connection 
+          to the device.
+          If instructed to do so, the function also clears all of the flags 
+          for this connection to zero immediately after retrieving them.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2523380"></a>Parameters</h6></div></div></div><p>
+          </p><div class="itemizedlist"><ul type="disc"><li><p>handle - The value returned by the eth32_open function.</p></li><li><p>reset - If nonzero, specifies that the flags for this connection should be reset to zero immediately after retrieving them.</p></li><li><p>flags - Pointer to a variable which will receive the current flags value for this connection.  See the remarks below 
+                           for a list of the individual flags that can make up this value.</p></li></ul></div><p>
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483330"></a>Return Value</h6></div></div></div><p>
+          This function returns zero on success and a negative error code on failure.  Please 
+          see the <a class="xref" href="c_error_handling.html#errorcodes" title="Error Codes">Error Codes</a> section for possible error codes.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483405"></a>Remarks</h6></div></div></div><p>
+          To understand the role of the connection flags, consider the following example. 
+          Suppose that digital events are enabled on port 0, bit 0 for your connection to 
+          the ETH32.  Now suppose that port 0, bit 0 begins pulsing rapidly, generating a 
+          steady stream of event notifications. Finally, suppose that the connection to 
+          your application is having trouble (losing packets, etc). Due to the nature of 
+          TCP/IP, the event notifications must be retained in the queue of the ETH32 device until a TCP/IP 
+          acknowledgement for them has been received from the PC (in case they need to be retransmitted). 
+          If the TCP/IP acknowledgements do not come promptly and the events keep occurring, the 
+          queue will eventually fill up and the ETH32 device will be forced to simply discard 
+          any new event notifications.  Although this scenario is undesirable and should be avoided, 
+          if it does happen, it is helpful for your application to be able to detect that it happened 
+          and that data was lost.  The flags keep track of this individually for each TCP/IP connection 
+          (that is, a full queue on one connection will not affect flags on another).   Note that the 
+          flags are informational only - they do not affect the behavior of the device.
+         </p><p>
+          The flags value can be made up of a bitwise OR of any or all of the following individual 
+          flags.  Each flag indicates which kind of data had to be discarded due to a full queue.
+          </p><div class="itemizedlist"><ul type="disc"><li><p>CONN_FLAG_RESPONSE - Response to a query for information (for example <a class="xref" href="eth32_input_byte.html" title="eth32_input_byte">eth32_input_byte</a>).</p></li><li><p>CONN_FLAG_DIGITAL_EVENT - Digital event notification.</p></li><li><p>CONN_FLAG_ANALOG_EVENT - Analog event notification.</p></li><li><p>CONN_FLAG_COUNTER_EVENT - Counter event (rollover or threshold) notification.</p></li></ul></div><p>
+          Once a flag is 
+          set, it will remain set until it is reset back to zero by passing a nonzero number to the 
+          <span class="emphasis"><em>reset</em></span> parameter of this function.  In this case, the flags will only 
+          be reset to zero if the connection has enough space to queue up the reply data. In other 
+          words, the flags will not be lost if the response itself is unable to be queued.
+         </p><p>
+          The connection flags for new connections always start out as zero. When the <a class="xref" href="eth32_reset.html" title="eth32_reset">eth32_reset</a> 
+          function is called, the flags for the connection it was received on are cleared, but the flags for 
+          any other active connections are not affected.
+         </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483479"></a>Example</h6></div></div></div><pre class="programlisting">
+eth32 handle;
+int result;
+int flags;
+
+// .... Your code that establishes a connection here
+
+// Retrieve the connection flags for this connection and 
+// simultaneously clear them to zero.
+result=eth32_connection_flags(handle, 1, &amp;flags);
+if(result)
+{
+	// Handle error
+}
+
+// See which flags are set
+if(flags &amp; CONN_FLAG_RESPONSE)
+{
+	// The device ran out of queue space at some point
+	// when it was trying to respond to a query for information.
+}
+
+if(flags &amp; CONN_FLAG_DIGITAL_EVENT)
+{
+	// Some digital event data was lost due to running out 
+	// of queue space.
+}
+
+// and so on
+         </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3483455"></a>See Also</h6></div></div></div><p>
+          <a class="xref" href="eth32_verify_connection.html" title="eth32_verify_connection">eth32_verify_connection</a>
+         </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eth32_close.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="eth32_dequeue_event.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">eth32_close </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> eth32_dequeue_event</td></tr></table></div></body></html>

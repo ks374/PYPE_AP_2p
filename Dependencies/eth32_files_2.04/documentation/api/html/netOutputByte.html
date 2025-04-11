@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>OutputByte Method</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02s04.html" title="Eth32 Member Reference"><link rel="prev" href="netOutputBit.html" title="OutputBit Method"><link rel="next" href="netProductID.html" title="ProductID Property"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">OutputByte Method</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="netOutputBit.html">Prev</a> </td><th width="60%" align="center">Eth32 Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="netProductID.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="netOutputByte"></a>OutputByte Method</h5></div></div></div><p>
+        </p><pre class="programlisting">void OutputByte(int port, int val)</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496178"></a>Summary</h6></div></div></div><p>
+          This method writes a new output value to one of the digital I/O ports on the device.  When 
+          the port is configured as an output port (using the <a class="xref" href="netSetDirection.html" title="SetDirection Method">SetDirection Method</a>),
+          each bit of the output value determines the voltage (0 or 5V) of the corresponding bit of the port.  
+          When the port is configured as an input port, any 1-bits in the output value enables a weak 
+          pullup for that bit of the port.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496281"></a>Parameters</h6></div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>port - The port number to write to (0-5).</p></li><li><p>value - The new value for the port.  This may be 0-255 for ports 0-3 and 0-1 
+                           for the single-bit ports 4 and 5.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496328"></a>Return Value</h6></div></div></div><p>
+         This method does not return a value.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496161"></a>Remarks</h6></div></div></div><p>
+         Port 3 shares its pins with the analog channels.  When the ADC is enabled, all pins 
+         of port 3 are forced into input mode and the output value is set to zero.  Port 3's 
+         output value cannot be modified while the ADC is enabled. 
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496191"></a>Example</h6></div></div></div><pre class="programlisting">
+Eth32 dev = new Eth32();
+
+try
+{
+	// .... Your code that establishes a connection here
+	
+	// Set port 0 pins to be outputs
+	dev.SetDirection(0, 255);
+	
+	// Write a new value for port 0
+	dev.OutputByte(0, 85);
+}
+catch (Eth32Exception e)
+{
+	// Handle Eth32 errors here
+}
+       </pre></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id3496225"></a>See Also</h6></div></div></div><p>
+         <a class="xref" href="netInputByte.html" title="InputByte Method">InputByte Method</a>, <a class="xref" href="netOutputBit.html" title="OutputBit Method">OutputBit Method</a>, <a class="xref" href="netReadback.html" title="Readback Method">Readback Method</a>, <a class="xref" href="netSetDirection.html" title="SetDirection Method">SetDirection Method</a>
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="netOutputBit.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="netProductID.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">OutputBit Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ProductID Property</td></tr></table></div></body></html>

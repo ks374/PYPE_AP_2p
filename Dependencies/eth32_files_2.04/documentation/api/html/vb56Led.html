@@ -1,0 +1,39 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Led Property</title><meta name="generator" content="DocBook XSL Stylesheets V1.64.1"><link rel="home" href="index.html" title="Winford Engineering ETH32 API Documentation"><link rel="up" href="ar01s04s03s04.html" title="Member Reference"><link rel="previous" href="vb56InputSuccessive.html" title="InputSuccessive Method"><link rel="next" href="vb56OutputBit.html" title="OutputBit Method"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Led Property</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="vb56InputSuccessive.html">Prev</a> </td><th width="60%" align="center">Member Reference</th><td width="20%" align="right"> <a accesskey="n" href="vb56OutputBit.html">Next</a></td></tr></table><hr></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="funcref"><a name="vb56Led"></a>Led Property</h5></div></div><div></div></div><p>
+        </p><pre class="programlisting">Public Property Led(ByVal lednum As Long) As Boolean</pre><p>
+       </p><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909334"></a>Summary</h6></div></div><div></div></div><p>
+         This property allows you to control or retrieve the state of the two LED's built into the ETH32 device.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2908358"></a>Parameters</h6></div></div><div></div></div><p>
+         </p><div class="itemizedlist"><ul type="disc"><li><p>lednum - Identifies the LED (0 or 1) to control or inspect.</p></li></ul></div><p>
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909492"></a>Value</h6></div></div><div></div></div><p>
+         This property is a boolean type.  A true value means the LED is on and a false value 
+         means the LED is off.
+        </p></div><div class="sect5" lang="en"><div class="titlepage"><div><div><h6 class="funcref"><a name="id2909667"></a>Example</h6></div></div><div></div></div><pre class="programlisting">
+Private Sub example()
+    
+    ' Set up error handling for this routine
+    On Error GoTo myerror
+    
+    Set dev = New Eth32
+    
+    ' .... Your code that establishes a connection here
+
+    ' Determine whether LED 0 is on or off
+    If dev.Led(0) Then
+        ' LED is on
+    Else
+        ' LED is off
+    End If
+    
+    ' Turn on LED 1
+    dev.Led(1) = True
+
+    Exit Sub
+myerror:
+    MsgBox "ETH32 error: " &amp; dev.ErrorString(Err.Number)
+End Sub
+        </pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="vb56InputSuccessive.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s03s04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="vb56OutputBit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">InputSuccessive Method </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> OutputBit Method</td></tr></table></div></body></html>

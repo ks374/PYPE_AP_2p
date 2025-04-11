@@ -60,16 +60,20 @@ OpenIrisClient *client = NULL;
  
 
 static int openiris_read(double *x, double *y, int *pa){
+	//fprintf(stderr,"Openiris_server: openiris_read(): Trying to fetch eye data\n");
     EyesData *eyesdata = malloc(sizeof(EyesData));
     OpenIrisClient_fetch_data(eyesdata, client, 0);
+	//fprintf(stderr,"Openiris_server: openiris_read(): success\n");
     EyeData *temp;
     temp = &(eyesdata -> left); //you might want to change it to right if needed. 
+	//fprintf(stderr,"Openiris_server: Assigned left eye to temp pointer. \n");
     
     /*Variable to store current eyedata content*/
     
     if (x) *x = (temp -> cr.x) - (temp -> p4.x);
     if (y) *y = (temp -> cr.y) - (temp -> p4.y);
     if (pa) *pa = (int)(temp -> pupil_area);
+	//fprintf(stderr,"Openiris_server: finish assign x,y,pa\n");
 	return(1);
 }
 static void halt(void){
@@ -139,8 +143,14 @@ static void mainloop(char *server_address,int port,double timeout)
   dacq_data->openiris_ready = 1;
   UNLOCK(semid);
 
+	int Openiris_server_loop_start = 0;
   do {
+	  if (Openiris_server_loop_start==0){
+		  fprintf(stderr,"Openiris_server_loop started. \n");
+		  Openiris_server_loop_start = 1;
+	  }
     if (openiris_read(&x, &y, &pa)) {
+	  //fprintf(stderr,"Trying to read openiris data\n");
       LOCK(semid);
       dacq_data->openiris_x = x;
       dacq_data->openiris_y = y;
@@ -172,10 +182,11 @@ static void mainloop(char *server_address,int port,double timeout)
 
 
 int main(int ac, char **av){
-    char *p = rindex(av[0], '/');
+    fprintf(stderr,"Openiris_server:Starting openiris_server\n");
+	char *p = rindex(av[0], '/');
     char *dev;
 	char *server_address = NULL;
-	int port = 5000;
+	int port = 9003;
 	double timeout = 10;
     
     if (p) {
@@ -190,19 +201,19 @@ int main(int ac, char **av){
         exit(1);
     }
     dev=av[1];
-    if (ac < 4) {
+    if (ac < 3) {
         fprintf(stderr,"not enought arguments passed to openiris_server\n");
-    } else if (ac < 5) {
-        server_address = av[2];
-        port = atoi(av[3]);
+    } else if (ac < 4) {
+        server_address = av[1];
+        port = atoi(av[2]);
 		timeout = 10;
     } else {
-        server_address = av[2];
-        port = atoi(av[3]);
-        timeout = atof(av[4]);
+        server_address = av[1];
+        port = atoi(av[2]);
+        timeout = atof(av[3]);
     }
     init(dev,server_address,port,timeout);
-    fprintf(stderr,"%s: entering aminloop\n",progname);
+    fprintf(stderr,"%s: entering mainloop\n",progname);
     mainloop(server_address,port,timeout);
     exit(0);
 }

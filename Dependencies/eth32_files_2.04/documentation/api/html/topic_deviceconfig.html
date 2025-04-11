@@ -1,0 +1,81 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Configuration and Detection</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s03.html" title="Topics"><link rel="prev" href="topic_other.html" title="Other Functionality"><link rel="next" href="topic_deviceconfigplugin.html" title="Plugins"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Configuration and Detection</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="topic_other.html">Prev</a> </td><th width="60%" align="center">Topics</th><td width="20%" align="right"> <a accesskey="n" href="topic_deviceconfigplugin.html">Next</a></td></tr></table><hr></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="topic_deviceconfig"></a>Configuration and Detection</h3></div></div></div><p>
+    Starting with v2.00, the ETH32 API includes functionality that allows your applications 
+    to detect the presence of ETH32 devices on the local network, retrieve their current network 
+    configuration settings, and store new configuration settings into devices.  One of the main 
+    reasons for including this functionality is the ability for ETH32 devices with firmware v3.000 and 
+    greater to use DHCP to automatically acquire an IP address.  If the device is using DHCP, your 
+    application needs some way of finding out which IP address has been assigned to the device so 
+    your application can connect to it.  If you control the configuration of the DHCP server, in most 
+    cases it is possible to configure the DHCP server to assign a specific, fixed IP address to a 
+    specific device based on its MAC address.  In that case, your application could always connect to 
+    that fixed IP address and know that the ETH32 had that address.  And of course, as before, the ETH32 
+    device can still be configured with a static IP address, yielding a similar result.  However, when 
+    DHCP is used and not configured to provide a fixed IP address, you will most likely want to 
+    utilize this functionality of the API to determine the IP address that has been assigned.
+    </p><p>
+    This functionality of the API is only able to detect and configure devices that are on the 
+    same local network segment as your PC.  The functionality works by sending out UDP broadcast 
+    packets onto the network.  This is the only practical way to detect the devices, since the 
+    specific address of each is unknown.  However, network routers do not forward broadcast packets 
+    on to other network segments, so the API will not be able to detect any ETH32 devices that are 
+    past routers.  Devices that are behind normal switches and hubs will be detected.  Note that these restrictions 
+    only apply to the configuration and detection functionality.  The normal ETH32 communications are 
+    implemented with standard (unicast) TCP/IP communications, and will work between any PC and device regardless 
+    of any routers in between, including over the Internet, as long as there is a valid route between them.
+    </p><p>
+    The API includes two different ways to detect devices.  The Query function detects every ETH32 device 
+    on the local network, and returns all of the available settings and device information about each device.
+    On the other hand, the Discover IP function allows you to discover just the active IP address and settings 
+    for a particular device that you specify by its MAC address or serial number.  The Discover IP function is 
+    intended to be the standard method for your application 
+    to determine the IP to connect to when working with a device using DHCP.  Your application should know the MAC 
+    address or the serial number of the device, and when provided to Discover IP, only information about that 
+    device will be returned.  When a filter is provided to Discover IP, it is able to return immediately with that information as soon as 
+    the requested device replies.  On the other hand, the Query functionality does not know how many replies will come in, 
+    so it delays a short period to allow replies to arrive, and also sends out the broadcast requests multiple times 
+    in case any network congestion causes interference.  Query also sends two different types of packets out and 
+    potentially receives two different types of replies from each device, which is necessary to determine every available 
+    detail about the device, whereas Discover IP only sends and receives one type of packet, which provides the active 
+    IP settings and the DHCP status of the device.  So to summarize, since Query is attempting to find every bit of 
+    information about every device on the network, it will necessarily take longer than Discover IP, which is able to 
+    return as soon as the requested device replies.  Note that if a filter is not provided to Discover IP, then it 
+    attempts to find all devices, and will take as long as Query.  In that case, there is little difference except that Query 
+    sends out two different types of queries and Discover IP sends only one type.  The packet type that Discover IP uses 
+    is supported on devices with firmware v3.000 and greater (those that support DHCP).
+    </p><p>
+    Depending on if and how you decide to detect devices, it may help to know how device serial numbers are constructed.  
+    An example of a serial number as it would be printed on the product label is 105-AB291.
+    Each serial number is made up of three components: Product ID, Batch number, and Unit number.  The Product ID 
+    is constant for all ETH32 devices, which is defined to be 105.  As the example shows, this is printed first and 
+    followed by a dash.  Batch and Unit numbers taken together are 
+    unique to each ETH32 device.  The batch number is represented by letters in the serial number, such as the AB 
+    in the example.  Internally and in the API code, the batch number is represented numerically, but when the 
+    serial number is printed, it is shown with letters.  The letters are NOT hexadecimal, but rather in the style 
+    of Microsoft Excel column identifiers, although starting with AA.  So, AA means 0, AB means 1, ..., AZ means 25, 
+    BA means 26, and so on.  Lastly, the unit number is simply shown numerically and zero-padded out to three digits 
+    if necessary.  The API includes a function to take the individual components and format a serial number string 
+    in the same way it is printed on the device.
+    </p><p>
+    The broadcast address to which packets are sent out may depend on your particular network configuration
+    or PC, so it can therefore be specified to the API by your application.  In most cases, a broadcast 
+    address of 255.255.255.255 is suitable.  
+    </p><p>
+    The API also includes functions to convert between 
+    a string representation of an IP address, and the binary representation that is used by the Configuration / Detection 
+    functionality of the API.
+    </p><h4 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="id3481881"></a>Applicable Functions and Information</h4><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><thead><tr bgcolor="#c0c0c0"><th>Task</th><th>C / C++</th><th>.NET Languages</th><th>Visual Basic 6</th></tr></thead><tbody><tr><td>Query</td><td><a class="xref" href="eth32cfg_query.html" title="eth32cfg_query">eth32cfg_query</a></td><td><a class="xref" href="netcfgQuery.html" title="Query Method">Query Method</a></td><td><a class="xref" href="vb6cfgQuery.html" title="Query Method">Query Method</a></td></tr><tr><td>Discover IP</td><td><a class="xref" href="eth32cfg_discover_ip.html" title="eth32cfg_discover_ip">eth32cfg_discover_ip</a></td><td><a class="xref" href="netcfgDiscoverIp.html" title="DiscoverIp Method">DiscoverIp Method</a></td><td><a class="xref" href="vb6cfgDiscoverIp.html" title="DiscoverIp Method">DiscoverIp Method</a></td></tr><tr><td>Get results</td><td><a class="xref" href="eth32cfg_get_config.html" title="eth32cfg_get_config">eth32cfg_get_config</a></td><td><a class="xref" href="netcfgResult.html" title="Result Property">Result Property</a></td><td><a class="xref" href="vb6cfgResult.html" title="Result Property">Result Property</a></td></tr><tr><td>Free memory for results</td><td><a class="xref" href="eth32cfg_free.html" title="eth32cfg_free">eth32cfg_free</a></td><td><a class="xref" href="netcfgFree.html" title="Free Method">Free Method</a></td><td><a class="xref" href="vb6cfgFree.html" title="Free Method">Free Method</a></td></tr><tr><td>Store new configuration to device</td><td><a class="xref" href="eth32cfg_set_config.html" title="eth32cfg_set_config">eth32cfg_set_config</a></td><td><a class="xref" href="netcfgSetConfig.html" title="SetConfig Method">SetConfig Method</a></td><td><a class="xref" href="vb6cfgSetConfig.html" title="SetConfig Method">SetConfig Method</a></td></tr><tr><td>Broadcast address</td><td>Parameters to above functions</td><td><div class="literallayout"><p><a class="xref" href="netcfgBroadcastAddress.html" title="BroadcastAddress Property">BroadcastAddress Property</a><br>
+<a class="xref" href="netcfgBroadcastAddressString.html" title="BroadcastAddressString Property">BroadcastAddressString Property</a></p></div></td><td><div class="literallayout"><p><a class="xref" href="vb6cfgBroadcastAddress.html" title="BroadcastAddress Property">BroadcastAddress Property</a><br>
+<a class="xref" href="vb6cfgBroadcastAddressString.html" title="BroadcastAddressString Property">BroadcastAddressString Property</a></p></div></td></tr><tr><td>IP Address Conversion</td><td><div class="literallayout"><p><a class="xref" href="eth32cfg_ip_to_string.html" title="eth32cfg_ip_to_string">eth32cfg_ip_to_string</a><br>
+<a class="xref" href="eth32cfg_string_to_ip.html" title="eth32cfg_string_to_ip">eth32cfg_string_to_ip</a></p></div></td><td><div class="literallayout"><p><a class="xref" href="netcfgIpConvert.html" title="IpConvert Method">IpConvert Method</a><br>
+<a class="xref" href="netcfgIpConvertToString.html" title="IpConvertToString Method">IpConvertToString Method</a><br>
+<a class="xref" href="netcfgIpConvertToNetIPAddress.html" title="IpConvertToNetIPAddress Method">IpConvertToNetIPAddress Method</a></p></div></td><td><div class="literallayout"><p><a class="xref" href="vb6cfgIpConvert.html" title="IpConvert Method">IpConvert Method</a><br>
+<a class="xref" href="vb6cfgIpConvertToString.html" title="IpConvertToString Method">IpConvertToString Method</a></p></div></td></tr><tr><td>Format a serial number string</td><td><a class="xref" href="eth32cfg_serialnum_string.html" title="eth32cfg_serialnum_string">eth32cfg_serialnum_string</a></td><td><a class="xref" href="netcfgSerialNumString.html" title="SerialNumString Method">SerialNumString Method</a></td><td><a class="xref" href="vb6cfgSerialNumString.html" title="SerialNumString Method">SerialNumString Method</a></td></tr><tr><td>MAC Address Conversion</td><td>None</td><td><div class="literallayout"><p><a class="xref" href="netcfgMacConvert.html" title="MacConvert Method">MacConvert Method</a><br>
+<a class="xref" href="netcfgMacConvertToString.html" title="MacConvertToString Method">MacConvertToString Method</a></p></div></td><td><div class="literallayout"><p><a class="xref" href="vb6cfgMacConvert.html" title="MacConvert Method">MacConvert Method</a><br>
+<a class="xref" href="vb6cfgMacConvertToString.html" title="MacConvertToString Method">MacConvertToString Method</a></p></div></td></tr></tbody></table></div><p>
+     </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="topic_other.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="topic_deviceconfigplugin.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Other Functionality </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Plugins</td></tr></table></div></body></html>

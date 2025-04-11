@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Error Handling</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Winford Engineering ETH32 API Version 2 Documentation"><link rel="up" href="ar01s04s02.html" title=".NET Languages"><link rel="prev" href="net_getting_started.html" title="Getting Started"><link rel="next" href="ar01s04s02s03.html" title="Structures"><style xmlns="http://www.w3.org/TR/xhtml1/transitional" type="text/css">
+  h2 { font-family: helvetica; }
+  h5.funcref { font-size: 12pt; margin: 0 }
+  h6.funcref { font-weight: normal; font-style: italic; font-size: 12pt; margin: 0 }
+  hr { border: 1px solid black }
+  </style></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Error Handling</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="net_getting_started.html">Prev</a> </td><th width="60%" align="center">.NET Languages</th><td width="20%" align="right"> <a accesskey="n" href="ar01s04s02s03.html">Next</a></td></tr></table><hr></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="net_error_handling"></a>Error Handling</h4></div></div></div><p>
+       Errors that may occur within the class or core API are provided to your 
+       application as exceptions.  
+       This means that as you use the device, you do not need to check return values 
+       for error codes.  Instead, if an error occurs, an exception will be raised 
+       and the applicable error handling code you have designated (if any) will 
+       be executed.  As a rule, you should include error handling code for your 
+       application so that, for example, if an attempt to connect to the device 
+       fails, it does not cause an unhandled exception (which causes the application to exit).
+      </p><p>
+       The exception class used in .NET languages is Eth32Exception.  This class  
+       inherits from the System.Exception class and adds 
+       the ErrorCode member.  The ErrorCode member contains one of the possible values 
+       of the EthError enumerator, indicating more specifically what caused the error.  
+       The following example in VB.NET illustrates the basic idea.
+</p><pre class="programlisting">
+Dim dev As New Eth32()
+
+Try
+	dev.Connect("192.168.1.100")
+Catch my_error As Eth32Exception
+	MsgBox("Error occurred involving the ETH32 device: " &amp; dev.ErrorString(my_error.ErrorCode))
+End Try
+</pre><p>
+      </p><h5 xmlns="http://www.w3.org/TR/xhtml1/transitional"><a xmlns="" name="net_error_codes"></a>Error Codes</h5><p>
+        Error code constants are defined by the EthError enumerator.  The following 
+        error codes are defined:
+        </p><div class="itemizedlist"><ul type="disc"><li><p>EthError.None - Success, no error.</p></li><li><p>EthError.General - A miscellaneous or uncategorized error has occurred.</p></li><li><p>EthError.Closing - Function aborted because the device is being closed.</p></li><li><p>EthError.Network - Network communications error.  Connection was unable to be established or existing connection was broken.</p></li><li><p>EthError.Thread - Internal error occurred in the threads and synchronization library.</p></li><li><p>EthError.NotSupported - Function not supported by this device.</p></li><li><p>EthError.Pipe - Internal API error dealing with data pipes.</p></li><li><p>EthError.Rthread - Internal API error dealing with the "Reader thread."</p></li><li><p>EthError.Ethread - Internal API error dealing with the "Event thread."</p></li><li><p>EthError.Malloc - Error dynamically allocating memory.</p></li><li><p>EthError.Windows - Internal API error specific to the Microsoft Windows platform.</p></li><li><p>EthError.Winsock - Internal API error in dealing with the Microsoft Winsock library.</p></li><li><p>EthError.NetworkIntr - Network read/write operation was interrupted.</p></li><li><p>EthError.WrongMode - Something is not configured correctly in order to allow this functionality.</p></li><li><p>EthError.BcastOpt - Error setting the SO_BROADCAST option on a socket.</p></li><li><p>EthError.ReuseOpt - Error setting the SO_REUSEADDR option on a socket.</p></li><li><p>EthError.ConfigNoack - Warning - device did not acknowledge our attempt to store a new configuration.</p></li><li><p>EthError.ConfigReject - Device has rejected the new configuration data we attempted to store.  Configuration switch on device may be disabled.</p></li><li><p>EthError.Loadlib - Error loading an external DLL library.</p></li><li><p>EthError.Plugin - General error with the currently configured plugin/sniffer library.</p></li><li><p>EthError.Bufsize - A buffer provided was either invalid size or too small.</p></li><li><p>EthError.InvalidHandle - Invalid device handle was given.</p></li><li><p>EthError.InvalidPort - The given port number does not exist on this device.</p></li><li><p>EthError.InvalidBit - The given bit number does not exist on this port.</p></li><li><p>EthError.InvalidChannel - The given channel number does not exist on this device.</p></li><li><p>EthError.InvalidPointer - The pointer passed in to an API function was invalid.</p></li><li><p>EthError.InvalidOther - One of the parameters passed in to an API function was invalid.</p></li><li><p>EthError.InvalidValue - The given value is out of range for this I/O port, counter, etc.</p></li><li><p>EthError.InvalidIp - The IP address provided was invalid.</p></li><li><p>EthError.InvalidNetmask - The subnet mask provided was invalid.</p></li><li><p>EthError.InvalidIndex - Invalid index value.</p></li><li><p>EthError.Timeout - Operation timed out before it could be completed.</p></li><li><p>EthError.AlreadyConnected - An object that is already connected cannot have Connect called again.</p></li><li><p>EthError.NotConnected - This operation requires the object to be connected.</p></li></ul></div><p>
+
+       </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="net_getting_started.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ar01s04s02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ar01s04s02s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Getting Started </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Structures</td></tr></table></div></body></html>
