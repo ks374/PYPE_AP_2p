@@ -347,6 +347,7 @@ static void dig_str_out()
     {
 	clock_gettime(CLOCK_REALTIME, &ts);
 	t1 = ts.tv_nsec;
+	usleep(100);
     }
 
     //now set the strobe bit high
@@ -371,6 +372,7 @@ static void dig_str_out()
     {
 	clock_gettime(CLOCK_REALTIME, &ts);
 	t1 = ts.tv_nsec;
+	usleep(100);
     }
 
     //Now set the strobe bit low

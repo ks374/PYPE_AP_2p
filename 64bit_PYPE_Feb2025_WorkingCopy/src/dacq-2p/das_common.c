@@ -731,6 +731,7 @@ static void mainloop(void)
 
   // this isn't needed, halt() gets called automatically via atexit()
   //halt();
+  usleep(100);
 }
 
 int main(int ac, char **av, char **envp)
@@ -810,4 +811,3 @@ int main(int ac, char **av, char **envp)
   fprintf(stderr, "%s: bye bye\n", progname);
   exit(0);
 }
-

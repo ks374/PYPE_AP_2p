@@ -1960,7 +1960,7 @@ class PypeApp:
                 beep(1000, 100)
             if not self.config.iget('DACQ_TESTMODE'):
                 self.juice_drip(ms, dobeep,dojuice)
-                print("reward const %d  " % (dobeep))
+                #print("reward const %d  " % (dobeep))
             #if self.tk:
             #	self.console.writenl("[reward=%dms]" % ms, color='black')
         self.dropcount = self.dropcount + 1
